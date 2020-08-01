@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "mock": ["./mock"]
+    },
+    "jsx": "react",
+    "esModuleInterop": true,
+    "target": "ES2020",
+    "declaration": false,
+    "moduleResolution": "node",
+    "experimentalDecorators": true
+  },
+  "include": ["src/**/*", "mock/*"],
+  "exclude": ["node_modules"]
+}

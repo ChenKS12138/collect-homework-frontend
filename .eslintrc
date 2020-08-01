@@ -1,0 +1,32 @@
+{
+  "env": {
+    "es6": true,
+    "browser": true
+  },
+  "extends": ["plugin:prettier/recommended"],
+  "plugins": [
+    "react",
+    "react-hooks",
+    "import",
+    "prettier",
+    "@typescript-eslint"
+  ],
+  "rules": {
+    "prettier/prettier": "error"
+  },
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module"
+  },
+  "parser": "@typescript-eslint/parser",
+  "settings": {
+    "import-resolver": {
+      "alias": {
+        "map": [
+          ["@", "./src"],
+          ["mock", "./mock"]
+        ]
+      }
+    }
+  }
+}
