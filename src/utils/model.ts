@@ -24,3 +24,6 @@ export const requestAdminBasicInfo = (): Promise<IAdminBasicInfo> =>
 
 export const requestFiles = (id: number) =>
   memorize(instance.get)(`/files/${id}`);
+
+export const requestAuthSecretCode = ({ email }: { email: string }) =>
+  instance.post("/auth/secretCode", { email });

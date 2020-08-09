@@ -33,3 +33,10 @@ export interface IProjectFile {
   createAt: string;
   size: string;
 }
+
+type StdError = Error;
+
+export interface StdResponse<TStdResponse = any> {
+  data: TStdResponse;
+  reason: StdError;
+}

@@ -8,4 +8,13 @@ export default [
       };
     },
   },
+  {
+    url: "/auth/secretCode",
+    method: "post",
+    response() {
+      return {
+        success: true,
+      };
+    },
+  },
 ];

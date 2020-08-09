@@ -25,7 +25,7 @@ export default function AuthPage({
 }: DuckCmpProps<AuthPageDuck> & RouteComponentProps) {
   const { ducks } = duck;
   const { path } = ducks.route.selector(store);
-  const showRegistry = useMatch("/auth/registry");
+  const showRegistry = useMatch("/auth/registry") !== null;
   const { height, width } = useWindowSize();
   const [formInstance] = useForm();
 

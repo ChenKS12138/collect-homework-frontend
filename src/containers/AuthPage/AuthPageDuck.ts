@@ -3,7 +3,7 @@ import { fork, put, select } from "redux-saga/effects";
 import { takeLatest } from "redux-saga-catch";
 import AuthPageLoginFormDuck from "./AuthPageLoginFormDuck";
 import AuthPageRegistryFormDuck from "./AuthPageRegistryFormDuck";
-import { requestAuthLogin } from "@/utils/model";
+import { requestAuthLogin, requestAuthSecretCode } from "@/utils/model";
 import { BasePageDuck } from "@/ducks/index";
 
 export interface ILoginForm {
@@ -24,6 +24,7 @@ export default class AuthPageDuck extends BasePageDuck {
       SET_LOGIN_FORM,
       SET_LOGIN_LOADING,
       SET_LOGIN_ERROR,
+      FETCH_SECRET_CODE,
     }
     return {
       ...super.quickTypes,
@@ -35,6 +36,13 @@ export default class AuthPageDuck extends BasePageDuck {
       ...super.quickDucks,
       loginForm: AuthPageLoginFormDuck,
       registryForm: AuthPageRegistryFormDuck,
+    };
+  }
+  get creators() {
+    const { types } = this;
+    return {
+      ...super.creators,
+      fetchSecretCode: createToPayload<string>(types.FETCH_SECRET_CODE),
     };
   }
   *saga() {
@@ -58,6 +66,16 @@ export default class AuthPageDuck extends BasePageDuck {
     yield takeLatest([ducks.registryForm.types.SET_FORM_DATA], function* () {
       const { formData } = ducks.registryForm.selector(yield select());
       console.log(formData);
+    });
+  }
+  *watchToFetchSecretCode() {
+    const { types } = this;
+    yield takeLatest([types.FETCH_SECRET_CODE], function* (action) {
+      if (!action?.payload?.length) return;
+      const result = yield requestAuthSecretCode({ email: action.payload });
+      if (result.success) {
+        console.log("success");
+      }
     });
   }
 }

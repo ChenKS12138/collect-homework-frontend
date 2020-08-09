@@ -130,7 +130,7 @@ export default purify(function AdminPage({
   const { path } = ducks.route.selector(store);
   const { width, height } = useWindowSize();
 
-  const showCreate = useMatch("/admin/create");
+  const showCreate = useMatch("/admin/create") !== null;
 
   useEffect(() => {
     console.log("init admin page");

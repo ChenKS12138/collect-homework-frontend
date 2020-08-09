@@ -1,6 +1,3 @@
-/**
- * 单例模式 装饰器
- */
 export const singleton = (props?: { runOnceMethods?: string[] }) => {
   const { runOnceMethods } = props;
   return (Target) => {

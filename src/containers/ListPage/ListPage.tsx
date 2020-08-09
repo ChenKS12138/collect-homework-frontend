@@ -33,7 +33,7 @@ export default purify(function ListPage({
   const { projects, currentProject } = selector(store);
   const { height, width } = useWindowSize();
   const { path } = ducks.route.selector(store);
-  const showDetail = useMatch("/detail/:id");
+  const showDetail = useMatch("/detail/:id") !== null;
 
   return (
     <Scaffold
