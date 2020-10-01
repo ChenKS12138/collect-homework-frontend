@@ -40,16 +40,23 @@ export default function AuthPage({
 
   return (
     <Scaffold
-      optionRight={{
-        element: [
-          <OptionButtonHelp key="help" />,
-          <OptionButtonList key="list" />,
-        ],
-        span: 2,
-      }}
+      links={[
+        {
+          link: "/help",
+          text: "帮助",
+        },
+        {
+          link: "/list",
+          text: "主页",
+        },
+      ]}
     >
       <AuthWrapper className="app-mlr-auto app-mt-10n">
         <Form
+          style={{
+            maxWidth: "90vw",
+          }}
+          className="app-mlr-auto"
           form={formInstance}
           onFinish={(value: ILoginForm) => {
             dispatch(ducks.loginForm.creators.setFormData(value));

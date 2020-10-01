@@ -138,13 +138,16 @@ export default purify(function AdminPage({
 
   return (
     <Scaffold
-      optionRight={{
-        element: [
-          <OptionButtonHelp key="help" />,
-          <OptionButtonList key="list" />,
-        ],
-        span: 2,
-      }}
+      links={[
+        {
+          text: "帮助",
+          link: "/help",
+        },
+        {
+          text: "主页",
+          link: "/",
+        },
+      ]}
     >
       <AdminWrapper className="app-mlr-auto app-mt-3n">
         <Card

@@ -37,13 +37,16 @@ export default purify(function ListPage({
 
   return (
     <Scaffold
-      optionRight={{
-        element: [
-          <OptionButtonHelp key="help" />,
-          <OptionButtonAuth key="auth" />,
-        ],
-        span: 2,
-      }}
+      links={[
+        {
+          link: "/help",
+          text: "帮助",
+        },
+        {
+          link: "/auth",
+          text: "管理员",
+        },
+      ]}
     >
       <TitleText className="app-mt-4n app-text-size-11n app-text-align-center app-text-weight-6n">
         <span>各种作业</span>

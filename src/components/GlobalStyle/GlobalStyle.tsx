@@ -81,6 +81,46 @@ const composedStyleString = composeCssClasses([
   ),
 ]);
 
+const composedMobileStyleString = composeCssClasses([
+  ...flatArray(
+    createRadixs(20).map((radix) => [
+      createCssClass(`app-ma-${radix}n`, { margin: `${radix * 3}px` }),
+      createCssClass(`app-ml-${radix}n`, { marginLeft: `${radix * 3}px` }),
+      createCssClass(`app-mr-${radix}n`, { marginRight: `${radix * 3}px` }),
+      createCssClass(`app-mt-${radix}n`, { marginTop: `${radix * 3}px` }),
+      createCssClass(`app-mb-${radix}n`, { marginBottom: `${radix * 3}px` }),
+    ])
+  ),
+  ...flatArray(
+    createRadixs(20).map((radix) => [
+      createCssClass(`app-pa-${radix}n`, { padding: `${radix * 3}px` }),
+      createCssClass(`app-pl-${radix}n`, { paddingLeft: `${radix * 3}px` }),
+      createCssClass(`app-pr-${radix}n`, { paddingRight: `${radix * 3}px` }),
+      createCssClass(`app-pt-${radix}n`, { paddingTop: `${radix * 3}px` }),
+      createCssClass(`app-pb-${radix}n`, {
+        paddingBottom: `${radix * 3}px`,
+      }),
+    ])
+  ),
+  ...createRadixs(20).map((radix) =>
+    createCssClass(`app-text-size-${radix}n`, {
+      fontSize: `${radix * 1.8}px`,
+    })
+  ),
+  ...createRadixs(20).map((radix) =>
+    createCssClass(`app-text-height-${radix}n`, { height: radix * 2 })
+  ),
+  ...createRadixs(20).map((radix) =>
+    createCssClass(`app-text-width-${radix}n`, { width: radix * 2 })
+  ),
+]);
+
 export default createGlobalStyle`
   ${composedStyleString}
+  @media screen and (max-width: 960px) {
+    ${composedMobileStyleString}
+  }
+  * {
+    transition: all .5s ease;
+  }
 `;

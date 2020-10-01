@@ -12,13 +12,16 @@ export default function HelpPage({}: DuckCmpProps<HelpPageDuck> &
   RouteComponentProps) {
   return (
     <Scaffold
-      optionRight={{
-        element: [
-          <OptionButtonHelp key="help" />,
-          <OptionButtonList key="list" />,
-        ],
-        span: 2,
-      }}
+      links={[
+        {
+          link: "/help",
+          text: "帮助",
+        },
+        {
+          link: "/",
+          text: "主页",
+        },
+      ]}
     >
       <div className="app-mt-4n app-text-align-center">开发中...</div>
     </Scaffold>

@@ -1,5 +1,6 @@
-import React, { Props, ReactNode } from "react";
+import React, { Props, ReactNode, useState } from "react";
 import { Layout, Row, Col, Space, Button } from "antd";
+import { BarsOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 const { Header, Content, Footer } = Layout;
 import { useWindowSize } from "react-use";
@@ -17,35 +18,77 @@ const TitleText = styled.h2`
 const ColorLink = styled(Link)``;
 
 interface IScaffold extends Props<null> {
-  optionRight: {
-    span: number;
-    element: ReactNode | ReactNode[];
-  };
+  links: {
+    text: string;
+    link: string;
+  }[];
   sider?: ReactNode;
   children: any;
 }
 const MAX_WIDTH_TO_SHOW_FULL_OPERATION = 750;
 
-export default function Scaffold({
-  optionRight: { element, span },
-  sider,
-  children,
-}: IScaffold) {
+export default function Scaffold({ links, sider, children }: IScaffold) {
   const { width } = useWindowSize();
+  const [showMenu, setShowMenu] = useState(false);
   return (
     <Layout style={{ minHeight: "100vh" }}>
-      <Header className="app-box-shadow-default">
+      <Header
+        className="app-box-shadow-default"
+        style={{
+          height: width > MAX_WIDTH_TO_SHOW_FULL_OPERATION ? "64px" : "auto",
+        }}
+      >
+        <div style={{ display: showMenu ? "block" : "none" }}>
+          {links.map((item, index) => (
+            <Row key={index} align="middle">
+              <Col push={3} style={{ maxHeight: "64px" }}>
+                <Button type="link">
+                  <ColorLink to={item.link}>{item.text}</ColorLink>
+                </Button>
+              </Col>
+            </Row>
+          ))}
+        </div>
         {width > MAX_WIDTH_TO_SHOW_FULL_OPERATION ? (
           <Row>
-            <Col span={span} />
-            <Col span={24 - 2 * span}>
+            <Col span={2} />
+            <Col span={20}>
               <TitleText>作业提交平台</TitleText>
             </Col>
-            <Col span={span}>
-              <Space>{element}</Space>
+            <Col span={2}>
+              <Space>
+                {links.map((item) => (
+                  <Button type="link" key={item.text}>
+                    <ColorLink to={item.link}>{item.text}</ColorLink>
+                  </Button>
+                ))}
+              </Space>
             </Col>
           </Row>
-        ) : null}
+        ) : (
+          <Row
+            style={{
+              height: "64px",
+            }}
+            justify="center"
+            align="middle"
+          >
+            <Col>
+              <TitleText>作业提交平台</TitleText>
+            </Col>
+            <Col push={9}>
+              <BarsOutlined
+                style={{
+                  color: "#ffffff",
+                  fontSize: "26px",
+                }}
+                onClick={() => {
+                  setShowMenu(!showMenu);
+                }}
+              />
+            </Col>
+          </Row>
+        )}
       </Header>
       <Content>{children}</Content>
       <Footer>
@@ -54,21 +97,3 @@ export default function Scaffold({
     </Layout>
   );
 }
-
-export const OptionButtonHelp = () => (
-  <Button type="link">
-    <ColorLink to="/help">帮助</ColorLink>
-  </Button>
-);
-
-export const OptionButtonAuth = () => (
-  <Button type="link">
-    <ColorLink to="/auth">管理员</ColorLink>
-  </Button>
-);
-
-export const OptionButtonList = () => (
-  <Button type="link">
-    <ColorLink to="/">主页</ColorLink>
-  </Button>
-);

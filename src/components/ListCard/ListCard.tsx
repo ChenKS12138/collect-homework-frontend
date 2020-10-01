@@ -68,6 +68,9 @@ export default function ListCard(props: IListCard) {
       dataSource={dataSource}
       pagination={false}
       columns={columns}
+      scroll={{
+        x: true,
+      }}
       className={`app-mlr-auto app-mt-4n app-box-shadow-default ${className}`}
       rowClassName="app-text-size-1n"
     />
