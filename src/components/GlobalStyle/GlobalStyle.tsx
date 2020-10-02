@@ -1,6 +1,5 @@
 import { createGlobalStyle } from "styled-components";
 import { CSSProperties } from "react";
-import { array } from "prop-types";
 
 type CssClass = string;
 

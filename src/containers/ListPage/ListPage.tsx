@@ -1,19 +1,12 @@
-import React from "react";
+import React, { useEffect } from "react";
 
-import {
-  Scaffold,
-  Avatar,
-  ListCard,
-  UploadCard,
-  OptionButtonHelp,
-  OptionButtonAuth,
-} from "@/components/index";
+import { Scaffold, Avatar, ListCard, UploadCard, Modal } from "@/components";
 import { Button, Drawer } from "antd";
 import styled from "styled-components";
-import { avatarImage } from "@/assets/index";
+import { avatarImage } from "@/assets";
 import { DuckCmpProps, purify } from "saga-duck";
-import { ListPageDuck } from "@/containers/ListPage/index";
-import { Link, RouteComponentProps, useMatch } from "@reach/router";
+import { ListPageDuck } from "@/containers/ListPage";
+import { RouterLink, navigateTo, useRouteMatch } from "@/utils";
 import { useWindowSize } from "react-use";
 
 const TitleText = styled.div`
@@ -28,12 +21,14 @@ export default purify(function ListPage({
   dispatch,
   duck,
   store,
-}: DuckCmpProps<ListPageDuck> & RouteComponentProps) {
+}: DuckCmpProps<ListPageDuck>) {
   const { selector, ducks } = duck;
   const { projects, currentProject } = selector(store);
   const { height, width } = useWindowSize();
   const { path } = ducks.route.selector(store);
-  const showDetail = useMatch("/detail/:id") !== null;
+  const matched = useRouteMatch<{ id: string }>("/detail/:id");
+  const showDetail = matched !== false;
+  const machedID: string = matched ? matched?.params?.id : "";
 
   return (
     <Scaffold
@@ -62,7 +57,7 @@ export default purify(function ListPage({
         title="提交作业"
         closable={true}
         onClose={() => {
-          dispatch(ducks.route.creators.navigate("/"));
+          navigateTo("/");
         }}
         visible={showDetail}
         height={height * 0.9}
@@ -76,7 +71,7 @@ export default purify(function ListPage({
           onUpload={() => {}}
           successResultExtra={
             <Button type="primary">
-              <Link to="/">返回首页</Link>
+              <RouterLink to="/">返回首页</RouterLink>
             </Button>
           }
         />

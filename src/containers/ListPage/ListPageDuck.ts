@@ -1,4 +1,4 @@
-import { DuckMap, reduceFromPayload, createToPayload } from "@/utils/saga-duck";
+import { DuckMap, reduceFromPayload, createToPayload } from "@/utils";
 import { IProjectItem } from "@/utils/interface";
 import { requestProjectList } from "@/utils/model";
 import { fork, put, select } from "redux-saga/effects";
@@ -13,7 +13,7 @@ interface ListPageParam {
 export default class ListPageDuck extends BasePageDuck {
   IParams: ListPageParam;
   get RoutePath() {
-    return ["/", "/detail/:id"];
+    return ["/", "/:id"];
   }
   get quickTypes() {
     enum Types {
@@ -47,9 +47,6 @@ export default class ListPageDuck extends BasePageDuck {
       ...super.creators,
       setProjects: createToPayload<IProjectItem[]>(types.SET_PROJECTS),
     };
-  }
-  *main() {
-    yield console.log("listpage main");
   }
   *saga() {
     yield* super.saga();

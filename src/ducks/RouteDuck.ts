@@ -1,7 +1,6 @@
-import { DuckMap, reduceFromPayload, createToPayload } from "@/utils/saga-duck";
+import { DuckMap, reduceFromPayload, createToPayload } from "@/utils";
 import { fork, put, call, take } from "redux-saga/effects";
 import { takeLatest, runAndTakeLatest } from "redux-saga-catch";
-import { globalHistory } from "@/utils/index";
 import { eventChannel } from "redux-saga";
 import { singleton } from "@/utils/index";
 
@@ -43,7 +42,7 @@ export default class RouteDuck extends DuckMap {
   *watchToNavigate() {
     const { types } = this;
     yield takeLatest(types.ROUTE_NAVIGATE, function* (param) {
-      yield globalHistory.navigate(param?.payload);
+      // yield globalHistory.navigate(param?.payload);
     });
   }
   *watchHistoryChange() {
@@ -71,9 +70,9 @@ export default class RouteDuck extends DuckMap {
   }
   createHistoryChangeChannel() {
     return eventChannel((emit) => {
-      globalHistory.listen((history) => {
-        emit(history);
-      });
+      // globalHistory.listen((history) => {
+      //   emit(history);
+      // });
       return () => {};
     });
   }

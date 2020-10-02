@@ -7,7 +7,6 @@
   "dependencies": {
     "@ant-design/icons": "^4.0.3",
     "@babel/runtime": "^7.10.4",
-    "@reach/router": "^1.3.4",
     "animate.css": "^3.7.2",
     "antd": "^4.0.3",
     "axios": "^0.19.2",
@@ -15,7 +14,6 @@
     "history": "^5.0.0",
     "moment": "^2.24.0",
     "path-to-regexp": "^6.1.0",
-    "prop-types": "^15.7.2",
     "react": "^16.13.0",
     "react-dom": "^16.13.0",
     "react-helmet": "^6.1.0",

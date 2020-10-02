@@ -1,12 +1,8 @@
 import React from "react";
-import {
-  Scaffold,
-  OptionButtonHelp,
-  OptionButtonList,
-} from "@/components/index";
+import { Scaffold } from "@/components/index";
 import { Form, Input, Button, Drawer, Space } from "antd";
 import styled from "styled-components";
-import { Link, RouteComponentProps, useMatch } from "@reach/router";
+import { RouterLink, navigateTo, useRouteMatch } from "@/utils";
 import { useWindowSize } from "react-use";
 import { DuckCmpProps } from "saga-duck";
 import { AuthPageDuck } from ".";
@@ -22,10 +18,10 @@ export default function AuthPage({
   dispatch,
   duck,
   store,
-}: DuckCmpProps<AuthPageDuck> & RouteComponentProps) {
+}: DuckCmpProps<AuthPageDuck>) {
   const { ducks } = duck;
   const { path } = ducks.route.selector(store);
-  const showRegistry = useMatch("/auth/registry") !== null;
+  const showRegistry = useRouteMatch("/auth/registry");
   const { height, width } = useWindowSize();
   const [formInstance] = useForm();
 
@@ -46,7 +42,7 @@ export default function AuthPage({
           text: "帮助",
         },
         {
-          link: "/list",
+          link: "/",
           text: "主页",
         },
       ]}
@@ -72,7 +68,7 @@ export default function AuthPage({
             登陆
           </Button>
           <Button type="link" htmlType="button" block className="app-mt-1n">
-            <Link to="/auth/registry">暂无账号？立即注册</Link>
+            <RouterLink to="/auth/registry">暂无账号？立即注册</RouterLink>
           </Button>
         </Form>
       </AuthWrapper>
@@ -80,7 +76,7 @@ export default function AuthPage({
         title="注册管理员"
         closable={true}
         onClose={() => {
-          dispatch(ducks.route.creators.navigate("/auth"));
+          navigateTo("/auth");
         }}
         visible={showRegistry}
         placement="right"

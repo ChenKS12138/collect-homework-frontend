@@ -1,4 +1,9 @@
-import { DuckMap, reduceFromPayload, createToPayload } from "@/utils/saga-duck";
+import {
+  DuckMap,
+  reduceFromPayload,
+  createToPayload,
+  navigateTo,
+} from "@/utils";
 import { fork, put, select } from "redux-saga/effects";
 import { takeLatest } from "redux-saga-catch";
 import AuthPageLoginFormDuck from "./AuthPageLoginFormDuck";
@@ -57,7 +62,7 @@ export default class AuthPageDuck extends BasePageDuck {
       } = ducks.loginForm.selector(yield select());
       const response = yield requestAuthLogin({ email, password });
       if (response.success) {
-        yield put(ducks.route.creators.navigate("/admin"));
+        yield navigateTo("/admin");
       }
     });
   }

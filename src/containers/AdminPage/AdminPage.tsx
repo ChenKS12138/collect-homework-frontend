@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
 import {
   Scaffold,
-  OptionButtonHelp,
-  OptionButtonList,
   EditableFormCard,
   CommonModal,
   EditableTagSet,
@@ -22,15 +20,20 @@ import {
   Modal,
 } from "antd";
 import { AdminPageDuck } from ".";
-import { DuckCmpProps, purify } from "@/utils/saga-duck";
-import { IProjectItemOwn, distributeArray } from "@/utils";
-import { Link, RouteComponentProps, useMatch } from "@reach/router";
+import {
+  DuckCmpProps,
+  purify,
+  useRouteMatch,
+  IProjectItemOwn,
+  distributeArray,
+  navigateTo,
+} from "@/utils";
 import { useWindowSize } from "react-use";
 import { FormInstance } from "antd/lib/form";
 import moment from "moment";
 import AdminPageCreateProjectFormDuck from "./AdminPageCreateFormDuck";
 import { useForm } from "antd/lib/form/Form";
-import { greetByTime } from "@/utils/index";
+import { greetByTime, RouterLink } from "@/utils";
 
 const AdminWrapper = styled.div`
   max-width: 800px;
@@ -124,13 +127,13 @@ export default purify(function AdminPage({
   dispatch,
   duck,
   store,
-}: DuckCmpProps<AdminPageDuck> & RouteComponentProps) {
+}: DuckCmpProps<AdminPageDuck>) {
   const { selector, ducks } = duck;
   const { projectOwn, basicInfo } = selector(store);
   const { path } = ducks.route.selector(store);
   const { width, height } = useWindowSize();
 
-  const showCreate = useMatch("/admin/create") !== null;
+  const showCreate = useRouteMatch("/admin/create") !== false;
 
   useEffect(() => {
     console.log("init admin page");
@@ -190,7 +193,7 @@ export default purify(function AdminPage({
           className="app-mt-2n"
           extra={[
             <Button type="primary" key="new">
-              <Link to="/admin/create">新建</Link>
+              <RouterLink to="/admin/create">新建</RouterLink>
             </Button>,
           ]}
         >
@@ -211,7 +214,7 @@ export default purify(function AdminPage({
         width={width * 0.7}
         placement="right"
         closable
-        onClose={() => dispatch(ducks.route.creators.navigate("/admin"))}
+        onClose={() => navigateTo("/admin")}
       >
         <AdminPageCreate
           duck={ducks.createProject}

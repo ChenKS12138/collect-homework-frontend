@@ -7,3 +7,4 @@ export { default as UploadCard } from "./UploadCard/UploadCard";
 export { default as EditableFormCard } from "./EditableFormCard/EditableFormCard";
 export { default as CommonModal } from "./CommonModal/CommonModal";
 export { default as EditableTagSet } from "./EditableTagSet/EditableTagSet";
+export { default as Modal } from "./Modal/Modal";

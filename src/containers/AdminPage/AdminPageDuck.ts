@@ -1,4 +1,4 @@
-import { reduceFromPayload, createToPayload } from "@/utils/saga-duck";
+import { reduceFromPayload, createToPayload } from "@/utils";
 import moment from "moment";
 import { fork, put, select } from "redux-saga/effects";
 import { takeLatest } from "redux-saga-catch";

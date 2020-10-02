@@ -1,15 +1,9 @@
 import React from "react";
-import {
-  Scaffold,
-  OptionButtonHelp,
-  OptionButtonList,
-} from "@/components/index";
+import { Scaffold } from "@/components/index";
 import { DuckCmpProps } from "saga-duck";
 import { HelpPageDuck } from ".";
-import { RouteComponentProps } from "@reach/router";
 
-export default function HelpPage({}: DuckCmpProps<HelpPageDuck> &
-  RouteComponentProps) {
+export default function HelpPage({}: DuckCmpProps<HelpPageDuck>) {
   return (
     <Scaffold
       links={[

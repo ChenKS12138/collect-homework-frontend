@@ -4,7 +4,7 @@ import { BarsOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 const { Header, Content, Footer } = Layout;
 import { useWindowSize } from "react-use";
-import { Link } from "@reach/router";
+import { RouterLink } from "@/utils";
 
 const BottomText = styled.div`
   text-align: center;
@@ -14,8 +14,6 @@ const TitleText = styled.h2`
   color: white;
   text-align: center;
 `;
-
-const ColorLink = styled(Link)``;
 
 interface IScaffold extends Props<null> {
   links: {
@@ -43,7 +41,7 @@ export default function Scaffold({ links, sider, children }: IScaffold) {
             <Row key={index} align="middle">
               <Col push={3} style={{ maxHeight: "64px" }}>
                 <Button type="link">
-                  <ColorLink to={item.link}>{item.text}</ColorLink>
+                  <RouterLink to={item.link}>{item.text}</RouterLink>
                 </Button>
               </Col>
             </Row>
@@ -59,7 +57,7 @@ export default function Scaffold({ links, sider, children }: IScaffold) {
               <Space>
                 {links.map((item) => (
                   <Button type="link" key={item.text}>
-                    <ColorLink to={item.link}>{item.text}</ColorLink>
+                    <RouterLink to={item.link}>{item.text}</RouterLink>
                   </Button>
                 ))}
               </Space>

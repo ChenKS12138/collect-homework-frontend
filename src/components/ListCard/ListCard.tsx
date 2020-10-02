@@ -2,7 +2,7 @@ import React, { Props, AllHTMLAttributes, ReactNode } from "react";
 import { Table, Tag, Space, Button } from "antd";
 import styled from "styled-components";
 import { IProjectItem } from "@/utils/interface";
-import { Link } from "@reach/router";
+import { RouterLink } from "@/utils";
 
 const ListCardWrapper = styled(Table)`
   border-radius: 8px;
@@ -46,9 +46,9 @@ const columns = [
     dataIndex: "id",
     render: (id) => (
       <Button type="primary" size="small">
-        <Link className="app-text-size-1n" to={`/detail/${id}`}>
+        <RouterLink className="app-text-size-1n" to={`/detail/${id}`}>
           去提交
-        </Link>
+        </RouterLink>
       </Button>
     ),
   },

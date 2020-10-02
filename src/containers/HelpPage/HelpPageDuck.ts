@@ -1,4 +1,4 @@
-import { DuckMap, reduceFromPayload, createToPayload } from "@/utils/saga-duck";
+import { DuckMap, reduceFromPayload, createToPayload } from "@/utils";
 import { fork, put, select } from "redux-saga/effects";
 import { takeLatest, runAndTakeLatest } from "redux-saga-catch";
 import { BasePageDuck } from "@/ducks/index";

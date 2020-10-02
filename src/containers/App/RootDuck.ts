@@ -1,4 +1,4 @@
-import { DuckMap, reduceFromPayload, createToPayload } from "@/utils/saga-duck";
+import { DuckMap, reduceFromPayload, createToPayload } from "@/utils";
 import { AdminPageDuck } from "@/containers/AdminPage/index";
 import { AuthPageDuck } from "@/containers/AuthPage/index";
 import { HelpPageDuck } from "@/containers/HelpPage/index";
