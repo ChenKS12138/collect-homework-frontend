@@ -1,15 +1,16 @@
 import { mock } from "mockjs";
 import mockProject from "./project";
-import mockAuth from "./auth";
 import mockAdmin from "./admin";
-import mockFile from "./file";
+import mockStorage from "./storage";
 
-const mocks = [mockProject, mockAuth, mockAdmin, mockFile];
+const mocks = [mockProject, mockAdmin, mockStorage];
 
-export function mockXHR() {
+function mockXHR() {
   mocks.forEach((mockItem) =>
     mockItem.forEach((rule) => {
       mock(rule.url, rule.method, rule.response);
     })
   );
 }
+
+mockXHR();

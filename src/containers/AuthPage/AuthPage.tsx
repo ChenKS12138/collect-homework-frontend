@@ -9,9 +9,9 @@ import {
   useSagaDuckState,
 } from "@/utils";
 import { useWindowSize } from "react-use";
-import { DuckCmpProps } from "saga-duck";
 import { AuthPageDuck } from ".";
 import { ILoginForm } from "./AuthPageDuck";
+import { IRegistryForm } from "./AuthPageRegistryFormDuck";
 
 const { useForm } = Form;
 
@@ -24,12 +24,10 @@ export default function AuthPage() {
     AuthPageDuck
   );
   const { ducks } = duck;
-  // const { path } = ducks.route.selector(store);
   const showRegistry = useRouteMatch("/auth/registry") !== false;
   const { height, width } = useWindowSize();
-  const [formInstance] = useForm();
-
-  console.log(ducks.loginForm.selector(store), store, duck);
+  const [loginFormInstance] = useForm();
+  const [registerFormInstance] = useForm();
 
   const {
     formLoading: loginLoading,
@@ -39,6 +37,8 @@ export default function AuthPage() {
     formLoading: registryLoading,
     formError: registryError,
   } = ducks.registryForm.selector(store);
+
+  const { active, seconds } = ducks.cutdown.selector(store);
 
   return (
     <Scaffold
@@ -59,11 +59,8 @@ export default function AuthPage() {
             maxWidth: "90vw",
           }}
           className="app-mlr-auto"
-          form={formInstance}
-          onFinish={(value: ILoginForm) => {
-            const { email, password } = value;
-            if (!email?.length || !password?.length) return;
-            console.log(value);
+          form={loginFormInstance}
+          onValuesChange={(changeValue: any, value: ILoginForm) => {
             dispatch(ducks.loginForm.creators.setFormData(value));
           }}
         >
@@ -73,7 +70,15 @@ export default function AuthPage() {
           <Form.Item label="密码" name="password">
             <Input.Password type="password" />
           </Form.Item>
-          <Button type="primary" htmlType="submit" block loading={loginLoading}>
+          <Button
+            type="primary"
+            htmlType="button"
+            block
+            loading={loginLoading}
+            onClick={() => {
+              dispatch({ type: duck.types.INVOKE_LOGIN });
+            }}
+          >
             登陆
           </Button>
           <Button type="link" htmlType="button" block className="app-mt-1n">
@@ -93,12 +98,25 @@ export default function AuthPage() {
         width={Math.max(width * 0.7, 300)}
       >
         <AuthWrapper className="app-mlr-auto app-mt-4n">
-          <Form>
+          <Form
+            form={registerFormInstance}
+            onValuesChange={(changeValue: any, value: IRegistryForm) => {
+              dispatch(ducks.registryForm.creators.setFormData(value));
+            }}
+          >
             <Form.Item label="邮箱" required>
               <Space size="large">
                 <Input />
-                <Button type="default" htmlType="button">
-                  申请邀请码
+                <Button
+                  type="default"
+                  htmlType="button"
+                  onClick={() => {
+                    dispatch(ducks.cutdown.creators.invoke(60));
+                  }}
+                  disabled={active}
+                  block
+                >
+                  {active ? `${seconds}s秒后重试` : "申请邀请码"}
                 </Button>
               </Space>
             </Form.Item>
@@ -111,7 +129,12 @@ export default function AuthPage() {
             <Form.Item label="密码" required>
               <Input.Password />
             </Form.Item>
-            <Button type="primary" htmlType="submit" block>
+            <Button
+              type="primary"
+              htmlType="button"
+              block
+              loading={registryLoading}
+            >
               提交申请
             </Button>
           </Form>

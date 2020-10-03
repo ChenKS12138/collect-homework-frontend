@@ -3,5 +3,6 @@
   "extends": ["tslint:recommended"],
   "jsRules": {},
   "rules": {},
-  "rulesDirectory": []
+  "rulesDirectory": [],
+  "module": "esnext"
 }

@@ -1,26 +1,17 @@
-import { reduceFromPayload, createToPayload } from "@/utils";
+import { reduceFromPayload, createToPayload } from "saga-duck";
 import moment from "moment";
 import { fork, put, select } from "redux-saga/effects";
 import { takeLatest } from "redux-saga-catch";
 import {
   requestProjectOwn,
-  requestAdminBasicInfo,
-  requestFiles,
+  requestAdminStatus,
+  requestStorageFileList,
 } from "@/utils/model";
 import { IProjectItem, IAdminBasicInfo, IProjectFile } from "@/utils/interface";
 import AdminPageCreateFormDuck from "./AdminPageCreateFormDuck";
-// import { BasePageDuck } from "@/ducks/index";
 import { DuckMap } from "saga-duck";
 
-interface AdminPageParam {
-  id: string;
-}
-
 export default class AdminPageDuck extends DuckMap {
-  IParams: AdminPageParam;
-  get RoutePath() {
-    return ["/admin", "/admin/create", "/admin/edit/:id"];
-  }
   get quickTypes() {
     enum Types {
       SET_PROJECT_OWN,
@@ -70,26 +61,30 @@ export default class AdminPageDuck extends DuckMap {
   }
   *watchToFetchProjectOwn() {
     const { types } = this;
-    const { projects } = yield requestProjectOwn();
-    yield put({
-      type: types.SET_PROJECT_OWN,
-      payload: projects ?? [],
-    });
+    const { success, data } = yield requestProjectOwn();
+    if (success) {
+      yield put({
+        type: types.SET_PROJECT_OWN,
+        payload: data?.projects ?? [],
+      });
+    }
   }
   *watchToFetchAdminBasicInfo() {
     const { types } = this;
-    const result = yield requestAdminBasicInfo();
-    yield put({
-      type: types.SET_ADMIN_BASIC_INFO,
-      payload: result,
-    });
+    const { success, data } = yield requestAdminStatus();
+    if (success) {
+      yield put({
+        type: types.SET_ADMIN_BASIC_INFO,
+        payload: data,
+      });
+    }
   }
   *watchToFetchProjectFilesInfo() {
     const { types, selector } = this;
     yield takeLatest(types.FETCH_FILES_INFO, function* (action) {
       const id = action?.payload;
       if (!id) return;
-      const { files } = yield requestFiles(id);
+      const { files } = yield requestStorageFileList(id);
       const { filesInfoMap } = selector(yield select());
       const newFilesInfoMap = new Map(filesInfoMap);
       newFilesInfoMap.set(id, { data: files });
@@ -108,7 +103,7 @@ export default class AdminPageDuck extends DuckMap {
     });
   }
   formatProjectOwn(list): IProjectItem[] {
-    return list.map((item) => {
+    return list?.map?.((item) => {
       item.createAt = moment(item.createAt).format("YYYY-MM-DD HH:mm:ss");
       item.updateAt = moment(item.updateAt).format("YYYY-MM-DD HH:mm:ss");
       item.due = moment(item.due).format("YYYY-MM-DD HH:mm:ss");

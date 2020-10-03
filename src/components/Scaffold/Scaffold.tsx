@@ -37,7 +37,7 @@ export default function Scaffold({ links, sider, children }: IScaffold) {
         }}
       >
         <div style={{ display: showMenu ? "block" : "none" }}>
-          {links.map((item, index) => (
+          {links?.map?.((item, index) => (
             <Row key={index} align="middle">
               <Col push={3} style={{ maxHeight: "64px" }}>
                 <Button type="link">
@@ -55,7 +55,7 @@ export default function Scaffold({ links, sider, children }: IScaffold) {
             </Col>
             <Col span={2}>
               <Space>
-                {links.map((item) => (
+                {links?.map?.((item) => (
                   <Button type="link" key={item.text}>
                     <RouterLink to={item.link}>{item.text}</RouterLink>
                   </Button>

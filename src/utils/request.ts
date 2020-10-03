@@ -1,11 +1,39 @@
 import axios from "axios";
-import { mockXHR } from "../../mock/index";
 
-mockXHR();
+if (process.env.NODE_ENV === "development" && process.env.MOCK_REQUEST) {
+  require("../../mock");
+}
 
-export const instance = axios.create();
+export const instance = axios.create({
+  baseURL:
+    process.env.NODE_ENV === "development" && !process.env.MOCK_REQUEST
+      ? "/api"
+      : "",
+});
+
+const CONSTANT_TOKEN_KEY = "JWT_TOKEN";
+
+let jwtToken = "";
+export const setToken = (token: string) => {
+  jwtToken = token;
+  window.localStorage.setItem(CONSTANT_TOKEN_KEY, token);
+};
+export const cleanToken = () => {
+  jwtToken = "";
+  window.localStorage.removeItem(CONSTANT_TOKEN_KEY);
+};
+export const getToken = (): string => {
+  return jwtToken || window.localStorage.getItem(CONSTANT_TOKEN_KEY);
+};
 instance.interceptors.response.use((response) => {
   return response?.data;
+});
+instance.interceptors.request.use((config) => {
+  const token = getToken();
+  if (token?.length) {
+    config.headers["Authorization"] = `Bearer ${token}`;
+  }
+  return config;
 });
 
 const memorizeMap = new WeakMap<Function, Map<string, any>>();

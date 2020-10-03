@@ -20,14 +20,13 @@ import {
 } from "antd";
 import { AdminPageDuck } from ".";
 import {
-  DuckCmpProps,
-  purify,
   useRouteMatch,
   distributeArray,
   navigateTo,
   IProjectItem,
   useSagaDuckState,
 } from "@/utils";
+import { DuckCmpProps, purify } from "saga-duck";
 import { useWindowSize } from "react-use";
 import { FormInstance } from "antd/lib/form";
 import moment from "moment";
@@ -50,33 +49,17 @@ const editFormProperty = [
     renderShow: (item) => <div>{item.adminName}</div>,
   },
   {
-    key: "due",
-    label: "截止时间",
-    renderShow: (item) => <div>{item.due}</div>,
-    renderEdit: (item, formInstance: FormInstance) => (
-      <DatePicker
-        format="YYYY-MM-DD"
-        defaultValue={moment(item.due)}
-        onChange={(value) => {
-          formInstance.setFieldsValue({
-            due: moment(value).format("YYYY-MM-DD"),
-          });
-        }}
-      />
-    ),
-  },
-  {
-    key: "nameExtensions",
+    key: "fileNameExtensions",
     label: "文件后缀名",
     renderShow: (item) => (
       <div>
-        {item.nameExtensions?.map((tag, tagIndex) => (
+        {item.fileNameExtensions?.map((tag, tagIndex) => (
           <Tag key={tagIndex}>{tag}</Tag>
         ))}
       </div>
     ),
     renderEdit: (item, formInstance: FormInstance) => {
-      const formatedList = Array.from(item.nameExtensions)?.map(
+      const formatedList = Array.from(item.fileNameExtensions)?.map(
         (x: string) => ({
           key: x,
           text: x,
@@ -93,27 +76,27 @@ const editFormProperty = [
     },
   },
   {
-    key: "nameRegDesc",
+    key: "fileNameExample",
     label: "文件名示例",
-    renderShow: (item) => <div>{item.nameRegDesc}</div>,
+    renderShow: (item) => <div>{item.fileNameExample}</div>,
     renderEdit: (item, formInstance: FormInstance) => (
       <Input
-        defaultValue={item.nameRegDesc}
+        defaultValue={item.fileNameExample}
         onChange={(event) => {
-          formInstance.setFieldsValue({ nameRegDesc: event.target.value });
+          formInstance.setFieldsValue({ fileNameExample: event.target.value });
         }}
       />
     ),
   },
   {
-    key: "nameRegExp",
+    key: "fileNamePattern",
     label: "文件名正则表达式",
-    renderShow: (item) => <div>{item.nameRegExp}</div>,
+    renderShow: (item) => <div>{item.fileNamePattern}</div>,
     renderEdit: (item, formInstance: FormInstance) => (
       <Input
-        defaultValue={item.nameRegExp}
+        defaultValue={item.fileNamePattern}
         onChange={(event) => {
-          formInstance.setFieldsValue({ nameRegExp: event.target.value });
+          formInstance.setFieldsValue({ fileNamePattern: event.target.value });
         }}
       />
     ),
@@ -134,10 +117,6 @@ export default function AdminPage() {
   const { width, height } = useWindowSize();
 
   const showCreate = useRouteMatch("/admin/create") !== false;
-
-  useEffect(() => {
-    console.log("init admin page");
-  }, []);
 
   return (
     <Scaffold
@@ -168,22 +147,22 @@ export default function AdminPage() {
             <Col>
               <Statistic
                 title="创建的作业项目"
-                value={basicInfo?.projectsCount ?? "-"}
+                value={basicInfo?.projectCount ?? "-"}
                 suffix="个"
               />
             </Col>
             <Col>
               <Statistic
                 title="收集到的作业文件总个数"
-                value={basicInfo?.filesCount ?? "-"}
+                value={basicInfo?.fileCount ?? "-"}
                 suffix="个"
               />
             </Col>
             <Col>
               <Statistic
                 title="占用的总空间数"
-                value={basicInfo?.memoryUsed ?? "-"}
-                suffix="MB"
+                value={basicInfo?.totalSize ?? "-"}
+                suffix="B"
               />
             </Col>
           </Row>

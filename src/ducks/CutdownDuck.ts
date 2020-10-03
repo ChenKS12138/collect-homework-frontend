@@ -45,10 +45,10 @@ export default class CutdownDuck extends DuckMap {
         type: types.SET_ACTIVE,
         payload: true,
       });
-      while (rest >= 0) {
+      while (rest > 1) {
         yield put({
           type: types.SET_SECONDS,
-          payload: rest,
+          payload: rest - 1,
         });
         rest = yield take(cutdownChannel);
       }

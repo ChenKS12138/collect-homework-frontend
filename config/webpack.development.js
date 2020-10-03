@@ -27,15 +27,15 @@ const config = merge(common, {
     compress: true,
     // 配合页面路由history模式
     historyApiFallback: true,
-    // proxy: {
-    //   "/api": {
-    //     target: "http://localhost:3030",
-    //     pathRewrite: {
-    //       "^/api": ""
-    //     },
-    //     changeOrigin: true
-    //   }
-    // }
+    proxy: {
+      "/api": {
+        target: "http://localhost:3000",
+        pathRewrite: {
+          "^/api": "",
+        },
+        changeOrigin: true,
+      },
+    },
   },
   devtool: "eval-cheap-source-map",
 });

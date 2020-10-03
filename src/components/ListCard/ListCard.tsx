@@ -23,7 +23,7 @@ const columns = [
     dataIndex: "fileNameExtensions",
     render: (tags) => (
       <Space>
-        {tags.map((tag, tagIndex) => (
+        {tags?.map?.((tag, tagIndex) => (
           <Tag key={tagIndex}>{tag}</Tag>
         ))}
       </Space>
@@ -37,10 +37,10 @@ const columns = [
     title: "创建时间",
     dataIndex: "createAt",
   },
-  {
-    title: "截止时间",
-    dataIndex: "due",
-  },
+  // {
+  //   title: "截止时间",
+  //   dataIndex: "due",
+  // },
   {
     title: "操作",
     dataIndex: "id",

@@ -4,7 +4,6 @@ import { Scaffold, Avatar, ListCard, UploadCard, Modal } from "@/components";
 import { Button, Drawer } from "antd";
 import styled from "styled-components";
 import { avatarImage } from "@/assets";
-import { DuckCmpProps, purify } from "saga-duck";
 import { ListPageDuck } from "@/containers/ListPage";
 import {
   RouterLink,
@@ -32,7 +31,13 @@ export default function ListPage() {
   const { height, width } = useWindowSize();
   const matched = useRouteMatch<{ id: string }>("/detail/:id");
   const showDetail = matched !== false;
-  const machedID: string = matched ? matched?.params?.id : "";
+  const matchedID: string = matched ? matched?.params?.id : "";
+
+  useEffect(() => {
+    if (matchedID?.length) {
+      dispatch(duck.creators.fetchProject(matchedID));
+    }
+  }, [matchedID]);
 
   return (
     <Scaffold

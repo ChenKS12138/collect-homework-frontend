@@ -12,9 +12,9 @@ export interface IProjectItem {
 }
 
 export interface IAdminBasicInfo {
-  projectsCount: number;
-  filesCount: number;
-  memoryUsed: number;
+  projectCount: number;
+  fileCount: number;
+  totalSize: number;
 }
 
 export interface IProjectFile {

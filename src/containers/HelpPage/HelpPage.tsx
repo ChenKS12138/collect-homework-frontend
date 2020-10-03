@@ -1,19 +1,17 @@
 import React from "react";
 import { Scaffold } from "@/components/index";
-import { DuckCmpProps } from "saga-duck";
-import { HelpPageDuck } from ".";
 
 export default function HelpPage() {
   return (
     <Scaffold
       links={[
         {
-          link: "/help",
-          text: "帮助",
-        },
-        {
           link: "/",
           text: "主页",
+        },
+        {
+          link: "/auth",
+          text: "管理员",
         },
       ]}
     >

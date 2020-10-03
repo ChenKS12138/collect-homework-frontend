@@ -1,29 +1,107 @@
 import { instance, memorize } from "./request";
-import axios from "axios";
-import { IProjectItem, IAdminBasicInfo } from "@/utils/interface";
 
-export const requestProjectList = (): Promise<{ projects: IProjectItem[] }> =>
-  memorize(instance.get)("/project");
-
-export const requestProjectOwn = (): Promise<{ projects: IProjectItem[] }> =>
-  memorize(instance.get)("/project/own");
-
-interface IRequestAuthLogin {
+interface IRequestAdminLogin {
   email: string;
   password: string;
 }
 
-export const requestAuthLogin = ({
+// admin
+export const requestAdminLogin = ({ email, password }: IRequestAdminLogin) =>
+  instance.post("/admin/login", { email, password });
+
+interface IRequestAdminRegister {
+  email: string;
+  password: string;
+  name: string;
+  invitationCode: string;
+}
+
+export const IRequestAdminRegister = ({
   email,
   password,
-}: IRequestAuthLogin): Promise<any> =>
-  instance.post("/auth/login", { email, password });
+  invitationCode,
+  name,
+}: IRequestAdminRegister) =>
+  instance.post("/admin/register", { email, password, invitationCode, name });
 
-export const requestAdminBasicInfo = (): Promise<IAdminBasicInfo> =>
-  memorize(instance.post)("/admin/basicInfo");
+export const requestAdminStatus = () => memorize(instance.get)("/admin/status");
 
-export const requestFiles = (id: number) =>
-  memorize(instance.get)(`/files/${id}`);
+interface IRequestAdminInvitationCode {
+  email: string;
+}
 
-export const requestAuthSecretCode = ({ email }: { email: string }) =>
-  instance.post("/auth/secretCode", { email });
+export const requestAdminInvitationCode = ({
+  email,
+}: IRequestAdminInvitationCode) =>
+  instance.post("/admin/invitationCode", { email });
+
+// project
+export const requestProjectList = () => memorize(instance.get)("/project/");
+
+export const requestProjectOwn = () => memorize(instance.get)("/project/own");
+
+interface IRequestProjectInsert {
+  name: string;
+  fileNamePattern: string;
+  fileNameExtensions: string[];
+  fileNameExample: string;
+}
+
+export const requestProjectInsert = ({
+  fileNameExample,
+  fileNameExtensions,
+  fileNamePattern,
+  name,
+}: IRequestProjectInsert) =>
+  instance.post("/project/insert", {
+    name,
+    fileNamePattern,
+    fileNameExtensions,
+    fileNameExample,
+  });
+
+interface IRequestProjectUpdate {
+  id: string;
+  usable: boolean;
+  fileNamePattern: string;
+  fileNameExtensions: string[];
+  fileNameExample: string;
+}
+
+export const requestProjectUpdate = ({
+  fileNameExample,
+  fileNameExtensions,
+  fileNamePattern,
+  id,
+  usable,
+}: IRequestProjectUpdate) =>
+  instance.post("/project/update", {
+    id,
+    usable,
+    fileNamePattern,
+    fileNameExtensions,
+    fileNameExample,
+  });
+
+// storage
+
+interface IRequestStorageDownload {
+  id: string;
+}
+
+export const requestStorageDownload = ({ id }: IRequestStorageDownload) =>
+  instance.get(`/storage/download?id=${id}`);
+
+interface IRequestStorageFileList {
+  id: string;
+}
+
+export const requestStorageFileList = ({ id }: IRequestStorageFileList) =>
+  instance.get(`/storage/fileList?id=${id}`);
+
+interface IRequestStorageFileCount {
+  id: string;
+}
+
+export const requestStorageFileCount = ({ id }: IRequestStorageFileCount) =>
+  instance.get(`/storage/fileCount?id=${id}`);

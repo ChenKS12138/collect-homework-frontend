@@ -42,7 +42,7 @@ export default function ManageCard({
       actions={actions({ isEdit, setIsEdit, formInstance })}
     >
       <Form initialValues={initFormValue} form={formInstance}>
-        {formAttr.map((attr) => (
+        {formAttr?.map?.((attr) => (
           <Form.Item key={attr.key} label={attr.label} name={attr?.name}>
             {attr.renderEdit && isEdit
               ? attr.renderEdit(initFormValue, formInstance)

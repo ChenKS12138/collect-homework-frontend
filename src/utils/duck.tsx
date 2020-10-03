@@ -15,7 +15,7 @@ const sagaMiddleware = createSagaMiddleware();
 const loggerMiddleware = createLogger({ collapsed: true });
 
 // saga-duck 缺少declare文件
-export * from "../../node_modules/saga-duck/build/index";
+// export * from "../../node_modules/saga-duck/build/index";
 
 export const connectWithDuck = (Component, Duck, middlewares = []) => {
   return () => {
@@ -41,11 +41,17 @@ export function useSagaDuckState<T extends DuckMap = any>(
 ) {
   const [duck] = useState(new DM());
   const initState = useMemo(() => {
-    const state = {};
-    for (const key in duck.ducks) {
-      state[key] = {};
-    }
-    return state;
+    const makeState = (obj) => {
+      const state = {};
+      for (const key in obj) {
+        state[key] = {};
+        for (const duckKey in obj[key]?.ducks) {
+          state[key][duckKey] = makeState(obj[key]?.ducks);
+        }
+      }
+      return state;
+    };
+    return makeState(duck.ducks);
   }, [duck, duck.ducks]);
   const [state, dispatch]: [any, any] = useReducer(
     duck.reducer as any,

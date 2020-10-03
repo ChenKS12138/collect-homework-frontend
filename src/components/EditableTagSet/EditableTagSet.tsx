@@ -32,7 +32,7 @@ export default function EditTableSet({
 
   return (
     <div>
-      {currentTagSet.map((tag) => (
+      {currentTagSet?.map?.((tag) => (
         <Tag
           key={tag.key}
           onClose={() => {

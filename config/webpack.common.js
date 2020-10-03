@@ -2,6 +2,7 @@ const path = require("path");
 const HtmlWebpackPlugin = require("html-webpack-plugin");
 const merge = require("webpack-merge");
 const HappyPack = require("happypack");
+const webpack = require("webpack");
 
 const config = merge({
   target: "web",
@@ -47,6 +48,9 @@ const config = merge({
     },
   },
   plugins: [
+    new webpack.DefinePlugin({
+      "process.env.MOCK_REQUEST": process.env.MOCK_REQUEST,
+    }),
     new HappyPack({
       loaders: ["babel-loader?cacheDirectory=true"],
     }),

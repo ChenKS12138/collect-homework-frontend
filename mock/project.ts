@@ -1,11 +1,14 @@
 import { projectListData } from "./mockData";
 export default [
   {
-    url: "/project",
+    url: "/project/",
     method: "get",
     response() {
       return {
-        projects: projectListData,
+        success: true,
+        data: {
+          projects: projectListData,
+        },
       };
     },
   },
@@ -14,7 +17,30 @@ export default [
     method: "get",
     response() {
       return {
-        projects: projectListData,
+        success: true,
+        data: {
+          projects: projectListData,
+        },
+      };
+    },
+  },
+  {
+    url: "/project/insert",
+    method: "get",
+    response() {
+      return {
+        success: true,
+        data: true,
+      };
+    },
+  },
+  {
+    url: "/project/update",
+    method: "get",
+    response() {
+      return {
+        success: true,
+        data: true,
       };
     },
   },

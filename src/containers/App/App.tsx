@@ -6,7 +6,6 @@ import { AuthPage } from "@/containers/AuthPage";
 import { HelpPage } from "@/containers/HelpPage";
 import { AdminPage } from "@/containers/AdminPage";
 import { GlobalStyle } from "@/components/index";
-import RootDuck from "./RootDuck";
 
 const AppWrapper = styled.div`
   padding: 0;
@@ -36,5 +35,4 @@ function App() {
   );
 }
 
-// export default connectWithDuck(purify(App), RootDuck);
 export default App;

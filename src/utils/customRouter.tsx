@@ -112,7 +112,7 @@ export function useRouteMatch<T extends object = any>(pattern) {
     [pattern]
   );
   useEffect(() => {
-    handlePathChange(getCurrentRoute().path);
+    handlePathChange(getCurrentRoute());
   }, [pattern]);
   useEffect(() => {
     pathWatcher.add(handlePathChange);

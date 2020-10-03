@@ -1,4 +1,4 @@
-import { DuckMap, reduceFromPayload, createToPayload } from "@/utils";
+import { DuckMap, reduceFromPayload, createToPayload } from "saga-duck";
 
 export default abstract class FormDuck extends DuckMap {
   abstract IForm;

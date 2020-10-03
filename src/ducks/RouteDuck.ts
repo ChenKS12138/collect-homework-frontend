@@ -1,8 +1,8 @@
-import { DuckMap, reduceFromPayload, createToPayload } from "@/utils";
-import { fork, put, call, take } from "redux-saga/effects";
-import { takeLatest, runAndTakeLatest } from "redux-saga-catch";
-import { eventChannel } from "redux-saga";
-import { singleton } from "@/utils/index";
+import { navigateTo, singleton } from "@/utils";
+import { fork } from "redux-saga/effects";
+import { createToPayload, DuckMap } from "saga-duck";
+import { takeLatest } from "redux-saga-catch";
+import { format } from "prettier";
 
 @singleton({
   runOnceMethods: ["saga"],
@@ -10,70 +10,30 @@ import { singleton } from "@/utils/index";
 export default class RouteDuck extends DuckMap {
   get quickTypes() {
     enum Types {
-      ROUTE_NAVIGATE,
-      SET_ROUTE_CHANGE_HISTORY,
-      SET_ROUTE_PATH,
+      NAVIGATE_TO,
     }
     return {
       ...super.quickTypes,
       ...Types,
     };
   }
-  get reducers() {
-    const { types } = this;
-    return {
-      ...super.reducers,
-      path: reduceFromPayload<string>(types.SET_ROUTE_PATH, ""),
-    };
-  }
   get creators() {
     const { types } = this;
     return {
       ...super.creators,
-      navigate: createToPayload<string>(types.ROUTE_NAVIGATE),
+      navigateTo: createToPayload<string>(types.NAVIGATE_TO),
     };
   }
   *saga() {
-    yield* super.saga();
-    yield fork([this, this.watchHistoryChange]);
-    yield fork([this, this.watchToNavigate]);
-    yield fork([this, this.watchToSetPath]);
+    yield fork([this, this.watchToNavigateTo]);
   }
-  *watchToNavigate() {
+  *watchToNavigateTo() {
     const { types } = this;
-    yield takeLatest(types.ROUTE_NAVIGATE, function* (param) {
-      // yield globalHistory.navigate(param?.payload);
-    });
-  }
-  *watchHistoryChange() {
-    const { types, createHistoryChangeChannel } = this;
-    const historyChannel = yield call(createHistoryChangeChannel);
-    while (true) {
-      const payload = yield take(historyChannel);
-      if (payload) {
-        yield put({
-          type: types.SET_ROUTE_CHANGE_HISTORY,
-          payload,
-        });
-      }
-    }
-  }
-  *watchToSetPath() {
-    const { types } = this;
-    yield runAndTakeLatest(types.SET_ROUTE_CHANGE_HISTORY, function* (param) {
-      const path = param?.payload?.location?.pathname ?? location.pathname;
-      yield put({
-        type: types.SET_ROUTE_PATH,
-        payload: path,
-      });
-    });
-  }
-  createHistoryChangeChannel() {
-    return eventChannel((emit) => {
-      // globalHistory.listen((history) => {
-      //   emit(history);
-      // });
-      return () => {};
-    });
+    yield takeLatest([
+      types.NAVIGATE_TO,
+      function* (action) {
+        navigateTo(action.payload);
+      },
+    ]);
   }
 }
