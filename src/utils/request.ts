@@ -1,5 +1,6 @@
 import axios from "axios";
 import { mockXHR } from "../../mock/index";
+
 mockXHR();
 
 export const instance = axios.create();

@@ -3,7 +3,7 @@ import axios from "axios";
 import { IProjectItem, IAdminBasicInfo } from "@/utils/interface";
 
 export const requestProjectList = (): Promise<{ projects: IProjectItem[] }> =>
-  memorize(instance.get)("/project/list");
+  memorize(instance.get)("/project");
 
 export const requestProjectOwn = (): Promise<{ projects: IProjectItem[] }> =>
   memorize(instance.get)("/project/own");

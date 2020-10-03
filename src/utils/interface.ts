@@ -1,22 +1,12 @@
 export interface IProjectItem {
-  id: number;
+  id: string;
   name: string;
-  nameExtensions: string[];
-  nameRegExp: string;
-  nameRegDesc: string;
-  due: string;
+  adminId: string;
   adminName: string;
-  createAt: string;
-  updateAt: string;
-}
-export interface IProjectItemOwn {
-  id: number;
-  name: string;
-  nameExtensions: string[];
-  nameRegExp: string;
-  nameRegDesc: string;
-  due: string;
-  adminName: string;
+  fileNamePattern: string;
+  fileNameExtensions: string[];
+  fileNameExample: string;
+  usable: boolean;
   createAt: string;
   updateAt: string;
 }

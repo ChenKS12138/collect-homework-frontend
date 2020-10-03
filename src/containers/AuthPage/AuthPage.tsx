@@ -2,7 +2,12 @@ import React from "react";
 import { Scaffold } from "@/components/index";
 import { Form, Input, Button, Drawer, Space } from "antd";
 import styled from "styled-components";
-import { RouterLink, navigateTo, useRouteMatch } from "@/utils";
+import {
+  RouterLink,
+  navigateTo,
+  useRouteMatch,
+  useSagaDuckState,
+} from "@/utils";
 import { useWindowSize } from "react-use";
 import { DuckCmpProps } from "saga-duck";
 import { AuthPageDuck } from ".";
@@ -14,16 +19,17 @@ const AuthWrapper = styled.div`
   max-width: 400px;
 `;
 
-export default function AuthPage({
-  dispatch,
-  duck,
-  store,
-}: DuckCmpProps<AuthPageDuck>) {
+export default function AuthPage() {
+  const { dispatch, duck, store } = useSagaDuckState<AuthPageDuck>(
+    AuthPageDuck
+  );
   const { ducks } = duck;
-  const { path } = ducks.route.selector(store);
-  const showRegistry = useRouteMatch("/auth/registry");
+  // const { path } = ducks.route.selector(store);
+  const showRegistry = useRouteMatch("/auth/registry") !== false;
   const { height, width } = useWindowSize();
   const [formInstance] = useForm();
+
+  console.log(ducks.loginForm.selector(store), store, duck);
 
   const {
     formLoading: loginLoading,
@@ -55,6 +61,9 @@ export default function AuthPage({
           className="app-mlr-auto"
           form={formInstance}
           onFinish={(value: ILoginForm) => {
+            const { email, password } = value;
+            if (!email?.length || !password?.length) return;
+            console.log(value);
             dispatch(ducks.loginForm.creators.setFormData(value));
           }}
         >

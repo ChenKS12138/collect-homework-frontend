@@ -77,14 +77,16 @@ export default function UploadCard({
         />
         <Form.Item label="支持的文件格式">
           <Space>
-            {currentProject?.nameExtensions?.map((tag, tagIndex) => (
+            {currentProject?.fileNameExtensions?.map((tag, tagIndex) => (
               <Tag key={tagIndex}>{tag}</Tag>
             ))}
           </Space>
         </Form.Item>
         <Form.Item label="正确的文件名示例">
-          <Popover content={`对应的正则表达式为${currentProject?.nameRegExp}`}>
-            <span>{currentProject?.nameRegDesc}</span>
+          <Popover
+            content={`对应的正则表达式为${currentProject?.fileNamePattern}`}
+          >
+            <span>{currentProject?.fileNameExample}</span>
           </Popover>
         </Form.Item>
         <Dragger disabled={showLoading}>

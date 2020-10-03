@@ -1,15 +1,11 @@
-import {
-  DuckMap,
-  reduceFromPayload,
-  createToPayload,
-  navigateTo,
-} from "@/utils";
+import { reduceFromPayload, createToPayload, navigateTo } from "@/utils";
 import { fork, put, select } from "redux-saga/effects";
 import { takeLatest } from "redux-saga-catch";
 import AuthPageLoginFormDuck from "./AuthPageLoginFormDuck";
 import AuthPageRegistryFormDuck from "./AuthPageRegistryFormDuck";
 import { requestAuthLogin, requestAuthSecretCode } from "@/utils/model";
-import { BasePageDuck } from "@/ducks/index";
+// import { BasePageDuck } from "@/ducks/index";
+import { DuckMap } from "saga-duck";
 
 export interface ILoginForm {
   email: string;
@@ -18,7 +14,7 @@ export interface ILoginForm {
 
 interface AuthPageParam {}
 
-export default class AuthPageDuck extends BasePageDuck {
+export default class AuthPageDuck extends DuckMap {
   IParams: AuthPageParam;
   get RoutePath() {
     return ["/auth/", "/auth/registry"];
@@ -57,6 +53,7 @@ export default class AuthPageDuck extends BasePageDuck {
   *watchToLogin() {
     const { ducks } = this;
     yield takeLatest([ducks.loginForm.types.SET_FORM_DATA], function* () {
+      console.log(yield select());
       const {
         formData: { email, password },
       } = ducks.loginForm.selector(yield select());

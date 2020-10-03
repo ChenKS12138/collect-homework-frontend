@@ -20,7 +20,7 @@ const columns = [
   },
   {
     title: "支持的文件格式",
-    dataIndex: "nameExtensions",
+    dataIndex: "fileNameExtensions",
     render: (tags) => (
       <Space>
         {tags.map((tag, tagIndex) => (
@@ -31,7 +31,7 @@ const columns = [
   },
   {
     title: "文件名示例",
-    dataIndex: "nameRegDesc",
+    dataIndex: "fileNameExample",
   },
   {
     title: "创建时间",

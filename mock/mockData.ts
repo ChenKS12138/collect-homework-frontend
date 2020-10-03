@@ -1,7 +1,7 @@
 import { IProjectItem } from "@/utils/interface";
 import { mock, Random } from "mockjs";
 
-(Random as any).extend({
+Random.extend({
   fileName() {
     return `B180307${this.natural(10, 30)}-${this.cname()}-实验1.doc`;
   },
@@ -22,14 +22,15 @@ import { mock, Random } from "mockjs";
 
 export const projectListData = [
   ...Array.from({ length: 7 }).map(() => ({
-    name: (Random as any).projectName(),
-    createAt: Random.date(),
-    due: Random.date(),
     id: Random.guid(),
+    name: Random.projectName(),
+    adminId: Random.guid(),
     adminName: Random.cname(),
-    nameExtensions: [".doc", ".docx"],
-    nameRegDesc: (Random as any).fileName(),
-    nameRegExp: String.raw`\d+`,
+    fileNamePattern: String.raw`\d+`,
+    fileNameExtensions: [".doc", ".docx"],
+    fileNameExample: Random.fileName(),
+    usable: true,
+    createAt: Random.date(),
     updateAt: Random.datetime(),
   })),
 ];

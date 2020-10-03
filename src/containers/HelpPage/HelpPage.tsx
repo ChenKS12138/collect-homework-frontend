@@ -3,7 +3,7 @@ import { Scaffold } from "@/components/index";
 import { DuckCmpProps } from "saga-duck";
 import { HelpPageDuck } from ".";
 
-export default function HelpPage({}: DuckCmpProps<HelpPageDuck>) {
+export default function HelpPage() {
   return (
     <Scaffold
       links={[

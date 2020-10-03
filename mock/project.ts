@@ -1,7 +1,7 @@
 import { projectListData } from "./mockData";
 export default [
   {
-    url: "/project/list",
+    url: "/project",
     method: "get",
     response() {
       return {

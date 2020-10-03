@@ -1,11 +1,10 @@
 import { DuckMap, reduceFromPayload, createToPayload } from "@/utils";
 import { fork, put, select } from "redux-saga/effects";
 import { takeLatest, runAndTakeLatest } from "redux-saga-catch";
-import { BasePageDuck } from "@/ducks/index";
 
 interface HelpPageParam {}
 
-export default class HelpPageDuck extends BasePageDuck {
+export default class HelpPageDuck extends DuckMap {
   IParams: HelpPageParam;
   get RoutePath() {
     return ["/help"];

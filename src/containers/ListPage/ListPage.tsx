@@ -6,7 +6,12 @@ import styled from "styled-components";
 import { avatarImage } from "@/assets";
 import { DuckCmpProps, purify } from "saga-duck";
 import { ListPageDuck } from "@/containers/ListPage";
-import { RouterLink, navigateTo, useRouteMatch } from "@/utils";
+import {
+  RouterLink,
+  navigateTo,
+  useRouteMatch,
+  useSagaDuckState,
+} from "@/utils";
 import { useWindowSize } from "react-use";
 
 const TitleText = styled.div`
@@ -17,15 +22,14 @@ const TitleLineThroughText = styled.span`
   text-decoration-color: red;
 `;
 
-export default purify(function ListPage({
-  dispatch,
-  duck,
-  store,
-}: DuckCmpProps<ListPageDuck>) {
+export default function ListPage() {
+  const { dispatch, duck, store } = useSagaDuckState<ListPageDuck>(
+    ListPageDuck
+  );
+
   const { selector, ducks } = duck;
   const { projects, currentProject } = selector(store);
   const { height, width } = useWindowSize();
-  const { path } = ducks.route.selector(store);
   const matched = useRouteMatch<{ id: string }>("/detail/:id");
   const showDetail = matched !== false;
   const machedID: string = matched ? matched?.params?.id : "";
@@ -78,4 +82,4 @@ export default purify(function ListPage({
       </Drawer>
     </Scaffold>
   );
-});
+}

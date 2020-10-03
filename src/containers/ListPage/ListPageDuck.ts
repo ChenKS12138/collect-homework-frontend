@@ -10,10 +10,10 @@ interface ListPageParam {
   id: string;
 }
 
-export default class ListPageDuck extends BasePageDuck {
+export default class ListPageDuck extends DuckMap {
   IParams: ListPageParam;
   get RoutePath() {
-    return ["/", "/:id"];
+    return ["/", "/detail/:id"];
   }
   get quickTypes() {
     enum Types {
@@ -49,6 +49,7 @@ export default class ListPageDuck extends BasePageDuck {
     };
   }
   *saga() {
+    console.log("invoke main saga");
     yield* super.saga();
     yield fork([this, this.watchToFetchProjectList]);
     yield fork([this, this.watchToFetchCurrentProject]);
@@ -63,15 +64,15 @@ export default class ListPageDuck extends BasePageDuck {
   }
   *watchToFetchCurrentProject() {
     const { types, formatList, selector } = this;
-    yield takeLatest([types.SET_ROUTE_PARAM], function* () {
-      const { params } = selector(yield select());
-      if (!params?.id?.length) return;
-      const { projects } = yield requestProjectList();
-      yield put({
-        type: types.SET_CURRENT_PROJECT,
-        payload: formatList(projects)[0],
-      });
-    });
+    // yield takeLatest([types.SET_ROUTE_PARAM], function* () {
+    //   const { params } = selector(yield select());
+    //   if (!params?.id?.length) return;
+    //   const { projects } = yield requestProjectList();
+    //   yield put({
+    //     type: types.SET_CURRENT_PROJECT,
+    //     payload: formatList(projects)[0],
+    //   });
+    // });
   }
   formatList(list): IProjectItem[] {
     return list.map((item) => {

@@ -7,19 +7,16 @@ import {
   requestAdminBasicInfo,
   requestFiles,
 } from "@/utils/model";
-import {
-  IProjectItemOwn,
-  IAdminBasicInfo,
-  IProjectFile,
-} from "@/utils/interface";
+import { IProjectItem, IAdminBasicInfo, IProjectFile } from "@/utils/interface";
 import AdminPageCreateFormDuck from "./AdminPageCreateFormDuck";
-import { BasePageDuck } from "@/ducks/index";
+// import { BasePageDuck } from "@/ducks/index";
+import { DuckMap } from "saga-duck";
 
 interface AdminPageParam {
   id: string;
 }
 
-export default class AdminPageDuck extends BasePageDuck {
+export default class AdminPageDuck extends DuckMap {
   IParams: AdminPageParam;
   get RoutePath() {
     return ["/admin", "/admin/create", "/admin/edit/:id"];
@@ -47,10 +44,7 @@ export default class AdminPageDuck extends BasePageDuck {
     const { types } = this;
     return {
       ...super.reducers,
-      projectOwn: reduceFromPayload<IProjectItemOwn[]>(
-        types.SET_PROJECT_OWN,
-        []
-      ),
+      projectOwn: reduceFromPayload<IProjectItem[]>(types.SET_PROJECT_OWN, []),
       basicInfo: reduceFromPayload<IAdminBasicInfo>(
         types.SET_ADMIN_BASIC_INFO,
         null
@@ -113,7 +107,7 @@ export default class AdminPageDuck extends BasePageDuck {
       console.log("download", id);
     });
   }
-  formatProjectOwn(list): IProjectItemOwn[] {
+  formatProjectOwn(list): IProjectItem[] {
     return list.map((item) => {
       item.createAt = moment(item.createAt).format("YYYY-MM-DD HH:mm:ss");
       item.updateAt = moment(item.updateAt).format("YYYY-MM-DD HH:mm:ss");

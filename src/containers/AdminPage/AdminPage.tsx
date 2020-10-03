@@ -17,16 +17,16 @@ import {
   Input,
   DatePicker,
   Form,
-  Modal,
 } from "antd";
 import { AdminPageDuck } from ".";
 import {
   DuckCmpProps,
   purify,
   useRouteMatch,
-  IProjectItemOwn,
   distributeArray,
   navigateTo,
+  IProjectItem,
+  useSagaDuckState,
 } from "@/utils";
 import { useWindowSize } from "react-use";
 import { FormInstance } from "antd/lib/form";
@@ -70,16 +70,18 @@ const editFormProperty = [
     label: "文件后缀名",
     renderShow: (item) => (
       <div>
-        {item.nameExtensions.map((tag, tagIndex) => (
+        {item.nameExtensions?.map((tag, tagIndex) => (
           <Tag key={tagIndex}>{tag}</Tag>
         ))}
       </div>
     ),
     renderEdit: (item, formInstance: FormInstance) => {
-      const formatedList = Array.from(item.nameExtensions).map((x: string) => ({
-        key: x,
-        text: x,
-      }));
+      const formatedList = Array.from(item.nameExtensions)?.map(
+        (x: string) => ({
+          key: x,
+          text: x,
+        })
+      );
       return (
         <EditableTagSet
           tagSet={formatedList}
@@ -123,14 +125,12 @@ const editFormProperty = [
   },
 ];
 
-export default purify(function AdminPage({
-  dispatch,
-  duck,
-  store,
-}: DuckCmpProps<AdminPageDuck>) {
+export default function AdminPage() {
+  const { dispatch, duck, store } = useSagaDuckState<AdminPageDuck>(
+    AdminPageDuck
+  );
   const { selector, ducks } = duck;
   const { projectOwn, basicInfo } = selector(store);
-  const { path } = ducks.route.selector(store);
   const { width, height } = useWindowSize();
 
   const showCreate = useRouteMatch("/admin/create") !== false;
@@ -224,10 +224,10 @@ export default purify(function AdminPage({
       </Drawer>
     </Scaffold>
   );
-});
+}
 
 interface IProjectOwnWrapper extends DuckCmpProps<AdminPageDuck> {
-  projectOwn: IProjectItemOwn[];
+  projectOwn: IProjectItem[];
 }
 
 function ProjectOwnWrapper({
@@ -236,14 +236,14 @@ function ProjectOwnWrapper({
   store,
   duck,
 }: IProjectOwnWrapper) {
-  const distributedProjectOwn = distributeArray<IProjectItemOwn>(projectOwn, 2);
+  const distributedProjectOwn = distributeArray<IProjectItem>(projectOwn, 2);
   const { selector } = duck;
   const { filesInfoMap } = selector(store);
   return (
     <>
-      {distributedProjectOwn.map((row, rowIndex) => (
+      {distributedProjectOwn?.map((row, rowIndex) => (
         <Row gutter={[16, 16]} key={rowIndex}>
-          {row.map((col, colIndex) => {
+          {row?.map((col, colIndex) => {
             const currentFileInfo = filesInfoMap.get(String(col.id));
             return (
               <Col span={12} key={colIndex}>
@@ -297,7 +297,7 @@ function ProjectOwnWrapper({
                           key="overview"
                           onClick={() => {
                             setVisible(true);
-                            dispatch(duck.creators.fetchFiles(col.id));
+                            dispatch(duck.creators.fetchFiles((col as any).id));
                           }}
                         >
                           查看文件

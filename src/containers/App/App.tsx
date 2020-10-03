@@ -1,11 +1,10 @@
 import React, { Props, useEffect, useMemo } from "react";
 import styled from "styled-components";
 import { Router, Route } from "@/utils";
-import { ListPage } from "@/containers/ListPage/index";
-import { AuthPage } from "@/containers/AuthPage/index";
-import { HelpPage } from "@/containers/HelpPage/index";
-import { AdminPage } from "@/containers/AdminPage/index";
-import { connectWithDuck, DuckCmpProps, purify } from "@/utils/index";
+import { ListPage } from "@/containers/ListPage";
+import { AuthPage } from "@/containers/AuthPage";
+import { HelpPage } from "@/containers/HelpPage";
+import { AdminPage } from "@/containers/AdminPage";
 import { GlobalStyle } from "@/components/index";
 import RootDuck from "./RootDuck";
 
@@ -15,22 +14,21 @@ const AppWrapper = styled.div`
   border: 0;
 `;
 
-function App({ dispatch, duck, store }: DuckCmpProps<RootDuck>) {
-  const { ducks } = duck;
+function App() {
   return (
     <AppWrapper>
       <Router>
         <Route path={["/", "/detail/:id"]}>
-          <ListPage dispatch={dispatch} duck={ducks.list} store={store} />
+          <ListPage />
         </Route>
         <Route path={["/auth", "/auth/registry"]}>
-          <AuthPage dispatch={dispatch} duck={ducks.auth} store={store} />
+          <AuthPage />
         </Route>
         <Route path={["/admin", "/admin/create"]}>
-          <AdminPage dispatch={dispatch} duck={ducks.admin} store={store} />
+          <AdminPage />
         </Route>
         <Route path={["/help"]}>
-          <HelpPage dispatch={dispatch} duck={ducks.help} store={store} />
+          <HelpPage />
         </Route>
       </Router>
       <GlobalStyle />
@@ -38,4 +36,5 @@ function App({ dispatch, duck, store }: DuckCmpProps<RootDuck>) {
   );
 }
 
-export default connectWithDuck(purify(App), RootDuck);
+// export default connectWithDuck(purify(App), RootDuck);
+export default App;

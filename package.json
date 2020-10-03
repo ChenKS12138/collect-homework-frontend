@@ -28,8 +28,9 @@
   },
   "scripts": {
     "lint": "eslint --ext .js,.jsx,.ts,.tsx ./src",
-    "build": "webpack --config config/webpack.production.js",
-    "start": "webpack-dev-server --config config/webpack.development.js",
+    "build": "cross-env MOCK_REQUEST=false webpack --config config/webpack.production.js",
+    "start": "cross-env MOCK_REQUEST=false webpack-dev-server --config config/webpack.development.js",
+    "start:mock": "cross-env MOCK_REQUEST=true webpack-dev-server --config config/webpack.development.js",
     "test": "jest",
     "prettier": "prettier ./src/**/**.{ts,tsx} --loglevel warn --write"
   },
