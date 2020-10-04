@@ -36,6 +36,7 @@ export default function AuthPage() {
   const {
     formLoading: registryLoading,
     formError: registryError,
+    formData: registryData,
   } = ducks.registryForm.selector(store);
 
   const { active, seconds } = ducks.cutdown.selector(store);
@@ -68,7 +69,12 @@ export default function AuthPage() {
             <Input />
           </Form.Item>
           <Form.Item label="密码" name="password">
-            <Input.Password type="password" />
+            <Input.Password
+              type="password"
+              onPressEnter={() => {
+                dispatch({ type: duck.types.INVOKE_LOGIN });
+              }}
+            />
           </Form.Item>
           <Button
             type="primary"
@@ -104,14 +110,16 @@ export default function AuthPage() {
               dispatch(ducks.registryForm.creators.setFormData(value));
             }}
           >
-            <Form.Item label="邮箱" required>
+            <Form.Item label="邮箱" name="email" required>
               <Space size="large">
                 <Input />
                 <Button
                   type="default"
                   htmlType="button"
                   onClick={() => {
-                    dispatch(ducks.cutdown.creators.invoke(60));
+                    dispatch(
+                      duck.creators.fetchSecretCode(registryData?.email)
+                    );
                   }}
                   disabled={active}
                   block
@@ -120,13 +128,13 @@ export default function AuthPage() {
                 </Button>
               </Space>
             </Form.Item>
-            <Form.Item label="邀请码" required>
+            <Form.Item label="邀请码" name="invitationCode" required>
               <Input.Password />
             </Form.Item>
-            <Form.Item label="用户名" required>
+            <Form.Item label="用户名" name="username" required>
               <Input />
             </Form.Item>
-            <Form.Item label="密码" required>
+            <Form.Item label="密码" name="userPassword" required>
               <Input.Password />
             </Form.Item>
             <Button
@@ -134,6 +142,9 @@ export default function AuthPage() {
               htmlType="button"
               block
               loading={registryLoading}
+              onClick={() => {
+                dispatch({ type: duck.types.INVOKE_REGISTER });
+              }}
             >
               提交申请
             </Button>

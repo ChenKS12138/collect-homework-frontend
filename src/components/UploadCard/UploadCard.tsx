@@ -26,6 +26,7 @@ const CodeInput = styled(Input)`
 
 interface IUploadCard extends Props<null> {
   currentProject: IProjectItem;
+  uploadCount: number;
   showSuccess: boolean;
   showLoading: boolean;
   onUpload: Function;
@@ -37,6 +38,7 @@ export default function UploadCard({
   showSuccess,
   showLoading,
   successResultExtra,
+  uploadCount,
 }: IUploadCard) {
   if (showSuccess) {
     return (
@@ -61,7 +63,7 @@ export default function UploadCard({
           <div>{currentProject?.adminName}</div>
         </Form.Item>
         <Form.Item label="提交人数">
-          <div>99/100</div>
+          <div>{uploadCount}</div>
         </Form.Item>
         <Divider />
         <Form.Item name="codes" label="口令" rules={[{ required: true }]}>

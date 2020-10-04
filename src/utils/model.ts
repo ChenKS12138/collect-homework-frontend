@@ -1,5 +1,7 @@
 import { instance, memorize } from "./request";
 
+// TODO 目前对于memorize的使用还有点问题，没办法有效地判断信息的有效性
+
 interface IRequestAdminLogin {
   email: string;
   password: string;
@@ -16,7 +18,7 @@ interface IRequestAdminRegister {
   invitationCode: string;
 }
 
-export const IRequestAdminRegister = ({
+export const requestAdminRegister = ({
   email,
   password,
   invitationCode,
@@ -24,7 +26,7 @@ export const IRequestAdminRegister = ({
 }: IRequestAdminRegister) =>
   instance.post("/admin/register", { email, password, invitationCode, name });
 
-export const requestAdminStatus = () => memorize(instance.get)("/admin/status");
+export const requestAdminStatus = () => instance.get("/admin/status");
 
 interface IRequestAdminInvitationCode {
   email: string;
@@ -36,9 +38,9 @@ export const requestAdminInvitationCode = ({
   instance.post("/admin/invitationCode", { email });
 
 // project
-export const requestProjectList = () => memorize(instance.get)("/project/");
+export const requestProjectList = () => instance.get("/project/");
 
-export const requestProjectOwn = () => memorize(instance.get)("/project/own");
+export const requestProjectOwn = () => instance.get("/project/own");
 
 interface IRequestProjectInsert {
   name: string;
@@ -83,8 +85,19 @@ export const requestProjectUpdate = ({
     fileNameExample,
   });
 
-// storage
+interface IRequestProjectDelete {
+  id: string;
+}
+export const requestProjectDelete = ({ id }: IRequestProjectDelete) =>
+  instance.post("/project/delete", { id });
 
+interface IRequestProjectRestore {
+  id: string;
+}
+export const requestProjectRestore = ({ id }: IRequestProjectRestore) =>
+  instance.post("/project/restore", { id });
+
+// storage
 interface IRequestStorageDownload {
   id: string;
 }

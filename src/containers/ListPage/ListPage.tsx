@@ -10,6 +10,7 @@ import {
   navigateTo,
   useRouteMatch,
   useSagaDuckState,
+  useLazyState,
 } from "@/utils";
 import { useWindowSize } from "react-use";
 
@@ -27,9 +28,10 @@ export default function ListPage() {
   );
 
   const { selector, ducks } = duck;
-  const { projects, currentProject } = selector(store);
+  const { projects, currentProject, currentPorjectCount } = selector(store);
   const { height, width } = useWindowSize();
   const matched = useRouteMatch<{ id: string }>("/detail/:id");
+  const [showDrawer, setShowDrawer] = useLazyState(false, 400);
   const showDetail = matched !== false;
   const matchedID: string = matched ? matched?.params?.id : "";
 
@@ -38,6 +40,14 @@ export default function ListPage() {
       dispatch(duck.creators.fetchProject(matchedID));
     }
   }, [matchedID]);
+
+  useEffect(() => {
+    if (showDetail) {
+      setShowDrawer(true, false);
+    } else {
+      setShowDrawer(false, true);
+    }
+  }, [showDetail]);
 
   return (
     <Scaffold
@@ -68,7 +78,7 @@ export default function ListPage() {
         onClose={() => {
           navigateTo("/");
         }}
-        visible={showDetail}
+        visible={showDrawer}
         height={height * 0.9}
         width={width}
         placement="bottom"
@@ -77,6 +87,7 @@ export default function ListPage() {
           currentProject={currentProject}
           showSuccess={false}
           showLoading={false}
+          uploadCount={currentPorjectCount}
           onUpload={() => {}}
           successResultExtra={
             <Button type="primary">

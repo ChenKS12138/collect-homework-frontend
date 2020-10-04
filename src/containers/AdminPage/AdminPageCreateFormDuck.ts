@@ -2,12 +2,11 @@ import { FormDuck } from "@/ducks/index";
 
 export interface ICreateProjectForm {
   name: string;
-  due: string;
-  nameExtensions: string[];
-  nameRegDesc: string;
-  nameRegExp: string;
+  fileNameExtensions: string[];
+  fileNameExample: string;
+  fileNamePattern: string;
 }
 
-export default class AdminPageCreateProjectFormDuck extends FormDuck {
+export default class AdminPageCreateFormDuck extends FormDuck {
   IForm: ICreateProjectForm;
 }

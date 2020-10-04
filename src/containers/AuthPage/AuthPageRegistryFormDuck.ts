@@ -2,9 +2,9 @@ import { FormDuck } from "@/ducks/index";
 
 export interface IRegistryForm {
   email: string;
-  secretCode: string;
+  invitationCode: string;
   username: string;
-  password: string;
+  userPassword: string;
 }
 
 export default class AuthPageRegistryFormDuck extends FormDuck {

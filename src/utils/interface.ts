@@ -15,6 +15,8 @@ export interface IAdminBasicInfo {
   projectCount: number;
   fileCount: number;
   totalSize: number;
+  username: string;
+  email: string;
 }
 
 export interface IProjectFile {

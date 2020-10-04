@@ -1,10 +1,6 @@
-import React, { useEffect } from "react";
-import {
-  Scaffold,
-  EditableFormCard,
-  CommonModal,
-  EditableTagSet,
-} from "@/components/index";
+import React, { Dispatch, useEffect } from "react";
+import { Scaffold, CommonModal, EditableTagSet } from "@/components";
+import { EditableFormCard } from "@/duckComponents";
 import styled from "styled-components";
 import {
   Card,
@@ -13,26 +9,27 @@ import {
   Col,
   Statistic,
   Drawer,
-  Tag,
   Input,
-  DatePicker,
   Form,
+  Empty,
 } from "antd";
 import { AdminPageDuck } from ".";
 import {
   useRouteMatch,
   distributeArray,
   navigateTo,
-  IProjectItem,
   useSagaDuckState,
+  greetByTime,
+  RouterLink,
 } from "@/utils";
-import { DuckCmpProps, purify } from "saga-duck";
+import { IProjectItem } from "@/utils/interface";
+import { DuckCmpProps } from "saga-duck";
 import { useWindowSize } from "react-use";
-import { FormInstance } from "antd/lib/form";
 import moment from "moment";
-import AdminPageCreateProjectFormDuck from "./AdminPageCreateFormDuck";
 import { useForm } from "antd/lib/form/Form";
-import { greetByTime, RouterLink } from "@/utils";
+import { cleanToken } from "@/utils/request";
+
+import adminEditFormColumns from "./AdminEditFormColumn";
 
 const AdminWrapper = styled.div`
   max-width: 800px;
@@ -41,72 +38,6 @@ const AdminWrapper = styled.div`
 const WelcomeText = styled.span`
   color: black;
 `;
-
-const editFormProperty = [
-  {
-    key: "adminName",
-    label: "管理员",
-    renderShow: (item) => <div>{item.adminName}</div>,
-  },
-  {
-    key: "fileNameExtensions",
-    label: "文件后缀名",
-    renderShow: (item) => (
-      <div>
-        {item.fileNameExtensions?.map((tag, tagIndex) => (
-          <Tag key={tagIndex}>{tag}</Tag>
-        ))}
-      </div>
-    ),
-    renderEdit: (item, formInstance: FormInstance) => {
-      const formatedList = Array.from(item.fileNameExtensions)?.map(
-        (x: string) => ({
-          key: x,
-          text: x,
-        })
-      );
-      return (
-        <EditableTagSet
-          tagSet={formatedList}
-          onInputConfirm={(value) => {
-            console.log(value);
-          }}
-        />
-      );
-    },
-  },
-  {
-    key: "fileNameExample",
-    label: "文件名示例",
-    renderShow: (item) => <div>{item.fileNameExample}</div>,
-    renderEdit: (item, formInstance: FormInstance) => (
-      <Input
-        defaultValue={item.fileNameExample}
-        onChange={(event) => {
-          formInstance.setFieldsValue({ fileNameExample: event.target.value });
-        }}
-      />
-    ),
-  },
-  {
-    key: "fileNamePattern",
-    label: "文件名正则表达式",
-    renderShow: (item) => <div>{item.fileNamePattern}</div>,
-    renderEdit: (item, formInstance: FormInstance) => (
-      <Input
-        defaultValue={item.fileNamePattern}
-        onChange={(event) => {
-          formInstance.setFieldsValue({ fileNamePattern: event.target.value });
-        }}
-      />
-    ),
-  },
-  {
-    key: "createAt",
-    label: "创建时间",
-    renderShow: (item) => <div>{item.createAt}</div>,
-  },
-];
 
 export default function AdminPage() {
   const { dispatch, duck, store } = useSagaDuckState<AdminPageDuck>(
@@ -135,13 +66,21 @@ export default function AdminPage() {
         <Card
           title="概览"
           extra={[
-            <Button type="link" danger key="logout">
+            <Button
+              type="link"
+              danger
+              key="logout"
+              onClick={() => {
+                cleanToken();
+                navigateTo("/auth");
+              }}
+            >
               登出
             </Button>,
           ]}
         >
           <WelcomeText className="app-text-size-10n app-mb-6n">
-            {greetByTime(moment())}，cattchen
+            {greetByTime(moment())}，{basicInfo?.username}
           </WelcomeText>
           <Row className="app-mt-5n" gutter={50}>
             <Col>
@@ -183,23 +122,21 @@ export default function AdminPage() {
               store={store}
               duck={duck}
             />
-          ) : null}
+          ) : (
+            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+          )}
         </Card>
       </AdminWrapper>
       <Drawer
         visible={showCreate}
         title="新建"
         height={height}
-        width={width * 0.7}
+        width={Math.max(width * 0.4, 300)}
         placement="right"
         closable
         onClose={() => navigateTo("/admin")}
       >
-        <AdminPageCreate
-          duck={ducks.createProject}
-          dispatch={dispatch}
-          store={store}
-        />
+        <AdminPageCreate duck={duck} dispatch={dispatch} store={store} />
       </Drawer>
     </Scaffold>
   );
@@ -215,29 +152,37 @@ function ProjectOwnWrapper({
   store,
   duck,
 }: IProjectOwnWrapper) {
-  const distributedProjectOwn = distributeArray<IProjectItem>(projectOwn, 2);
-  const { selector } = duck;
-  const { filesInfoMap } = selector(store);
+  const { width } = useWindowSize();
+  const distributedProjectOwn = distributeArray<IProjectItem>(
+    projectOwn,
+    width < 960 ? 1 : 2
+  );
   return (
     <>
       {distributedProjectOwn?.map((row, rowIndex) => (
         <Row gutter={[16, 16]} key={rowIndex}>
           {row?.map((col, colIndex) => {
-            const currentFileInfo = filesInfoMap.get(String(col.id));
+            const currentFileInfo = { reason: "reason", data: "data" };
             return (
-              <Col span={12} key={colIndex}>
+              <Col span={width < 960 ? 24 : 12} key={colIndex}>
                 <EditableFormCard
+                  duck={duck.ducks.editProject}
+                  store={store}
+                  dispatch={dispatch}
                   title={col.name}
-                  initFormValue={col}
-                  formAttr={editFormProperty}
-                  extra={({ isEdit, setIsEdit, formInstance }) => [
+                  instance={col}
+                  columns={adminEditFormColumns}
+                  extra={({ isEdit, setIsEdit }) => [
                     <Button
                       size="small"
                       type="text"
                       key="edit"
                       onClick={() => {
                         if (isEdit) {
-                          console.log(formInstance.getFieldsValue());
+                          const { formData } = duck.ducks.editProject.selector(
+                            store
+                          );
+                          dispatch(duck.creators.updateProject(formData));
                           setIsEdit(false);
                         } else {
                           setIsEdit(true);
@@ -248,7 +193,14 @@ function ProjectOwnWrapper({
                     </Button>,
                     <CommonModal
                       key="delete"
-                      title="删除"
+                      title={col.usable ? "删除" : "恢复"}
+                      onOk={() => {
+                        if (col.usable) {
+                          dispatch(duck.creators.deleteProject(col.id));
+                        } else {
+                          dispatch(duck.creators.restoreProject(col.id));
+                        }
+                      }}
                       innerComponent={(visible, setVisible) => (
                         <Button
                           size="small"
@@ -260,11 +212,11 @@ function ProjectOwnWrapper({
                             setVisible(true);
                           }}
                         >
-                          删除
+                          {col.usable ? "删除" : "恢复"}
                         </Button>
                       )}
                     >
-                      <div>确认删除？</div>
+                      <div>确认{col.usable ? "删除" : "恢复"}？</div>
                     </CommonModal>,
                   ]}
                   actions={({ isEdit, setIsEdit }) => [
@@ -276,7 +228,6 @@ function ProjectOwnWrapper({
                           key="overview"
                           onClick={() => {
                             setVisible(true);
-                            dispatch(duck.creators.fetchFiles((col as any).id));
                           }}
                         >
                           查看文件
@@ -311,64 +262,79 @@ function AdminPageCreate({
   dispatch,
   duck,
   store,
-}: DuckCmpProps<AdminPageCreateProjectFormDuck>) {
+}: DuckCmpProps<AdminPageDuck>) {
   const {
     formData: createProjectFormData,
     formError: createProjectFormError,
     formLoading: createProjectFormLoading,
-  } = duck.selector(store);
+  } = duck.ducks.createProject.selector(store);
   const [formInstance] = useForm();
+  const { ducks } = duck;
   return (
     <Form>
-      <Form.Item label="项目名称">
+      <Form.Item label="项目名称" name="name">
         <Input
-          defaultValue={createProjectFormData?.name}
+          value={createProjectFormData?.name}
           onChange={(event) => {
-            formInstance.setFieldsValue({ name: event.target.value });
+            dispatch(
+              ducks.createProject.creators.setFormDataPartly({
+                name: event.target.value,
+              })
+            );
           }}
         />
       </Form.Item>
-      <Form.Item label="截止日期">
-        <DatePicker
-          format="YYYY-MM-DD"
-          defaultValue={moment(createProjectFormData?.due)}
-          onChange={(value) => {
-            formInstance.setFieldsValue({
-              due: moment(value).format("YYYY-MM-DD"),
-            });
-          }}
-        />
-      </Form.Item>
-      <Form.Item label="文件后缀名">
+      <Form.Item label="文件后缀名" name="fileNameExtensions">
         <EditableTagSet
           tagSet={
             [] ||
-            createProjectFormData?.nameExtensions?.map?.((x: string) => ({
+            createProjectFormData?.fileNameExtensions?.map?.((x: string) => ({
               key: x,
               text: x,
             }))
           }
-          onInputConfirm={(value) => {
-            console.log(value);
+          onTagSetChange={(value: { text: string; key: string }[]) => {
+            dispatch(
+              ducks.createProject.creators.setFormDataPartly({
+                fileNameExtensions: value?.map?.((x) => x.text) ?? [],
+              })
+            );
           }}
         />
       </Form.Item>
-      <Form.Item label="文件名示例">
+      <Form.Item label="文件名示例" name="fileNameExample">
         <Input
-          defaultValue={createProjectFormData?.name}
+          value={createProjectFormData?.fileNameExample}
           onChange={(event) => {
-            formInstance.setFieldsValue({ name: event.target.value });
+            dispatch(
+              ducks.createProject.creators.setFormDataPartly({
+                fileNameExample: event.target.value,
+              })
+            );
           }}
         />
       </Form.Item>
-      <Form.Item label="文件名正则表达式">
+      <Form.Item label="文件名正则表达式" name="fileNamePattern">
         <Input
-          defaultValue={createProjectFormData?.name}
+          value={createProjectFormData?.fileNamePattern}
           onChange={(event) => {
-            formInstance.setFieldsValue({ name: event.target.value });
+            dispatch(
+              ducks.createProject.creators.setFormDataPartly({
+                fileNamePattern: event.target.value,
+              })
+            );
           }}
         />
       </Form.Item>
+      <Button
+        block
+        type="primary"
+        onClick={() => {
+          dispatch(duck.creators.insertProject(createProjectFormData));
+        }}
+      >
+        创建
+      </Button>
     </Form>
   );
 }

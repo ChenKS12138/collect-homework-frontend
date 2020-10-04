@@ -6,7 +6,7 @@ import React, {
   useCallback,
 } from "react";
 import { LinkProps } from "react-router-dom";
-import { Watcher } from "@/utils";
+import { Watcher } from "@/utils/utils";
 import { pathToRegexp, match } from "path-to-regexp";
 
 const HistoryContext = React.createContext("history");

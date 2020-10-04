@@ -1,4 +1,4 @@
-import React, { Props, useState } from "react";
+import React, { Props, useCallback, useState } from "react";
 import { Tag, Input } from "antd";
 
 interface IEditTableSet extends Props<null> {
@@ -7,28 +7,34 @@ interface IEditTableSet extends Props<null> {
     text: string;
     key: string;
   }[];
-  onInputConfirm: Function;
+  onTagSetChange: Function;
 }
 
 export default function EditTableSet({
   tagSet,
-  onInputConfirm,
+  onTagSetChange,
 }: IEditTableSet) {
   const [inputValue, setInputValue] = useState("");
   const [currentTagSet, setCurrentTagSet] = useState(tagSet);
 
-  const handleConfirm = () => {
+  const handleConfirm = useCallback(() => {
     if (!inputValue?.length) return;
-    setCurrentTagSet(
-      currentTagSet.concat([{ text: inputValue, key: inputValue }])
-    );
+    const newTagSet = currentTagSet.concat([
+      { text: inputValue, key: inputValue + Date.now() },
+    ]);
+    setCurrentTagSet(newTagSet);
     setInputValue("");
-    onInputConfirm(currentTagSet);
-  };
+    onTagSetChange(newTagSet);
+  }, [inputValue, currentTagSet, setInputValue, setCurrentTagSet]);
 
-  const handleTagClose = (tag: { key: string }) => {
-    setCurrentTagSet(currentTagSet.filter((x) => x.key !== tag.key));
-  };
+  const handleTagClose = useCallback(
+    (tag: { key: string }) => {
+      const newTagSet = currentTagSet.filter((x) => x.key !== tag.key);
+      setCurrentTagSet(newTagSet);
+      onTagSetChange(newTagSet);
+    },
+    [setCurrentTagSet, currentTagSet]
+  );
 
   return (
     <div>
