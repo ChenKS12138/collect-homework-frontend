@@ -1,4 +1,4 @@
-import React, { Props, ReactNode } from "react";
+import React, { Dispatch, Props, ReactNode, useEffect } from "react";
 import {
   Form,
   Input,
@@ -13,7 +13,10 @@ import {
 } from "antd";
 import { InboxOutlined } from "@ant-design/icons";
 import styled from "styled-components";
-import { IProjectItem } from "@/utils";
+import { IProjectItem } from "@/utils/interface";
+import { notice } from "@/utils";
+import ListPageUploadFormDuck from "@/containers/ListPage/ListPageUploadFormDuck";
+
 const { Dragger } = Upload;
 
 const UploadCardWrapper = styled.div`
@@ -31,6 +34,9 @@ interface IUploadCard extends Props<null> {
   showLoading: boolean;
   onUpload: Function;
   successResultExtra: ReactNode | ReactNode[];
+  duck: ListPageUploadFormDuck;
+  dispatch: Dispatch<any>;
+  store: any;
 }
 
 export default function UploadCard({
@@ -39,6 +45,10 @@ export default function UploadCard({
   showLoading,
   successResultExtra,
   uploadCount,
+  dispatch,
+  duck,
+  store,
+  onUpload,
 }: IUploadCard) {
   if (showSuccess) {
     return (
@@ -53,6 +63,13 @@ export default function UploadCard({
     );
   }
 
+  useEffect(() => {
+    dispatch(
+      duck.creators.setFormDataPartly({ projectId: currentProject?.id })
+    );
+  }, [currentProject, currentProject?.id]);
+  const { formData } = duck.selector(store);
+
   return (
     <UploadCardWrapper className="app-mlr-auto">
       <Form>
@@ -63,12 +80,23 @@ export default function UploadCard({
           <div>{currentProject?.adminName}</div>
         </Form.Item>
         <Form.Item label="提交人数">
-          <div>{uploadCount}</div>
+          <div>{uploadCount ?? "-"}</div>
         </Form.Item>
         <Divider />
-        <Form.Item name="codes" label="口令" rules={[{ required: true }]}>
+        <Form.Item name="codes" label="口令" required>
           <Popover content="用于在下次提交时,确认你是你">
-            <CodeInput disabled={showLoading} placeholder="请输入一条口令" />
+            <CodeInput
+              value={formData?.secret}
+              disabled={showLoading}
+              placeholder="请输入一条口令"
+              onChange={(event) => {
+                dispatch(
+                  duck.creators.setFormDataPartly({
+                    secret: event.target.value,
+                  })
+                );
+              }}
+            />
           </Popover>
         </Form.Item>
         <Alert
@@ -91,7 +119,35 @@ export default function UploadCard({
             <span>{currentProject?.fileNameExample}</span>
           </Popover>
         </Form.Item>
-        <Dragger disabled={showLoading}>
+        <Dragger
+          multiple={false}
+          beforeUpload={() => false}
+          fileList={formData?.file ? [formData?.file] : []}
+          disabled={showLoading}
+          onChange={(event) => {
+            const { file: currentFile } = event;
+            const { name: currentFileName } = currentFile;
+            const [extensionName, ...prefixNameList] = currentFileName
+              .split(".")
+              .reverse();
+            const prefixName = prefixNameList.join("");
+            if (
+              !currentProject?.fileNameExtensions?.includes?.(extensionName)
+            ) {
+              notice.error({ text: "文件后缀名不合法" });
+              return;
+            }
+            if (
+              !new RegExp(String.raw`${currentProject?.fileNamePattern}`).test(
+                prefixName
+              )
+            ) {
+              notice.error({ text: "文件名不满足正则表达式" });
+              return;
+            }
+            dispatch(duck.creators.setFormDataPartly({ file: currentFile }));
+          }}
+        >
           <p className="ant-upload-drag-icon">
             <InboxOutlined />
           </p>
@@ -103,6 +159,10 @@ export default function UploadCard({
           block
           className="app-mt-3n"
           loading={showLoading}
+          onClick={() => {
+            const uploadForm = duck.selector(store)?.formData ?? {};
+            onUpload(uploadForm);
+          }}
         >
           {showLoading ? "提交中" : "确认提交"}
         </Button>

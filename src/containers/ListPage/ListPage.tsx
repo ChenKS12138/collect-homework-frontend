@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 
-import { Scaffold, Avatar, ListCard, UploadCard, Modal } from "@/components";
+import { Scaffold, Avatar, ListCard, Modal } from "@/components";
+import { UploadCard } from "@/duckComponents";
 import { Button, Drawer } from "antd";
 import styled from "styled-components";
 import { avatarImage } from "@/assets";
@@ -88,7 +89,12 @@ export default function ListPage() {
           showSuccess={false}
           showLoading={false}
           uploadCount={currentPorjectCount}
-          onUpload={() => {}}
+          onUpload={(uploadForm) => {
+            dispatch(duck.creators.uploadFile(uploadForm));
+          }}
+          duck={ducks.upload}
+          dispatch={dispatch}
+          store={store}
           successResultExtra={
             <Button type="primary">
               <RouterLink to="/">返回首页</RouterLink>

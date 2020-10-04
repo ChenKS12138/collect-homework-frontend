@@ -43,10 +43,6 @@ export default function ManageCard({
 }: IManageCard) {
   const [isEdit, setIsEdit] = useState(false);
 
-  useEffect(() => {
-    dispatch(duck.creators.setFormData(instance));
-  }, []);
-
   return (
     <Card
       title={title}

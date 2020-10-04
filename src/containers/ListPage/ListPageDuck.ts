@@ -1,10 +1,15 @@
 import { DuckMap, reduceFromPayload, createToPayload } from "saga-duck";
 import { IProjectItem } from "@/utils/interface";
-import { requestProjectList, requestStorageFileCount } from "@/utils/model";
+import {
+  requestProjectList,
+  requestStorageFileCount,
+  requestStorageUpload,
+} from "@/utils/model";
 import { fork, put } from "redux-saga/effects";
 import { takeLatest } from "redux-saga-catch";
 import moment from "moment";
 import { notice } from "@/utils";
+import ListPageUploadFormDuck, { IUploadForm } from "./ListPageUploadFormDuck";
 
 export default class ListPageDuck extends DuckMap {
   get quickTypes() {
@@ -12,13 +17,19 @@ export default class ListPageDuck extends DuckMap {
       SET_PROJECTS,
       SET_CURRENT_PROJECT,
       SET_CURRENT_PROJECT_COUNT,
-      SET_UPLOAD_SUCCESS,
 
       FETCH_CURRENT_PROJECT,
+      UPLOAD_FILE,
     }
     return {
       ...super.quickTypes,
       ...Types,
+    };
+  }
+  get quickDucks() {
+    return {
+      ...super.quickDucks,
+      upload: ListPageUploadFormDuck,
     };
   }
   get reducers() {
@@ -34,10 +45,6 @@ export default class ListPageDuck extends DuckMap {
         types.SET_CURRENT_PROJECT_COUNT,
         0
       ),
-      uploadSuccess: reduceFromPayload<boolean>(
-        types.SET_UPLOAD_SUCCESS,
-        false
-      ),
     };
   }
   get creators() {
@@ -46,6 +53,7 @@ export default class ListPageDuck extends DuckMap {
       ...super.creators,
       setProjects: createToPayload<IProjectItem[]>(types.SET_PROJECTS),
       fetchProject: createToPayload<string>(types.FETCH_CURRENT_PROJECT),
+      uploadFile: createToPayload<IUploadForm>(types.UPLOAD_FILE),
     };
   }
   *saga() {
@@ -53,6 +61,7 @@ export default class ListPageDuck extends DuckMap {
     yield fork([this, this.watchToFetchProjectList]);
     yield fork([this, this.watchToFetchCurrentProject]);
     yield fork([this, this.watchToFetchCurrentProjectCount]);
+    yield fork([this, this.watchToUploadFile]);
   }
   *watchToFetchProjectList() {
     const { types } = this;
@@ -80,7 +89,7 @@ export default class ListPageDuck extends DuckMap {
           const { projects } = data;
           yield put({
             type: types.SET_CURRENT_PROJECT,
-            payload: formatList(projects)[0],
+            payload: formatList(projects).find((one) => one.id === id) ?? {},
           });
         } else {
           throw error;
@@ -100,6 +109,32 @@ export default class ListPageDuck extends DuckMap {
           type: types.SET_CURRENT_PROJECT_COUNT,
           payload: data?.count,
         });
+      }
+    });
+  }
+  *watchToUploadFile() {
+    const { types } = this;
+    yield takeLatest([types.UPLOAD_FILE], function* (action) {
+      const payload: IUploadForm = action.payload;
+      if (!payload?.file || !payload?.projectId || !payload?.secret) {
+        notice.error({
+          text: "信息不完整",
+        });
+        return;
+      }
+      try {
+        const { success, error } = yield requestStorageUpload({
+          file: payload.file,
+          projectId: payload.projectId,
+          secret: payload.secret,
+        });
+        if (success) {
+          notice.success({ text: "上传成功" });
+        } else {
+          throw error;
+        }
+      } catch (err) {
+        notice.error({ text: String(err) });
       }
     });
   }

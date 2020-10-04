@@ -185,6 +185,9 @@ function ProjectOwnWrapper({
                           dispatch(duck.creators.updateProject(formData));
                           setIsEdit(false);
                         } else {
+                          dispatch(
+                            duck.ducks.editProject.creators.setFormData(col)
+                          );
                           setIsEdit(true);
                         }
                       }}

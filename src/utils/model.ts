@@ -118,3 +118,15 @@ interface IRequestStorageFileCount {
 
 export const requestStorageFileCount = ({ id }: IRequestStorageFileCount) =>
   instance.get(`/storage/fileCount?id=${id}`);
+
+export const requestStorageUpload = ({ file, secret, projectId }) => {
+  const form = new FormData();
+  form.append("secret", secret);
+  form.append("projectId", projectId);
+  form.append("file", file);
+  return instance.post("/storage/upload", form, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};
