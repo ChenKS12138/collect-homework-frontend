@@ -126,7 +126,10 @@ export default function AdminPage() {
               duck={duck}
             />
           ) : (
-            <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+            <Empty
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+              description="暂无作业项目"
+            />
           )}
         </Card>
       </AdminWrapper>

@@ -1,5 +1,5 @@
 import React, { Props, AllHTMLAttributes, ReactNode } from "react";
-import { Table, Tag, Space, Button } from "antd";
+import { Table, Tag, Space, Button, Empty } from "antd";
 import styled from "styled-components";
 import { IProjectItem } from "@/utils/interface";
 import { RouterLink } from "@/utils";
@@ -68,6 +68,14 @@ export default function ListCard(props: IListCard) {
       dataSource={dataSource}
       pagination={false}
       columns={columns}
+      locale={{
+        emptyText: (
+          <Empty
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+            description="暂无作业需要提交"
+          ></Empty>
+        ),
+      }}
       scroll={{
         x: true,
       }}

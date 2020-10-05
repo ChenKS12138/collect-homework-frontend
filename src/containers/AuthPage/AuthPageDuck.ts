@@ -79,7 +79,7 @@ export default class AuthPageDuck extends DuckMap {
             throw error;
           }
         } catch (err) {
-          notice.success({ text: String(err) });
+          notice.error({ text: String(err) });
         }
       }
     });
