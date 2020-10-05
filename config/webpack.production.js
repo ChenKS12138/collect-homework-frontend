@@ -5,6 +5,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 const Dotenv = require("dotenv-webpack");
 const ManifestPlugin = require("webpack-manifest-plugin");
+const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
+  .BundleAnalyzerPlugin;
 
 const config = merge(common, {
   mode: "production",
@@ -17,12 +19,18 @@ const config = merge(common, {
     splitChunks: {
       chunks: "all",
     },
+    minimize: true,
   },
   module: {
     rules: [
       {
         test: /\.(css|less)$/,
-        use: [MiniCssExtractPlugin.loader, "css-loader", "less-loader"],
+        use: [
+          MiniCssExtractPlugin.loader,
+          "css-loader",
+          "postcss-loader",
+          "less-loader",
+        ],
       },
     ],
   },
@@ -36,5 +44,15 @@ const config = merge(common, {
     new Dotenv({ path: path.resolve(".env.production") }),
     new ManifestPlugin(),
   ],
+  // externals: {
+  //   react: "React",
+  //   axios: "axios",
+  //   "react-dom": "ReactDOM",
+  // },
 });
+
+if (process.env.BUNDLE_ANALYZE) {
+  config.plugins.push(new BundleAnalyzerPlugin());
+}
+
 module.exports = config;

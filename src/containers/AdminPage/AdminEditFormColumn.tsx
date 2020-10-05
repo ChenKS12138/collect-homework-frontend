@@ -1,8 +1,8 @@
 import { EditableTagSet } from "@/components";
 import { IRenderEdit } from "@/duckComponents/EditableFormCard/EditableFormCard";
+import { formatDate } from "@/utils";
 import { IProjectItem } from "@/utils/interface";
 import { Input, Tag } from "antd";
-import moment from "moment";
 import React from "react";
 import AdminPageEditFormDuck from "./AdminPageEditFormDuck";
 
@@ -108,7 +108,7 @@ const editFormColumns = [
     key: "createAt",
     label: "创建时间",
     renderShow: (instance: IProjectItem) => (
-      <div>{moment(instance.createAt).format("YYYY-MM-DD")}</div>
+      <div>{formatDate(instance.createAt)}</div>
     ),
   },
 ];

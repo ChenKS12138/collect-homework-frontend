@@ -27,7 +27,6 @@ import {
 import { IProjectItem } from "@/utils/interface";
 import { DuckCmpProps } from "saga-duck";
 import { useWindowSize } from "react-use";
-import moment from "moment";
 import { useForm } from "antd/lib/form/Form";
 import { cleanToken } from "@/utils/request";
 
@@ -83,7 +82,7 @@ export default function AdminPage() {
           ]}
         >
           <WelcomeText className="app-text-size-10n app-mb-6n">
-            {greetByTime(moment())}，{basicInfo?.username}
+            {greetByTime()}，{basicInfo?.username}
           </WelcomeText>
           <Row className="app-mt-5n" gutter={50}>
             <Col>

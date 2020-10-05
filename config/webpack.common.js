@@ -43,6 +43,9 @@ const config = merge({
   resolve: {
     extensions: [".ts", ".tsx", ".js", "jsx"],
     alias: {
+      react: "preact/compat",
+      "react-dom/test-utils": "preact/test-utils",
+      "react-dom": "preact/compat",
       "@": path.resolve("./src"),
       mock: path.resolve("./mock"),
     },
@@ -65,6 +68,7 @@ const config = merge({
       minify: {
         collapseWhitespace: true,
       },
+      favicon: path.resolve("./public/favicon.png"),
     }),
   ],
 });

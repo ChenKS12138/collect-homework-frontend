@@ -24,8 +24,8 @@ export class Watcher<T = any> {
   }
 }
 
-export const greetByTime = (now: Moment) => {
-  const hour = now.hour();
+export const greetByTime = () => {
+  const hour = new Date().getHours();
   if (hour > 6 && hour < 12) return GREET_TEXT.MORNING;
   if (hour < 14) return GREET_TEXT.NOON;
   if (hour < 18) return GREET_TEXT.AFTERNOON;
@@ -91,4 +91,12 @@ export function useDiskSize(sizeB: number) {
     return [sizeB, units[index]];
   }, [sizeB]);
   return [size, unit];
+}
+
+export function formatDate(dataString: string): string {
+  const d = new Date(dataString);
+  const year = d.getFullYear();
+  const month = d.getMonth() + 1;
+  const day = d.getDate();
+  return `${year}-${month}-${day}`;
 }

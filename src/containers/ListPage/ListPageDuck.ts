@@ -7,8 +7,7 @@ import {
 } from "@/utils/model";
 import { fork, put } from "redux-saga/effects";
 import { takeLatest } from "redux-saga-catch";
-import moment from "moment";
-import { notice } from "@/utils";
+import { formatDate, notice } from "@/utils";
 import ListPageUploadFormDuck, { IUploadForm } from "./ListPageUploadFormDuck";
 
 export default class ListPageDuck extends DuckMap {
@@ -147,8 +146,8 @@ export default class ListPageDuck extends DuckMap {
   }
   formatList(list): IProjectItem[] {
     return list?.map?.((item) => {
-      item.createAt = moment(item.createAt).format("YYYY-MM-DD");
-      item.updateAt = moment(item.updateAt).format("YYYY-MM-DD");
+      item.createAt = formatDate(item.createAt);
+      item.updateAt = formatDate(item.updateAt);
       return item;
     });
   }

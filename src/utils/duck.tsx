@@ -1,29 +1,17 @@
 import React, { useMemo, useEffect, useReducer } from "react";
 import { DuckMap, DuckOptions, INIT, END } from "saga-duck";
-import { createLogger } from "redux-logger";
 import { parallel } from "redux-saga-catch";
 import { useReactSaga } from "use-react-saga";
 
-const loggerMiddleware = createLogger({ collapsed: true });
+let createEnhanceDispatch = (dispatch, state) => dispatch;
 
-// export const connectWithDuck = (Component, Duck, middlewares = []) => {
-//   return () => {
-//     const allMiddlewares =
-//       process.env.NODE_ENV === "development"
-//         #? [createLogger({ collapsed: true }), ...middlewares]
-//         : [...middlewares];
-//     const duck = new Duck();
-//     const duckRuntime = new DuckRuntime(duck, ...allMiddlewares);
-//     const ConnectedComponent = duckRuntime.root()(
-//       duckRuntime.connect()(Component)
-//     );
-//     return (
-//       <Provider store={duckRuntime.store}>
-//         <ConnectedComponent />
-//       </Provider>
-//     );
-//   };
-// };
+if (process.env.NODE_ENV !== "production") {
+  const { createLogger } = require("redux-logger");
+  const loggerMiddleware = createLogger({ collapsed: true });
+  createEnhanceDispatch = (dispatch, state) => {
+    return loggerMiddleware({ getState: () => state, dispatch })(dispatch);
+  };
+}
 
 export function useSagaDuckState<T extends DuckMap = any>(
   DM: new (options?: DuckOptions) => T
@@ -51,10 +39,7 @@ export function useSagaDuckState<T extends DuckMap = any>(
 
   const enhanceDispatch = useReactSaga({
     state,
-    dispatch:
-      process.env.NODE_ENV === "production"
-        ? dispatch
-        : loggerMiddleware({ getState: () => state, dispatch })(dispatch),
+    dispatch: createEnhanceDispatch(dispatch, state),
     saga: function* () {
       yield parallel(duck.sagas);
     },

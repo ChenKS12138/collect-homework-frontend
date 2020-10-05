@@ -11,7 +11,8 @@
     "declaration": false,
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    "module": "ESNext"
+    "module": "ESNext",
+    "skipLibCheck": true
   },
   "include": ["src/**/*", "mock/*"],
   "exclude": ["node_modules"]

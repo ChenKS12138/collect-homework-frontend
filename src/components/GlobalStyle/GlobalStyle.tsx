@@ -101,17 +101,17 @@ const composedMobileStyleString = composeCssClasses([
       }),
     ])
   ),
-  ...createRadixs(20).map((radix) =>
-    createCssClass(`app-text-size-${radix}n`, {
-      fontSize: `${radix * 1.8}px`,
-    })
-  ),
-  ...createRadixs(20).map((radix) =>
-    createCssClass(`app-text-height-${radix}n`, { height: radix * 2 })
-  ),
-  ...createRadixs(20).map((radix) =>
-    createCssClass(`app-text-width-${radix}n`, { width: radix * 2 })
-  ),
+  // ...createRadixs(20).map((radix) =>
+  //   createCssClass(`app-text-size-${radix}n`, {
+  //     fontSize: `${radix * 1.8}px`,
+  //   })
+  // ),
+  // ...createRadixs(20).map((radix) =>
+  //   createCssClass(`app-text-height-${radix}n`, { height: radix * 2 })
+  // ),
+  // ...createRadixs(20).map((radix) =>
+  //   createCssClass(`app-text-width-${radix}n`, { width: radix * 2 })
+  // ),
 ]);
 
 export default createGlobalStyle`

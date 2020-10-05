@@ -70,7 +70,7 @@ export class Route extends React.Component<
 export class RouterLink extends React.Component<LinkProps, any> {
   handleClick = (event) => {
     pathWatcher.update({
-      path: this.props?.to || "#",
+      path: (this.props?.to as string) || "#",
       matched: [],
     });
     if (this.props?.onClick instanceof Function) {
