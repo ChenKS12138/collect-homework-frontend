@@ -11,6 +11,7 @@ export default abstract class FormDuck extends DuckMap {
       SET_FORM_ERROR,
 
       SET_FORM_DATA_PARTLY,
+      SET_CLEAN_FORM,
     }
     return {
       ...super.quickTypes,
@@ -39,6 +40,7 @@ export default abstract class FormDuck extends DuckMap {
   *saga() {
     yield* super.saga();
     yield fork([this, this.watchToPartlySetFormData]);
+    yield fork([this, this.watchToCleanForm]);
   }
   *watchToPartlySetFormData() {
     const { types, selector, creators } = this;
@@ -51,6 +53,15 @@ export default abstract class FormDuck extends DuckMap {
           ...formData,
           ...data,
         },
+      });
+    });
+  }
+  *watchToCleanForm() {
+    const { types } = this;
+    yield takeLatest([types.SET_CLEAN_FORM], function* () {
+      yield put({
+        type: types.SET_FORM_DATA,
+        payload: {},
       });
     });
   }

@@ -17,6 +17,7 @@ export default class ListPageDuck extends DuckMap {
       SET_PROJECTS,
       SET_CURRENT_PROJECT,
       SET_CURRENT_PROJECT_COUNT,
+      SET_UPLOAD_SUCCESS,
 
       FETCH_CURRENT_PROJECT,
       UPLOAD_FILE,
@@ -45,6 +46,10 @@ export default class ListPageDuck extends DuckMap {
         types.SET_CURRENT_PROJECT_COUNT,
         0
       ),
+      uploadSuccess: reduceFromPayload<boolean>(
+        types.SET_UPLOAD_SUCCESS,
+        false
+      ),
     };
   }
   get creators() {
@@ -54,6 +59,7 @@ export default class ListPageDuck extends DuckMap {
       setProjects: createToPayload<IProjectItem[]>(types.SET_PROJECTS),
       fetchProject: createToPayload<string>(types.FETCH_CURRENT_PROJECT),
       uploadFile: createToPayload<IUploadForm>(types.UPLOAD_FILE),
+      setUploadSuccess: createToPayload<boolean>(types.SET_UPLOAD_SUCCESS),
     };
   }
   *saga() {
@@ -113,7 +119,7 @@ export default class ListPageDuck extends DuckMap {
     });
   }
   *watchToUploadFile() {
-    const { types } = this;
+    const { types, creators } = this;
     yield takeLatest([types.UPLOAD_FILE], function* (action) {
       const payload: IUploadForm = action.payload;
       if (!payload?.file || !payload?.projectId || !payload?.secret) {
@@ -130,6 +136,7 @@ export default class ListPageDuck extends DuckMap {
         });
         if (success) {
           notice.success({ text: "上传成功" });
+          yield put(creators.setUploadSuccess(true));
         } else {
           throw error;
         }
@@ -140,9 +147,8 @@ export default class ListPageDuck extends DuckMap {
   }
   formatList(list): IProjectItem[] {
     return list?.map?.((item) => {
-      item.createAt = moment(item.createAt).format("YYYY-MM-DD HH:mm:ss");
-      item.updateAt = moment(item.updateAt).format("YYYY-MM-DD HH:mm:ss");
-      item.due = moment(item.due).format("YYYY-MM-DD HH:mm:ss");
+      item.createAt = moment(item.createAt).format("YYYY-MM-DD");
+      item.updateAt = moment(item.updateAt).format("YYYY-MM-DD");
       return item;
     });
   }

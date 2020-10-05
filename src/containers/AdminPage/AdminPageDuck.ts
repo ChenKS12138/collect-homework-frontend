@@ -1,5 +1,4 @@
 import { reduceFromPayload, createToPayload } from "saga-duck";
-import moment from "moment";
 import { fork, put, select } from "redux-saga/effects";
 import { takeLatest, runAndTakeLatest } from "redux-saga-catch";
 import {
@@ -9,8 +8,10 @@ import {
   requestProjectDelete,
   requestProjectRestore,
   requestProjectUpdate,
+  requestStorageFileList,
+  requestStorageDownload,
 } from "@/utils/model";
-import { IProjectItem, IAdminBasicInfo, IProjectFile } from "@/utils/interface";
+import { IProjectItem, IAdminBasicInfo } from "@/utils/interface";
 import AdminPageCreateFormDuck, {
   ICreateProjectForm,
 } from "./AdminPageCreateFormDuck";
@@ -20,12 +21,14 @@ import { cleanToken } from "@/utils/request";
 import AdminPageEditFormDuck, {
   IEditProjectForm,
 } from "./AdminPageEditFormDuck";
+import { saveAs } from "file-saver";
 
 export default class AdminPageDuck extends DuckMap {
   get quickTypes() {
     enum Types {
       SET_PROJECT_OWN,
       SET_ADMIN_BASIC_INFO,
+      SET_FILE_LIST,
 
       RELOAD,
 
@@ -35,6 +38,8 @@ export default class AdminPageDuck extends DuckMap {
       FETCH_DELETE_PROJECT,
       FETCH_RESTORE_PROJECT,
       FETCH_UPDATE_PROJECT,
+      FETCH_FILE_LIST,
+      FETCH_DOWNLAOD_FILE,
     }
     return {
       ...super.quickTypes,
@@ -60,6 +65,10 @@ export default class AdminPageDuck extends DuckMap {
       updateProject: createToPayload<IEditProjectForm>(
         types.FETCH_UPDATE_PROJECT
       ),
+      fetchFileList: createToPayload<string>(types.FETCH_FILE_LIST),
+      downloadFile: createToPayload<{ id: string; name: string }>(
+        types.FETCH_DOWNLAOD_FILE
+      ),
     };
   }
   get reducers() {
@@ -71,6 +80,7 @@ export default class AdminPageDuck extends DuckMap {
         types.SET_ADMIN_BASIC_INFO,
         null
       ),
+      fileList: reduceFromPayload<string[]>(types.SET_FILE_LIST, []),
     };
   }
   *saga() {
@@ -82,6 +92,8 @@ export default class AdminPageDuck extends DuckMap {
     yield fork([this, this.watchToRestoreProject]);
     yield fork([this, this.watchToUpdateProject]);
     yield fork([this, this.watchToLoad]);
+    yield fork([this, this.watchToFetchFileList]);
+    yield fork([this, this.watchToDownloadFile]);
   }
   *watchToLoad() {
     const { types } = this;
@@ -227,6 +239,46 @@ export default class AdminPageDuck extends DuckMap {
           yield put({ type: types.RELOAD });
         } else {
           throw error;
+        }
+      } catch (err) {
+        notice.error({ text: String(err) });
+      }
+    });
+  }
+  *watchToFetchFileList() {
+    const { types } = this;
+    yield takeLatest([types.FETCH_FILE_LIST], function* (action) {
+      yield put({
+        type: types.SET_FILE_LIST,
+        payload: [],
+      });
+      const id = action.payload;
+      try {
+        const { success, error, data } = yield requestStorageFileList({ id });
+        if (success) {
+          yield put({
+            type: types.SET_FILE_LIST,
+            payload: data?.files ?? [],
+          });
+        } else {
+          throw error;
+        }
+      } catch (err) {
+        notice.error({ text: String(err) });
+      }
+    });
+  }
+  *watchToDownloadFile() {
+    const { types } = this;
+    yield takeLatest([types.FETCH_DOWNLAOD_FILE], function* (action) {
+      const { id, name } = action.payload;
+      try {
+        const result = yield requestStorageDownload({ id });
+        if (result?.success) {
+          const fileName = `${name}.zip`;
+          saveAs(result?.blob, fileName);
+        } else {
+          throw result?.error;
         }
       } catch (err) {
         notice.error({ text: String(err) });

@@ -1,7 +1,7 @@
 import { Moment } from "moment";
 import { GREET_TEXT } from "@/utils/constants";
 import { notification } from "antd";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 export class Watcher<T = any> {
   value: T;
@@ -78,4 +78,17 @@ export function useLazyState(initState, timeout) {
     [timeout, setValue]
   );
   return [value, lazySetState];
+}
+
+export function useDiskSize(sizeB: number) {
+  const [size, unit] = useMemo(() => {
+    const units = ["B", "KB", "MB", "GB", "TB"];
+    let index = 0;
+    while (sizeB >= 1000 && index < units.length - 1) {
+      sizeB = Math.round(sizeB / 1000);
+      index++;
+    }
+    return [sizeB, units[index]];
+  }, [sizeB]);
+  return [size, unit];
 }

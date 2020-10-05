@@ -50,6 +50,8 @@ export default function ListPage() {
     }
   }, [showDetail]);
 
+  const { uploadSuccess } = duck.selector(store);
+
   return (
     <Scaffold
       links={[
@@ -77,6 +79,8 @@ export default function ListPage() {
         title="提交作业"
         closable={true}
         onClose={() => {
+          dispatch(duck.creators.setUploadSuccess(false));
+          dispatch({ type: ducks.upload.types.SET_CLEAN_FORM });
           navigateTo("/");
         }}
         visible={showDrawer}
@@ -86,7 +90,7 @@ export default function ListPage() {
       >
         <UploadCard
           currentProject={currentProject}
-          showSuccess={false}
+          showSuccess={uploadSuccess}
           showLoading={false}
           uploadCount={currentPorjectCount}
           onUpload={(uploadForm) => {
@@ -96,7 +100,13 @@ export default function ListPage() {
           dispatch={dispatch}
           store={store}
           successResultExtra={
-            <Button type="primary">
+            <Button
+              type="primary"
+              onClick={() => {
+                dispatch(duck.creators.setUploadSuccess(false));
+                dispatch({ type: ducks.upload.types.SET_CLEAN_FORM });
+              }}
+            >
               <RouterLink to="/">返回首页</RouterLink>
             </Button>
           }

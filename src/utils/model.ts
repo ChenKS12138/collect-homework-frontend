@@ -98,12 +98,6 @@ export const requestProjectRestore = ({ id }: IRequestProjectRestore) =>
   instance.post("/project/restore", { id });
 
 // storage
-interface IRequestStorageDownload {
-  id: string;
-}
-
-export const requestStorageDownload = ({ id }: IRequestStorageDownload) =>
-  instance.get(`/storage/download?id=${id}`);
 
 interface IRequestStorageFileList {
   id: string;
@@ -118,6 +112,15 @@ interface IRequestStorageFileCount {
 
 export const requestStorageFileCount = ({ id }: IRequestStorageFileCount) =>
   instance.get(`/storage/fileCount?id=${id}`);
+
+interface IRequestStorageDownload {
+  id: string;
+}
+
+export const requestStorageDownload = ({ id }: IRequestStorageDownload) =>
+  instance.get(`/storage/download?id=${id}`, {
+    responseType: "blob",
+  });
 
 export const requestStorageUpload = ({ file, secret, projectId }) => {
   const form = new FormData();

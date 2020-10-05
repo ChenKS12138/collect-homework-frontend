@@ -26,7 +26,17 @@ export const getToken = (): string => {
   return jwtToken || window.localStorage.getItem(CONSTANT_TOKEN_KEY);
 };
 instance.interceptors.response.use((response) => {
-  return response?.data;
+  if (
+    response.headers["content-type"]?.includes?.("application/octet-stream")
+  ) {
+    return {
+      success: true,
+      blob: new Blob([response?.data]),
+      headers: response.headers,
+    };
+  } else {
+    return response?.data;
+  }
 });
 instance.interceptors.request.use((config) => {
   const token = getToken();

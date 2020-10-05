@@ -12,6 +12,7 @@ import {
   Input,
   Form,
   Empty,
+  List,
 } from "antd";
 import { AdminPageDuck } from ".";
 import {
@@ -21,6 +22,7 @@ import {
   useSagaDuckState,
   greetByTime,
   RouterLink,
+  useDiskSize,
 } from "@/utils";
 import { IProjectItem } from "@/utils/interface";
 import { DuckCmpProps } from "saga-duck";
@@ -48,6 +50,7 @@ export default function AdminPage() {
   const { width, height } = useWindowSize();
 
   const showCreate = useRouteMatch("/admin/create") !== false;
+  const [size, unit] = useDiskSize(basicInfo?.totalSize ?? 0);
 
   return (
     <Scaffold
@@ -100,8 +103,8 @@ export default function AdminPage() {
             <Col>
               <Statistic
                 title="占用的总空间数"
-                value={basicInfo?.totalSize ?? "-"}
-                suffix="B"
+                value={size ?? "-"}
+                suffix={unit ?? "-"}
               />
             </Col>
           </Row>
@@ -162,6 +165,7 @@ function ProjectOwnWrapper({
       {distributedProjectOwn?.map((row, rowIndex) => (
         <Row gutter={[16, 16]} key={rowIndex}>
           {row?.map((col, colIndex) => {
+            const { fileList } = duck.selector(store);
             const currentFileInfo = { reason: "reason", data: "data" };
             return (
               <Col span={width < 960 ? 24 : 12} key={colIndex}>
@@ -230,8 +234,10 @@ function ProjectOwnWrapper({
                           type="link"
                           key="overview"
                           onClick={() => {
+                            dispatch(duck.creators.fetchFileList(col.id));
                             setVisible(true);
                           }}
+                          disabled={isEdit}
                         >
                           查看文件
                         </Button>
@@ -239,15 +245,35 @@ function ProjectOwnWrapper({
                       title="查看文件"
                       footer={null}
                     >
-                      {currentFileInfo?.reason ? (
-                        <div>{currentFileInfo?.reason}</div>
-                      ) : currentFileInfo?.data ? (
-                        <div>{JSON.stringify(currentFileInfo)}</div>
+                      {fileList?.length ? (
+                        <List
+                          dataSource={
+                            fileList?.map?.((one) => ({ title: one })) ?? []
+                          }
+                          bordered
+                          renderItem={(item) => (
+                            <List.Item>{item?.title}</List.Item>
+                          )}
+                          size="small"
+                        ></List>
                       ) : (
-                        <div>加载中...</div>
+                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                       )}
                     </CommonModal>,
-                    <Button size="small" type="link" key="download">
+                    <Button
+                      size="small"
+                      type="link"
+                      key="download"
+                      disabled={isEdit}
+                      onClick={() => {
+                        dispatch(
+                          duck.creators.downloadFile({
+                            id: col.id,
+                            name: col.name,
+                          })
+                        );
+                      }}
+                    >
                       一键下载
                     </Button>,
                   ]}
