@@ -56,15 +56,17 @@ const columns = [
 
 interface IListCard extends Props<null>, AllHTMLAttributes<null> {
   dataSource: IProjectItem[];
+  loading: boolean;
 }
 
 export default function ListCard(props: IListCard) {
-  const { className, style, dataSource = [] } = props;
+  const { className, style, dataSource = [], loading } = props;
 
   return (
     <ListCardWrapper
       rowKey="id"
       bordered
+      loading={loading}
       dataSource={dataSource}
       pagination={false}
       columns={columns}

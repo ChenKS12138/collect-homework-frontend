@@ -51,6 +51,8 @@ export default function ListPage() {
   }, [showDetail]);
 
   const { uploadSuccess } = duck.selector(store);
+  const tableLoading = ducks.listLoading.selectors.isLoading(store);
+  const uploadLoading = ducks.uploadLoading.selectors.isLoading(store);
 
   return (
     <Scaffold
@@ -74,7 +76,7 @@ export default function ListPage() {
         src={avatarImage}
         className="app-mlr-auto app-mt-1n app-box-shadow-default"
       />
-      <ListCard dataSource={projects} />
+      <ListCard dataSource={projects} loading={tableLoading} />
       <Drawer
         title="提交作业"
         closable={true}
@@ -91,7 +93,7 @@ export default function ListPage() {
         <UploadCard
           currentProject={currentProject}
           showSuccess={uploadSuccess}
-          showLoading={false}
+          showLoading={uploadLoading}
           uploadCount={currentPorjectCount}
           onUpload={(uploadForm) => {
             dispatch(duck.creators.uploadFile(uploadForm));

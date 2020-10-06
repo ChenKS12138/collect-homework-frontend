@@ -5,10 +5,11 @@ import {
   requestStorageFileCount,
   requestStorageUpload,
 } from "@/utils/model";
-import { fork, put } from "redux-saga/effects";
+import { fork, put, select } from "redux-saga/effects";
 import { takeLatest } from "redux-saga-catch";
 import { formatDate, notice } from "@/utils";
 import ListPageUploadFormDuck, { IUploadForm } from "./ListPageUploadFormDuck";
+import { LoadingDuck } from "@/ducks";
 
 export default class ListPageDuck extends DuckMap {
   get quickTypes() {
@@ -30,6 +31,8 @@ export default class ListPageDuck extends DuckMap {
     return {
       ...super.quickDucks,
       upload: ListPageUploadFormDuck,
+      listLoading: LoadingDuck,
+      uploadLoading: LoadingDuck,
     };
   }
   get reducers() {
@@ -69,7 +72,8 @@ export default class ListPageDuck extends DuckMap {
     yield fork([this, this.watchToUploadFile]);
   }
   *watchToFetchProjectList() {
-    const { types } = this;
+    const { types, ducks } = this;
+    yield put(ducks.listLoading.creators.add());
     try {
       const { success, data, error } = yield requestProjectList();
       if (success) {
@@ -83,9 +87,10 @@ export default class ListPageDuck extends DuckMap {
     } catch (err) {
       notice.error({ text: String(err) });
     }
+    yield put(ducks.listLoading.creators.done());
   }
   *watchToFetchCurrentProject() {
-    const { types, formatList, selector } = this;
+    const { types, formatList, selector, ducks } = this;
     yield takeLatest([types.FETCH_CURRENT_PROJECT], function* (action) {
       const id = action.payload;
       try {
@@ -105,7 +110,8 @@ export default class ListPageDuck extends DuckMap {
     });
   }
   *watchToFetchCurrentProjectCount() {
-    const { types } = this;
+    const { types, ducks } = this;
+    // yield put(ducks.uploadLoading.creators.add());
     yield takeLatest([types.FETCH_CURRENT_PROJECT], function* (action) {
       const id = action.payload;
       const { success, data } = yield requestStorageFileCount({ id });
@@ -118,8 +124,9 @@ export default class ListPageDuck extends DuckMap {
     });
   }
   *watchToUploadFile() {
-    const { types, creators } = this;
+    const { types, creators, ducks } = this;
     yield takeLatest([types.UPLOAD_FILE], function* (action) {
+      yield put(ducks.uploadLoading.creators.add());
       const payload: IUploadForm = action.payload;
       if (!payload?.file || !payload?.projectId || !payload?.secret) {
         notice.error({
@@ -142,6 +149,7 @@ export default class ListPageDuck extends DuckMap {
       } catch (err) {
         notice.error({ text: String(err) });
       }
+      yield put(ducks.uploadLoading.creators.done());
     });
   }
   formatList(list): IProjectItem[] {

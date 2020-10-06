@@ -30,10 +30,9 @@ const config = merge({
         test: /\.(png|jpe?g|gif)$/i,
         use: [
           {
-            loader: "file-loader",
+            loader: "url-loader",
             options: {
-              outputPath: "assets",
-              publicPath: "/assets",
+              limit: 8192,
             },
           },
         ],
