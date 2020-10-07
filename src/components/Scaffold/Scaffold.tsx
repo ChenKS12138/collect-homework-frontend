@@ -16,12 +16,12 @@ const TitleText = styled.h2`
 `;
 
 interface IScaffold extends Props<null> {
-  links: {
+  links?: {
     text: string;
     link: string;
   }[];
   sider?: ReactNode;
-  children: any;
+  children?: any;
 }
 const MAX_WIDTH_TO_SHOW_FULL_OPERATION = 750;
 
@@ -88,7 +88,7 @@ export default function Scaffold({ links, sider, children }: IScaffold) {
           </Row>
         )}
       </Header>
-      <Content>{children}</Content>
+      <Content>{children ?? null}</Content>
       <Footer>
         <BottomText>homework.chenks.codes</BottomText>
       </Footer>

@@ -1,17 +1,39 @@
-import React, { Props, useEffect, useMemo } from "react";
+import React, { Suspense, lazy } from "react";
 import styled from "styled-components";
 import { Router, Route } from "@/utils";
 import { ListPage } from "@/containers/ListPage";
-import { AuthPage } from "@/containers/AuthPage";
-import { HelpPage } from "@/containers/HelpPage";
-import { AdminPage } from "@/containers/AdminPage";
-import { GlobalStyle } from "@/components/index";
+import { GlobalStyle, Scaffold } from "@/components/index";
 
 const AppWrapper = styled.div`
   padding: 0;
   margin: 0;
   border: 0;
 `;
+
+const AuthPage = lazy(
+  () =>
+    import(
+      /*webpackChunkName: 'auth_page' */
+      /* webpackPrefetch: true */
+      "@/containers/AuthPage/AuthPage"
+    )
+);
+const HelpPage = lazy(
+  () =>
+    import(
+      /*webpackChunkName: 'help_page' */
+      /* webpackPrefetch: true */
+      "@/containers/HelpPage/HelpPage"
+    )
+);
+const AdminPage = lazy(
+  () =>
+    import(
+      /*webpackChunkName: 'admin_page' */
+      /* webpackPrefetch: true */
+      "@/containers/AdminPage/AdminPage"
+    )
+);
 
 function App() {
   return (
@@ -21,13 +43,19 @@ function App() {
           <ListPage />
         </Route>
         <Route path={["/auth", "/auth/registry"]}>
-          <AuthPage />
+          <Suspense fallback={() => <Scaffold />}>
+            <AuthPage />
+          </Suspense>
         </Route>
         <Route path={["/admin", "/admin/create"]}>
-          <AdminPage />
+          <Suspense fallback={() => <Scaffold />}>
+            <AdminPage />
+          </Suspense>
         </Route>
         <Route path={["/help"]}>
-          <HelpPage />
+          <Suspense fallback={() => <Scaffold />}>
+            <HelpPage />
+          </Suspense>
         </Route>
       </Router>
       <GlobalStyle />
