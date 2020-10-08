@@ -12,6 +12,7 @@ import { useWindowSize } from "react-use";
 import { AuthPageDuck } from ".";
 import { ILoginForm } from "./AuthPageDuck";
 import { IRegistryForm } from "./AuthPageRegistryFormDuck";
+import { Helmet } from "react-helmet";
 
 const { useForm } = Form;
 
@@ -54,6 +55,10 @@ export default function AuthPage() {
         },
       ]}
     >
+      <Helmet>
+        <title>登录｜作业提交平台</title>
+        <meta name="title" content="登录｜作业提交平台" />
+      </Helmet>
       <AuthWrapper className="app-mlr-auto app-mt-10n">
         <Form
           style={{

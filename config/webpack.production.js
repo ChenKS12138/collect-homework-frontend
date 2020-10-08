@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const path = require("path");
 const Dotenv = require("dotenv-webpack");
 const ManifestPlugin = require("webpack-manifest-plugin");
+const RobotstxtPlugin = require("robotstxt-webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
 
@@ -43,6 +44,17 @@ const config = merge(common, {
     }),
     new Dotenv({ path: path.resolve(".env.production") }),
     new ManifestPlugin(),
+    new RobotstxtPlugin({
+      host: "http://homework.cattchen.top",
+      policy: [
+        {
+          userAgent: "*",
+          allow: "/",
+          disallow: ["/api", "/assets", "/js", "/css"],
+          crawlDelay: 10,
+        },
+      ],
+    }),
   ],
   // externals: {
   //   react: "React",

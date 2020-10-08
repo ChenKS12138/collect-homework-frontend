@@ -29,6 +29,7 @@ import { DuckCmpProps } from "saga-duck";
 import { useWindowSize } from "react-use";
 import { useForm } from "antd/lib/form/Form";
 import { cleanToken } from "@/utils/request";
+import { Helmet } from "react-helmet";
 
 import adminEditFormColumns from "./AdminEditFormColumn";
 
@@ -64,6 +65,10 @@ export default function AdminPage() {
         },
       ]}
     >
+      <Helmet>
+        <title>管理 | 作业提交平台</title>
+        <meta name="title" content="管理 | 作业提交平台" />
+      </Helmet>
       <AdminWrapper className="app-mlr-auto app-mt-3n">
         <Card
           title="概览"

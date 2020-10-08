@@ -17,7 +17,6 @@ const AuthPage = loadable({
   loader: () =>
     import(
       /*webpackChunkName: 'auth_page' */
-      /* webpackPrefetch: true */
       "@/containers/AuthPage/AuthPage"
     ),
   loading: loadingElement,
@@ -27,7 +26,6 @@ const HelpPage = loadable({
   loader: () =>
     import(
       /*webpackChunkName: 'help_page' */
-      /* webpackPrefetch: true */
       "@/containers/HelpPage/HelpPage"
     ),
   loading: loadingElement,
@@ -37,7 +35,6 @@ const AdminPage = loadable({
   loader: () =>
     import(
       /*webpackChunkName: 'admin_page' */
-      /* webpackPrefetch: true */
       "@/containers/AdminPage/AdminPage"
     ),
   loading: loadingElement,

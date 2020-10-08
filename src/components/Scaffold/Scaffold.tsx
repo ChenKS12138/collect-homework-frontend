@@ -5,6 +5,7 @@ import styled from "styled-components";
 const { Header, Content, Footer } = Layout;
 import { useWindowSize } from "react-use";
 import { RouterLink } from "@/utils";
+import { Helmet } from "react-helmet";
 
 const BottomText = styled.div`
   text-align: center;
@@ -30,6 +31,9 @@ export default function Scaffold({ links, sider, children }: IScaffold) {
   const [showMenu, setShowMenu] = useState(false);
   return (
     <Layout style={{ minHeight: "100vh" }}>
+      <Helmet>
+        <meta name="description" content="作业提交平台" />
+      </Helmet>
       <Header
         className="app-box-shadow-default"
         style={{

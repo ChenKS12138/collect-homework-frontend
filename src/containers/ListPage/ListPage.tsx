@@ -14,6 +14,7 @@ import {
   useLazyState,
 } from "@/utils";
 import { useWindowSize } from "react-use";
+import { Helmet } from "react-helmet";
 
 const TitleText = styled.div`
   color: rgba(0, 0, 0, 0.65);
@@ -67,6 +68,10 @@ export default function ListPage() {
         },
       ]}
     >
+      <Helmet>
+        <title>首页 | 作业提交平台</title>
+        <meta name="title" content="首页 | 作业提交平台" />
+      </Helmet>
       <TitleText className="app-mt-4n app-text-size-11n app-text-align-center app-text-weight-6n">
         <span>各种作业</span>
         <TitleLineThroughText>程序语言实验设计报告</TitleLineThroughText>

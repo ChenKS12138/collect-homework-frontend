@@ -1,6 +1,7 @@
 import React from "react";
 import { Scaffold } from "@/components/index";
 import { Collapse } from "antd";
+import { Helmet } from "react-helmet";
 
 const tips = [
   {
@@ -47,6 +48,10 @@ export default function HelpPage() {
         },
       ]}
     >
+      <Helmet>
+        <title>帮助 ｜ 作业提交平台</title>
+        <meta name="title" content="帮助 ｜ 作业提交平台" />
+      </Helmet>
       <div
         className="app-mt-4n app-text-align-center app-mlr-auto app-mt-3n`"
         style={{ maxWidth: "80%", width: "960px" }}

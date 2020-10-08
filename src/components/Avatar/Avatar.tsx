@@ -13,5 +13,12 @@ interface IAvatarCard extends Props<null>, AllHTMLAttributes<null> {
 }
 
 export default function AvatarCard({ src, className, style }: IAvatarCard) {
-  return <AvatarCardImage src={src} className={className} style={style} />;
+  return (
+    <AvatarCardImage
+      src={src}
+      className={className}
+      style={style}
+      alt="avatar"
+    />
+  );
 }
