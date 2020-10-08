@@ -7,7 +7,7 @@ import {
 } from "@/utils/model";
 import { fork, put, select } from "redux-saga/effects";
 import { takeLatest } from "redux-saga-catch";
-import { formatDate, notice } from "@/utils";
+import { formatDate, navigateTo, notice } from "@/utils";
 import ListPageUploadFormDuck, { IUploadForm } from "./ListPageUploadFormDuck";
 import { LoadingDuck } from "@/ducks";
 
@@ -97,10 +97,15 @@ export default class ListPageDuck extends DuckMap {
         const { success, data, error } = yield requestProjectList();
         if (success) {
           const { projects } = data;
-          yield put({
-            type: types.SET_CURRENT_PROJECT,
-            payload: formatList(projects).find((one) => one.id === id) ?? {},
-          });
+          const project = formatList(projects).find((one) => one.id === id);
+          if (project) {
+            yield put({
+              type: types.SET_CURRENT_PROJECT,
+              payload: project,
+            });
+          } else {
+            window.location.href = "/";
+          }
         } else {
           throw error;
         }
