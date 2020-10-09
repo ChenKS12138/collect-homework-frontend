@@ -68,6 +68,8 @@ interface IRequestProjectUpdate {
   fileNamePattern: string;
   fileNameExtensions: string[];
   fileNameExample: string;
+  sendEmail: boolean;
+  visible: boolean;
 }
 
 export const requestProjectUpdate = ({
@@ -76,6 +78,8 @@ export const requestProjectUpdate = ({
   fileNamePattern,
   id,
   usable,
+  sendEmail,
+  visible,
 }: IRequestProjectUpdate) =>
   instance.post("/project/update", {
     id,
@@ -83,6 +87,8 @@ export const requestProjectUpdate = ({
     fileNamePattern,
     fileNameExtensions,
     fileNameExample,
+    sendEmail,
+    visible,
   });
 
 interface IRequestProjectDelete {

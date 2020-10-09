@@ -2,7 +2,8 @@ import { EditableTagSet } from "@/components";
 import { IRenderEdit } from "@/duckComponents/EditableFormCard/EditableFormCard";
 import { formatDate } from "@/utils";
 import { IProjectItem } from "@/utils/interface";
-import { Input, Tag } from "antd";
+import { instance } from "@/utils/request";
+import { Input, Tag, Switch } from "antd";
 import React from "react";
 import AdminPageEditFormDuck from "./AdminPageEditFormDuck";
 
@@ -115,6 +116,50 @@ const editFormColumns = [
                 fileNamePattern: event.target.value,
               })
             );
+          }}
+        />
+      );
+    },
+  },
+  {
+    key: "visible",
+    label: "是否对外公布",
+    renderShow: (instance: IProjectItem) => (
+      <Switch disabled checked={instance.visible} />
+    ),
+    renderEdit: ({
+      store,
+      duck,
+      dispatch,
+    }: IRenderEdit<AdminPageEditFormDuck>) => {
+      const visible = duck.selector(store)?.formData?.visible;
+      return (
+        <Switch
+          checked={visible}
+          onChange={(checked) => {
+            dispatch(duck.creators.setFormDataPartly({ visible: checked }));
+          }}
+        />
+      );
+    },
+  },
+  {
+    key: "sendEmail",
+    label: "是否发送邮件提醒",
+    renderShow: (instance: IProjectItem) => (
+      <Switch disabled checked={instance.sendEmail} />
+    ),
+    renderEdit: ({
+      store,
+      duck,
+      dispatch,
+    }: IRenderEdit<AdminPageEditFormDuck>) => {
+      const sendEmail = duck.selector(store)?.formData?.sendEmail;
+      return (
+        <Switch
+          checked={sendEmail}
+          onChange={(checked) => {
+            dispatch(duck.creators.setFormDataPartly({ sendEmail: checked }));
           }}
         />
       );

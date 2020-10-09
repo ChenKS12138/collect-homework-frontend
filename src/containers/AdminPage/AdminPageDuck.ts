@@ -228,6 +228,8 @@ export default class AdminPageDuck extends DuckMap {
           fileNamePattern: updateForm?.fileNamePattern,
           id: updateForm?.id,
           usable: true,
+          sendEmail: updateForm?.sendEmail,
+          visible: updateForm?.visible,
         });
         if (success) {
           notice.success({ text: "更新成功" });

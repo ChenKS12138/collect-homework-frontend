@@ -4,6 +4,8 @@ export interface IEditProjectForm {
   fileNameExtensions: string[];
   fileNameExample: string;
   fileNamePattern: string;
+  sendEmail: boolean;
+  visible: boolean;
   id: string;
 }
 

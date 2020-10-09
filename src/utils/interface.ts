@@ -7,6 +7,8 @@ export interface IProjectItem {
   fileNameExtensions: string[];
   fileNameExample: string;
   usable: boolean;
+  visible: boolean;
+  sendEmail: boolean;
   createAt: string;
   updateAt: string;
 }
