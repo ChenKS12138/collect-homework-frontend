@@ -148,12 +148,7 @@ export default class AdminPageDuck extends DuckMap {
     const { types } = duck;
     yield takeLatest([types.FETCH_INSERT_PROJECT], function* (action) {
       const fromData: ICreateProjectForm = action.payload;
-      if (
-        !fromData.fileNameExample ||
-        !fromData.fileNameExtensions ||
-        !fromData.fileNamePattern ||
-        !fromData.name
-      ) {
+      if (!fromData.name) {
         notice.error({ text: "信息不完整" });
       } else {
         try {

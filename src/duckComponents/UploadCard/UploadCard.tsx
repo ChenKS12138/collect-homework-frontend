@@ -107,17 +107,29 @@ export default function UploadCard({
         />
         <Form.Item label="支持的文件格式">
           <Space>
-            {currentProject?.fileNameExtensions?.map((tag, tagIndex) => (
-              <Tag key={tagIndex}>{tag}</Tag>
-            ))}
+            {currentProject?.fileNameExtensions?.length ? (
+              currentProject?.fileNameExtensions?.map((tag, tagIndex) => (
+                <Tag key={tagIndex}>{tag}</Tag>
+              ))
+            ) : (
+              <span>暂无要求</span>
+            )}
           </Space>
         </Form.Item>
         <Form.Item label="正确的文件名示例">
-          <Popover
-            content={`对应的正则表达式为${currentProject?.fileNamePattern}`}
-          >
-            <span>{currentProject?.fileNameExample}</span>
-          </Popover>
+          {currentProject?.fileNameExample?.length ? (
+            <Popover
+              content={
+                currentProject?.fileNamePattern?.length
+                  ? `对应的正则表达式为${currentProject?.fileNamePattern}`
+                  : "正则表达式无要求"
+              }
+            >
+              <span>{currentProject?.fileNameExample}</span>
+            </Popover>
+          ) : (
+            <span>暂无要求</span>
+          )}
         </Form.Item>
         <Dragger
           multiple={false}
@@ -132,12 +144,14 @@ export default function UploadCard({
               .reverse();
             const prefixName = prefixNameList.join("");
             if (
+              currentProject?.fileNameExtensions?.length &&
               !currentProject?.fileNameExtensions?.includes?.(extensionName)
             ) {
               notice.error({ text: "文件后缀名不合法" });
               return;
             }
             if (
+              currentProject?.fileNamePattern?.length &&
               !new RegExp(String.raw`${currentProject?.fileNamePattern}`).test(
                 prefixName
               )

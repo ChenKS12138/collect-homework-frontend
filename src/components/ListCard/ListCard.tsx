@@ -23,15 +23,20 @@ const columns = [
     dataIndex: "fileNameExtensions",
     render: (tags) => (
       <Space>
-        {tags?.map?.((tag, tagIndex) => (
-          <Tag key={tagIndex}>{tag}</Tag>
-        ))}
+        {tags?.length ? (
+          tags?.map?.((tag, tagIndex) => <Tag key={tagIndex}>{tag}</Tag>)
+        ) : (
+          <span>暂无要求</span>
+        )}
       </Space>
     ),
   },
   {
     title: "文件名示例",
     dataIndex: "fileNameExample",
+    render: (example: string) => (
+      <span>{example?.length ? example : "暂无要求"}</span>
+    ),
   },
   {
     title: "创建时间",
