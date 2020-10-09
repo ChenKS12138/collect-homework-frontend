@@ -37,11 +37,21 @@ export default abstract class FormDuck extends DuckMap {
       setFormDataPartly: createToPayload<any>(types.SET_FORM_DATA_PARTLY),
     };
   }
+  get rawSelectors() {
+    type State = this["State"];
+    return {
+      formatedData: (state: State) => this.formatData(state.formData),
+    };
+  }
   *saga() {
     yield* super.saga();
     yield fork([this, this.watchToPartlySetFormData]);
     yield fork([this, this.watchToCleanForm]);
   }
+  validate(data: this["IForm"]): boolean {
+    return true;
+  }
+  abstract formatData(data: this["IForm"]): this["IForm"];
   *watchToPartlySetFormData() {
     const { types, selector, creators } = this;
     yield takeLatest([types.SET_FORM_DATA_PARTLY], function* (action) {

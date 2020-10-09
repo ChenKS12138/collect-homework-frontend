@@ -9,4 +9,10 @@ export interface IEditProjectForm {
 
 export default class AdminPageEditFormDuck extends FormDuck {
   IForm: IEditProjectForm;
+  formatData(data: IEditProjectForm) {
+    return {
+      ...data,
+      fileNameExtensions: data?.fileNameExtensions ?? [],
+    };
+  }
 }

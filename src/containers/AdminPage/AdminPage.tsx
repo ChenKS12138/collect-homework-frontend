@@ -366,7 +366,11 @@ function AdminPageCreate({
         block
         type="primary"
         onClick={() => {
-          dispatch(duck.creators.insertProject(createProjectFormData));
+          dispatch(
+            duck.creators.insertProject(
+              duck.ducks.createProject.selectors.formatedData(store)
+            )
+          );
         }}
       >
         创建

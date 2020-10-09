@@ -9,4 +9,7 @@ export interface IRegistryForm {
 
 export default class AuthPageRegistryFormDuck extends FormDuck {
   IForm: IRegistryForm;
+  formatData(data: IRegistryForm) {
+    return data;
+  }
 }

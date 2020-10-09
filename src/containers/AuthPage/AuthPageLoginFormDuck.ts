@@ -7,4 +7,7 @@ export interface ILoginForm {
 
 export default class AuthPageLoginFormDuck extends FormDuck {
   IForm: ILoginForm;
+  formatData(data: ILoginForm) {
+    return data;
+  }
 }

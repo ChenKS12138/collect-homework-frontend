@@ -8,4 +8,7 @@ export interface IUploadForm {
 
 export default class AuthPageRegistryFormDuck extends FormDuck {
   IForm: IUploadForm;
+  formatData(data: IUploadForm) {
+    return data;
+  }
 }

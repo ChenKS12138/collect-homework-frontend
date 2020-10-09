@@ -9,4 +9,11 @@ export interface ICreateProjectForm {
 
 export default class AdminPageCreateFormDuck extends FormDuck {
   IForm: ICreateProjectForm;
+  formatData(data: ICreateProjectForm) {
+    return {
+      ...data,
+      name: data?.name ?? "",
+      fileNameExtensions: data?.fileNameExtensions ?? [],
+    };
+  }
 }

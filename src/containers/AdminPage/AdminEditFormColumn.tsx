@@ -18,9 +18,13 @@ const editFormColumns = [
     renderShow: (instance) => {
       return (
         <div>
-          {instance.fileNameExtensions?.map((tag, tagIndex) => (
-            <Tag key={tagIndex}>{tag}</Tag>
-          ))}
+          {instance.fileNameExtensions?.length ? (
+            instance.fileNameExtensions?.map((tag, tagIndex) => (
+              <Tag key={tagIndex}>{tag}</Tag>
+            ))
+          ) : (
+            <span>暂无要求</span>
+          )}
         </div>
       );
     },
@@ -54,7 +58,13 @@ const editFormColumns = [
     key: "fileNameExample",
     label: "文件名示例",
     renderShow: (instance: IProjectItem) => {
-      return <div>{instance.fileNameExample}</div>;
+      return (
+        <div>
+          {instance?.fileNameExample?.length
+            ? instance?.fileNameExample
+            : "暂无示例"}
+        </div>
+      );
     },
     renderEdit: ({
       store,
@@ -81,7 +91,13 @@ const editFormColumns = [
     key: "fileNamePattern",
     label: "文件名正则表达式",
     renderShow: (instance: IProjectItem) => {
-      return <div>{instance.fileNamePattern}</div>;
+      return (
+        <div>
+          {instance?.fileNamePattern?.length
+            ? instance?.fileNamePattern
+            : "暂无要求"}
+        </div>
+      );
     },
     renderEdit: ({
       store,
