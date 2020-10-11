@@ -79,7 +79,7 @@ export default function UploadCard({
         <Form.Item label="管理员">
           <div>{currentProject?.adminName}</div>
         </Form.Item>
-        <Form.Item label="提交人数">
+        <Form.Item label="提交份数">
           <div>{uploadCount ?? "-"}</div>
         </Form.Item>
         <Divider />
