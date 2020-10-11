@@ -66,6 +66,10 @@ const config = merge({
       chunks: ["index", "chunk_vendor"],
       minify: {
         collapseWhitespace: true,
+        preserveLineBreaks: false,
+        minifyCSS: true,
+        minifyJS: true,
+        minifyURLs: true,
       },
       favicon: path.resolve("./public/favicon.png"),
     }),
