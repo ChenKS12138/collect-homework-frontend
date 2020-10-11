@@ -13,8 +13,22 @@ const config = merge(common, {
   module: {
     rules: [
       {
-        test: /\.(css|less)$/,
+        test: (path) =>
+          !/\.module\.(le|c)ss$/.test(path) && /\.(c|le)ss$/.test(path),
         use: ["style-loader", "css-loader", "less-loader"],
+      },
+      {
+        test: /module\.(le|c)ss$/,
+        use: [
+          "style-loader",
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
+          "less-loader",
+        ],
       },
     ],
   },

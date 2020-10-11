@@ -1,10 +1,10 @@
+import React from "react";
 import { EditableTagSet } from "@/components";
 import { IRenderEdit } from "@/duckComponents/EditableFormCard/EditableFormCard";
 import { formatDate } from "@/utils";
 import { IProjectItem } from "@/utils/interface";
-import { instance } from "@/utils/request";
-import { Input, Tag, Switch } from "antd";
-import React from "react";
+import { Input } from "antd";
+import { Tag, Switch } from "base-component";
 import AdminPageEditFormDuck from "../ducks/AdminPageEditFormDuck";
 
 const editFormColumns = [
@@ -76,7 +76,7 @@ const editFormColumns = [
         duck.selector(store)?.formData?.fileNameExample ?? "";
       return (
         <Input
-          defaultValue={fileNameExample}
+          value={fileNameExample}
           onChange={(event) => {
             dispatch(
               duck.creators.setFormDataPartly({
@@ -109,7 +109,7 @@ const editFormColumns = [
         duck.selector(store)?.formData?.fileNamePattern ?? "";
       return (
         <Input
-          defaultValue={fileNamePattern}
+          value={fileNamePattern}
           onChange={(event) => {
             dispatch(
               duck.creators.setFormDataPartly({

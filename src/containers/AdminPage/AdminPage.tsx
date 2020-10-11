@@ -10,11 +10,11 @@ import {
   Statistic,
   Drawer,
   Input,
-  Form,
   Empty,
-  List,
   Progress,
 } from "antd";
+import { List } from "base-component";
+import { Form } from "base-component";
 import { AdminPageDuck } from ".";
 import {
   useRouteMatch,
@@ -28,7 +28,6 @@ import {
 import { IProjectItem } from "@/utils/interface";
 import { DuckCmpProps } from "saga-duck";
 import { useWindowSize } from "react-use";
-import { useForm } from "antd/lib/form/Form";
 import { cleanToken } from "@/utils/request";
 import { Helmet } from "react-helmet";
 import adminEditFormColumns from "./utils/AdminEditFormColumn";
@@ -261,11 +260,9 @@ function ProjectOwnWrapper({
                             fileList?.map?.((one) => ({ title: one })) ?? []
                           }
                           bordered
-                          renderItem={(item) => (
-                            <List.Item>{item?.title}</List.Item>
-                          )}
+                          renderItem={(item) => <div>{item?.title}</div>}
                           size="small"
-                        ></List>
+                        />
                       ) : (
                         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                       )}
@@ -325,7 +322,6 @@ function AdminPageCreate({
     formError: createProjectFormError,
     formLoading: createProjectFormLoading,
   } = duck.ducks.createProject.selector(store);
-  const [formInstance] = useForm();
   const { ducks } = duck;
   return (
     <Form>

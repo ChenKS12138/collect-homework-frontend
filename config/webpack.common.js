@@ -9,12 +9,6 @@ const config = merge({
   entry: {
     index: path.resolve("./src/index.tsx"),
   },
-  optimization: {
-    splitChunks: {
-      chunks: "all",
-      name: "chunk_vendor",
-    },
-  },
   module: {
     rules: [
       {
@@ -47,6 +41,7 @@ const config = merge({
       "react-dom": "preact/compat",
       "@": path.resolve("./src"),
       mock: path.resolve("./mock"),
+      "base-component": path.resolve("./src/components/base"),
     },
   },
   plugins: [
@@ -63,7 +58,6 @@ const config = merge({
         viewport: "width=device-width, initial-scale=1.0",
       },
       title: "作业提交平台",
-      chunks: ["index", "chunk_vendor"],
       minify: {
         collapseWhitespace: true,
         preserveLineBreaks: false,
@@ -71,7 +65,7 @@ const config = merge({
         minifyJS: true,
         minifyURLs: true,
       },
-      favicon: path.resolve("./public/favicon.png"),
+      favicon: path.resolve("./public/favicon.ico"),
     }),
   ],
 });

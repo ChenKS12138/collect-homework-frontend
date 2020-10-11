@@ -100,3 +100,12 @@ export function formatDate(dataString: string): string {
   const day = d.getDate();
   return `${year}-${month}-${day}`;
 }
+
+export function classnames(classes: { [key: string]: any }): string {
+  return Object.entries(classes).reduce((classString, current) => {
+    if (current[1]) {
+      classString += current[0] + " ";
+    }
+    return classString;
+  }, "");
+}

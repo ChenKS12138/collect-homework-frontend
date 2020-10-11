@@ -19,17 +19,42 @@ const config = merge(common, {
   optimization: {
     splitChunks: {
       chunks: "all",
+
+      cacheGroups: {
+        vendors: {
+          test: /[\\/]node_modules[\\/]/,
+          priority: 1,
+        },
+        antd: {
+          test: /[\\/]node_modules[\\/](antd|rc\-|@ant-design)/,
+          priority: 2,
+        },
+      },
     },
     minimize: true,
   },
   module: {
     rules: [
       {
-        test: /\.(css|less)$/,
+        test: (path) =>
+          !/\.module\.(le|c)ss$/.test(path) && /\.(c|le)ss$/.test(path),
         use: [
           MiniCssExtractPlugin.loader,
           "css-loader",
           "postcss-loader",
+          "less-loader",
+        ],
+      },
+      {
+        test: /module\.(le|c)ss$/,
+        use: [
+          MiniCssExtractPlugin.loader,
+          {
+            loader: "css-loader",
+            options: {
+              modules: true,
+            },
+          },
           "less-loader",
         ],
       },
@@ -42,10 +67,10 @@ const config = merge(common, {
       filename: "css/[name]_[hash].css",
       chunkFilename: "css/[id]_[hash].css",
     }),
-    new Dotenv({ path: path.resolve(".env.production") }),
+    // new Dotenv({ path: path.resolve(".env.production") }),
     new ManifestPlugin(),
     new RobotstxtPlugin({
-      host: "http://homework.cattchen.top",
+      host: "https://homework.cattchen.top",
       policy: [
         {
           userAgent: "*",
@@ -56,6 +81,9 @@ const config = merge(common, {
       ],
     }),
   ],
+  stats: {
+    children: false,
+  },
   // externals: {
   //   react: "React",
   //   axios: "axios",

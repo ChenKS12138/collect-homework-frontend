@@ -3,7 +3,8 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "mock": ["./mock"]
+      "mock": ["./mock"],
+      "base-component": ["./src/components/base"]
     },
     "jsx": "react",
     "esModuleInterop": true,
@@ -12,8 +13,9 @@
     "moduleResolution": "node",
     "experimentalDecorators": true,
     "module": "ESNext",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
-  "include": ["src/**/*", "mock/*"],
+  "include": ["src/**/*", "mock/*", "ambient/*"],
   "exclude": ["node_modules"]
 }

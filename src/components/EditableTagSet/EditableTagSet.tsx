@@ -1,5 +1,6 @@
 import React, { Props, useCallback, useState } from "react";
-import { Tag, Input } from "antd";
+import { Input } from "antd";
+import { Tag } from "base-component";
 
 interface IEditTableSet extends Props<null> {
   // isEdit: boolean;
@@ -26,6 +27,13 @@ export default function EditTableSet({
     setInputValue("");
     onTagSetChange(newTagSet);
   }, [inputValue, currentTagSet, setInputValue, setCurrentTagSet]);
+
+  // TODO应该有更好的处理方案
+  const handleKeyDown = useCallback((event: React.KeyboardEvent) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+    }
+  }, []);
 
   const handleTagClose = useCallback(
     (tag: { key: string }) => {
@@ -59,6 +67,7 @@ export default function EditTableSet({
         }}
         onBlur={handleConfirm}
         onPressEnter={handleConfirm}
+        onKeyDown={handleKeyDown}
       />
     </div>
   );

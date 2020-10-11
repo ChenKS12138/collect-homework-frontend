@@ -1,5 +1,7 @@
 import React, { Props, AllHTMLAttributes, ReactNode } from "react";
-import { Table, Tag, Space, Button, Empty } from "antd";
+import { Space, Button } from "antd";
+import { Table } from "base-component";
+import { Empty, Tag } from "base-component";
 import styled from "styled-components";
 import { IProjectItem } from "@/utils/interface";
 import { RouterLink } from "@/utils";
@@ -42,10 +44,6 @@ const columns = [
     title: "创建时间",
     dataIndex: "createAt",
   },
-  // {
-  //   title: "截止时间",
-  //   dataIndex: "due",
-  // },
   {
     title: "操作",
     dataIndex: "id",

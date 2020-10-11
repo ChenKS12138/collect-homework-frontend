@@ -1,16 +1,10 @@
 import React, { Dispatch, Props, ReactNode, useEffect } from "react";
-import {
-  Form,
-  Input,
-  Popover,
-  Upload,
-  Divider,
-  Button,
-  Space,
-  Tag,
-  Alert,
-  Result,
-} from "antd";
+import { Input, Popover, Upload, Button, Space } from "antd";
+import { Form } from "base-component";
+import { Tag } from "base-component";
+import { Result } from "base-component";
+import { Divider } from "base-component";
+import { Alert } from "base-component";
 import { InboxOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { IProjectItem } from "@/utils/interface";
@@ -101,8 +95,6 @@ export default function UploadCard({
         </Form.Item>
         <Alert
           message="请注意不合规则的文件名将会被拒绝提交"
-          type="info"
-          showIcon
           className="app-mb-2n"
         />
         <Form.Item label="支持的文件格式">

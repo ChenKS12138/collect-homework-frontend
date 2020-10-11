@@ -24,7 +24,8 @@
       "alias": {
         "map": [
           ["@", "./src"],
-          ["mock", "./mock"]
+          ["mock", "./mock"],
+          ["base-component", "./src/components/base"]
         ]
       }
     }

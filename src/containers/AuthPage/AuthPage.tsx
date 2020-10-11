@@ -1,6 +1,7 @@
 import React from "react";
 import { Scaffold } from "@/components/index";
-import { Form, Input, Button, Drawer, Space } from "antd";
+import { Input, Button, Drawer, Space } from "antd";
+import { Form } from "base-component";
 import styled from "styled-components";
 import {
   RouterLink,
@@ -10,11 +11,7 @@ import {
 } from "@/utils";
 import { useWindowSize } from "react-use";
 import { AuthPageDuck } from ".";
-import { ILoginForm } from "./AuthPageDuck";
-import { IRegistryForm } from "./ducks/AuthPageRegistryFormDuck";
 import { Helmet } from "react-helmet";
-
-const { useForm } = Form;
 
 const AuthWrapper = styled.div`
   max-width: 400px;
@@ -27,12 +24,11 @@ export default function AuthPage() {
   const { ducks } = duck;
   const showRegistry = useRouteMatch("/auth/registry") !== false;
   const { height, width } = useWindowSize();
-  const [loginFormInstance] = useForm();
-  const [registerFormInstance] = useForm();
 
   const {
     formLoading: loginLoading,
     formError: loginError,
+    formData: loginData,
   } = ducks.loginForm.selector(store);
   const {
     formLoading: registryLoading,
@@ -65,17 +61,30 @@ export default function AuthPage() {
             maxWidth: "90vw",
           }}
           className="app-mlr-auto"
-          form={loginFormInstance}
-          onValuesChange={(changeValue: any, value: ILoginForm) => {
-            dispatch(ducks.loginForm.creators.setFormData(value));
-          }}
         >
           <Form.Item label="邮箱" name="email">
-            <Input />
+            <Input
+              value={loginData?.email}
+              onChange={(event) => {
+                dispatch(
+                  ducks.loginForm.creators.setFormDataPartly({
+                    email: event.target.value,
+                  })
+                );
+              }}
+            />
           </Form.Item>
           <Form.Item label="密码" name="password">
             <Input.Password
               type="password"
+              value={loginData?.password}
+              onChange={(event) => {
+                dispatch(
+                  ducks.loginForm.creators.setFormDataPartly({
+                    password: event.target.value,
+                  })
+                );
+              }}
               onPressEnter={() => {
                 dispatch({ type: duck.types.INVOKE_LOGIN });
               }}
@@ -109,15 +118,19 @@ export default function AuthPage() {
         width={Math.max(width * 0.7, 300)}
       >
         <AuthWrapper className="app-mlr-auto app-mt-4n">
-          <Form
-            form={registerFormInstance}
-            onValuesChange={(changeValue: any, value: IRegistryForm) => {
-              dispatch(ducks.registryForm.creators.setFormData(value));
-            }}
-          >
+          <Form>
             <Form.Item label="邮箱" name="email" required>
               <Space size="large">
-                <Input />
+                <Input
+                  value={registryData?.email}
+                  onChange={(event) => {
+                    dispatch(
+                      ducks.registryForm.creators.setFormDataPartly({
+                        email: event.target.value,
+                      })
+                    );
+                  }}
+                />
                 <Button
                   type="default"
                   htmlType="button"
@@ -134,13 +147,40 @@ export default function AuthPage() {
               </Space>
             </Form.Item>
             <Form.Item label="邀请码" name="invitationCode" required>
-              <Input.Password />
+              <Input.Password
+                value={registryData?.invitationCode}
+                onChange={(event) => {
+                  dispatch(
+                    ducks.registryForm.creators.setFormDataPartly({
+                      invitationCode: event.target.value,
+                    })
+                  );
+                }}
+              />
             </Form.Item>
             <Form.Item label="用户名" name="username" required>
-              <Input />
+              <Input
+                value={registryData?.username}
+                onChange={(event) => {
+                  dispatch(
+                    ducks.registryForm.creators.setFormDataPartly({
+                      username: event.target.value,
+                    })
+                  );
+                }}
+              />
             </Form.Item>
             <Form.Item label="密码" name="userPassword" required>
-              <Input.Password />
+              <Input.Password
+                value={registryData?.userPassword}
+                onChange={(event) => {
+                  dispatch(
+                    ducks.registryForm.creators.setFormDataPartly({
+                      userPassword: event.target.value,
+                    })
+                  );
+                }}
+              />
             </Form.Item>
             <Button
               type="primary"
