@@ -8,7 +8,9 @@ import {
 import { fork, put, select } from "redux-saga/effects";
 import { takeLatest } from "redux-saga-catch";
 import { formatDate, navigateTo, notice } from "@/utils";
-import ListPageUploadFormDuck, { IUploadForm } from "./ListPageUploadFormDuck";
+import ListPageUploadFormDuck, {
+  IUploadForm,
+} from "./ducks/ListPageUploadFormDuck";
 import { LoadingDuck } from "@/ducks";
 
 export default class ListPageDuck extends DuckMap {

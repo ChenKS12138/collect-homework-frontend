@@ -14,13 +14,14 @@ import {
 import { IProjectItem, IAdminBasicInfo } from "@/utils/interface";
 import AdminPageCreateFormDuck, {
   ICreateProjectForm,
-} from "./AdminPageCreateFormDuck";
+} from "./ducks/AdminPageCreateFormDuck";
 import { DuckMap } from "saga-duck";
 import { navigateTo, notice } from "@/utils";
 import { cleanToken } from "@/utils/request";
 import AdminPageEditFormDuck, {
   IEditProjectForm,
-} from "./AdminPageEditFormDuck";
+} from "./ducks/AdminPageEditFormDuck";
+import AdminPageDownloadProgressDuck from "./ducks/AdminPageDownloadProgressDuck";
 import { saveAs } from "file-saver";
 
 export default class AdminPageDuck extends DuckMap {
@@ -51,6 +52,7 @@ export default class AdminPageDuck extends DuckMap {
       ...super.quickDucks,
       createProject: AdminPageCreateFormDuck,
       editProject: AdminPageEditFormDuck,
+      downloadProgress: AdminPageDownloadProgressDuck,
     };
   }
   get creators() {
@@ -266,11 +268,17 @@ export default class AdminPageDuck extends DuckMap {
     });
   }
   *watchToDownloadFile() {
-    const { types } = this;
+    const { types, handleDownloadProgress, ducks } = this;
     yield takeLatest([types.FETCH_DOWNLAOD_FILE], function* (action) {
       const { id, name } = action.payload;
       try {
-        const result = yield requestStorageDownload({ id });
+        yield put({
+          type: ducks.downloadProgress.types.RELOAD,
+        });
+        const result = yield requestStorageDownload({
+          id,
+          onDownloadProgress: handleDownloadProgress,
+        });
         if (result?.success) {
           const fileName = `${name}.zip`;
           saveAs(result?.blob, fileName);
@@ -282,4 +290,9 @@ export default class AdminPageDuck extends DuckMap {
       }
     });
   }
+  handleDownloadProgress = (progressEvent) => {
+    const current = progressEvent?.loaded;
+    const total = progressEvent?.total;
+    this.ducks.downloadProgress.emit(current / Math.max(total, 0.000001));
+  };
 }

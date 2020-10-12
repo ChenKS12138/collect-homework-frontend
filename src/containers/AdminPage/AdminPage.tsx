@@ -13,6 +13,7 @@ import {
   Form,
   Empty,
   List,
+  Progress,
 } from "antd";
 import { AdminPageDuck } from ".";
 import {
@@ -30,8 +31,7 @@ import { useWindowSize } from "react-use";
 import { useForm } from "antd/lib/form/Form";
 import { cleanToken } from "@/utils/request";
 import { Helmet } from "react-helmet";
-
-import adminEditFormColumns from "./AdminEditFormColumn";
+import adminEditFormColumns from "./utils/AdminEditFormColumn";
 
 const AdminWrapper = styled.div`
   max-width: 800px;
@@ -167,6 +167,9 @@ function ProjectOwnWrapper({
     projectOwn,
     width < 960 ? 1 : 2
   );
+  const { ducks } = duck;
+  const { percentage } = ducks.downloadProgress.selector(store);
+
   return (
     <>
       {distributedProjectOwn?.map((row, rowIndex) => (
@@ -267,22 +270,40 @@ function ProjectOwnWrapper({
                         <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
                       )}
                     </CommonModal>,
-                    <Button
-                      size="small"
-                      type="link"
-                      key="download"
-                      disabled={isEdit}
-                      onClick={() => {
-                        dispatch(
-                          duck.creators.downloadFile({
-                            id: col.id,
-                            name: col.name,
-                          })
+                    <CommonModal
+                      title="一键下载"
+                      innerComponent={(visible, setVisible) => {
+                        return (
+                          <Button
+                            size="small"
+                            type="link"
+                            key="download"
+                            disabled={isEdit}
+                            onClick={() => {
+                              dispatch(
+                                duck.creators.downloadFile({
+                                  id: col.id,
+                                  name: col.name,
+                                })
+                              );
+                              setVisible(true);
+                            }}
+                          >
+                            一键下载
+                          </Button>
                         );
                       }}
+                      footer={null}
                     >
-                      一键下载
-                    </Button>,
+                      <div>
+                        <Progress
+                          percent={parseFloat((percentage * 100).toFixed(2))}
+                        />
+                        <span style={{ color: "red" }}>
+                          文件压缩需要一定的时间，请耐心等待，下载中请勿关闭浏览器窗口
+                        </span>
+                      </div>
+                    </CommonModal>,
                   ]}
                 />
               </Col>

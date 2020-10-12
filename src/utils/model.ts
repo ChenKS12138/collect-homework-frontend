@@ -121,11 +121,16 @@ export const requestStorageFileCount = ({ id }: IRequestStorageFileCount) =>
 
 interface IRequestStorageDownload {
   id: string;
+  onDownloadProgress: (progressEvent: any) => void;
 }
 
-export const requestStorageDownload = ({ id }: IRequestStorageDownload) =>
+export const requestStorageDownload = ({
+  id,
+  onDownloadProgress,
+}: IRequestStorageDownload) =>
   instance.get(`/storage/download?id=${id}`, {
     responseType: "blob",
+    onDownloadProgress,
   });
 
 export const requestStorageUpload = ({ file, secret, projectId }) => {

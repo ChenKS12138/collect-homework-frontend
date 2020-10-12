@@ -1,8 +1,8 @@
 import { reduceFromPayload, createToPayload } from "saga-duck";
 import { fork, put, select } from "redux-saga/effects";
 import { takeLatest } from "redux-saga-catch";
-import AuthPageLoginFormDuck from "./AuthPageLoginFormDuck";
-import AuthPageRegistryFormDuck from "./AuthPageRegistryFormDuck";
+import AuthPageLoginFormDuck from "./ducks/AuthPageLoginFormDuck";
+import AuthPageRegistryFormDuck from "./ducks/AuthPageRegistryFormDuck";
 import {
   requestAdminLogin,
   requestAdminInvitationCode,

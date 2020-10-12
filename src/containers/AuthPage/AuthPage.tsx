@@ -11,7 +11,7 @@ import {
 import { useWindowSize } from "react-use";
 import { AuthPageDuck } from ".";
 import { ILoginForm } from "./AuthPageDuck";
-import { IRegistryForm } from "./AuthPageRegistryFormDuck";
+import { IRegistryForm } from "./ducks/AuthPageRegistryFormDuck";
 import { Helmet } from "react-helmet";
 
 const { useForm } = Form;

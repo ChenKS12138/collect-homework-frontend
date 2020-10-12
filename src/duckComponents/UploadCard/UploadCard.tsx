@@ -15,7 +15,7 @@ import { InboxOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { IProjectItem } from "@/utils/interface";
 import { notice } from "@/utils";
-import ListPageUploadFormDuck from "@/containers/ListPage/ListPageUploadFormDuck";
+import ListPageUploadFormDuck from "@/containers/ListPage/ducks/ListPageUploadFormDuck";
 
 const { Dragger } = Upload;
 

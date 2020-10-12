@@ -5,7 +5,7 @@ import { IProjectItem } from "@/utils/interface";
 import { instance } from "@/utils/request";
 import { Input, Tag, Switch } from "antd";
 import React from "react";
-import AdminPageEditFormDuck from "./AdminPageEditFormDuck";
+import AdminPageEditFormDuck from "../ducks/AdminPageEditFormDuck";
 
 const editFormColumns = [
   {
