@@ -94,7 +94,11 @@ export default function Scaffold({ links, sider, children }: IScaffold) {
       </Header>
       <Content>{children ?? null}</Content>
       <Footer>
-        <BottomText>homework.chenks.codes</BottomText>
+        <BottomText>
+          {process.env.VERSION
+            ? `Version: ${process.env.VERSION}`
+            : "Developing Mode No Version"}
+        </BottomText>
       </Footer>
     </Layout>
   );

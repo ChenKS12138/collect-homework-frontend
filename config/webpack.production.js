@@ -1,4 +1,5 @@
 const merge = require("webpack-merge");
+const webpack = require("webpack");
 const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 const common = require("./webpack.common");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
@@ -8,6 +9,9 @@ const ManifestPlugin = require("webpack-manifest-plugin");
 const RobotstxtPlugin = require("robotstxt-webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
+const GitRevisionPlugin = require("git-revision-webpack-plugin");
+
+const gitRevisionPlugin = new GitRevisionPlugin();
 
 const config = merge(common, {
   mode: "production",
@@ -62,6 +66,10 @@ const config = merge(common, {
   },
 
   plugins: [
+    gitRevisionPlugin,
+    new webpack.DefinePlugin({
+      "process.env.VERSION": JSON.stringify(gitRevisionPlugin.commithash()),
+    }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: "css/[name]_[hash].css",
