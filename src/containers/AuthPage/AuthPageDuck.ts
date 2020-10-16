@@ -10,7 +10,8 @@ import {
 } from "@/utils/model";
 import { DuckMap } from "saga-duck";
 import { CutdownDuck } from "@/ducks";
-import { navigateTo, notice } from "@/utils";
+import { notice } from "@/utils";
+import { navigateTo } from "router";
 import { getToken, setToken } from "@/utils/request";
 
 export interface ILoginForm {

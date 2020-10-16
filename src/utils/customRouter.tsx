@@ -6,11 +6,11 @@ import React, {
   useCallback,
 } from "react";
 import { LinkProps } from "react-router-dom";
-import { Watcher } from "@/utils/utils";
+import { Observer } from "@/utils";
 import { pathToRegexp, match } from "path-to-regexp";
 
 const HistoryContext = React.createContext("history");
-const pathWatcher = new Watcher<{ path: string; matched: string[] }>({
+const pathObserver = new Observer<{ path: string; matched: string[] }>({
   path: window.location.pathname,
   matched: [],
 });
@@ -20,15 +20,15 @@ export class Router extends React.Component<Props<null>, { path: string }> {
   constructor(props) {
     super(props);
     this.state = {
-      path: pathWatcher.value.path,
+      path: pathObserver.value.path,
     };
     this.historyState = {};
   }
   componentDidMount() {
-    pathWatcher.add(this.handlePathChange);
+    pathObserver.listen(this.handlePathChange);
   }
   componentWillUnmount() {
-    pathWatcher.cancel(this.handlePathChange);
+    pathObserver.cancel(this.handlePathChange);
   }
   handlePathChange = ({ path }) => {
     this.setState({ path });
@@ -69,7 +69,7 @@ export class Route extends React.Component<
 
 export class RouterLink extends React.Component<LinkProps, any> {
   handleClick = (event) => {
-    pathWatcher.update({
+    pathObserver.update({
       path: (this.props?.to as string) || "#",
       matched: [],
     });
@@ -88,13 +88,13 @@ export class RouterLink extends React.Component<LinkProps, any> {
 }
 
 export const navigateTo = (path: string) => {
-  pathWatcher.update({
+  pathObserver.update({
     path: path,
     matched: [],
   });
 };
 
-export const getCurrentRoute = () => pathWatcher.value;
+export const getCurrentRoute = () => pathObserver.value;
 
 export function useRouteMatch<T extends object = any>(pattern) {
   type MatchType = {
@@ -115,16 +115,16 @@ export function useRouteMatch<T extends object = any>(pattern) {
     handlePathChange(getCurrentRoute());
   }, [pattern]);
   useEffect(() => {
-    pathWatcher.add(handlePathChange);
+    pathObserver.listen(handlePathChange);
     return () => {
-      pathWatcher.cancel(handlePathChange);
+      pathObserver.cancel(handlePathChange);
     };
   }, []);
   return matched as MatchType | false;
 }
 
 window.addEventListener("popstate", function () {
-  pathWatcher.update({
+  pathObserver.update({
     path: window.location.pathname,
     matched: [],
   });

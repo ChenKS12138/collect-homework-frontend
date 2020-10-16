@@ -1,6 +1,6 @@
-import React, { Suspense, lazy } from "react";
+import React from "react";
 import styled from "styled-components";
-import { Router, Route } from "@/utils";
+import { Router, Route } from "router";
 import { ListPage } from "@/containers/ListPage";
 import { GlobalStyle, Loading } from "@/components";
 import { loadable } from "@/utils";

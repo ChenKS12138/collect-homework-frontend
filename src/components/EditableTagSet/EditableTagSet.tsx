@@ -1,6 +1,5 @@
 import React, { Props, useCallback, useState } from "react";
-import { Input } from "antd";
-import { Tag } from "base-component";
+import { Tag, Input } from "base-component";
 
 interface IEditTableSet extends Props<null> {
   // isEdit: boolean;

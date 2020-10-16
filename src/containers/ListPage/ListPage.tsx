@@ -1,18 +1,12 @@
 import React, { useEffect } from "react";
-
-import { Scaffold, Avatar, ListCard, Modal } from "@/components";
+import { Scaffold, Avatar, ListCard } from "@/components";
 import { UploadCard } from "@/duckComponents";
-import { Button, Drawer } from "antd";
+import { Button, Drawer } from "base-component";
 import styled from "styled-components";
 import { avatarImage } from "@/assets";
 import { ListPageDuck } from "@/containers/ListPage";
-import {
-  RouterLink,
-  navigateTo,
-  useRouteMatch,
-  useSagaDuckState,
-  useLazyState,
-} from "@/utils";
+import { useSagaDuckState, useLazyState } from "@/utils";
+import { RouterLink, navigateTo, useRouteMatch } from "router";
 import { useWindowSize } from "react-use";
 import { Helmet } from "react-helmet";
 

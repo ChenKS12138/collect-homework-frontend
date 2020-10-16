@@ -1,28 +1,6 @@
-import { Moment } from "moment";
 import { GREET_TEXT } from "@/utils/constants";
-import { notification } from "antd";
+import { notification } from "base-component";
 import { useCallback, useMemo, useState } from "react";
-
-export class Watcher<T = any> {
-  value: T;
-  callBackQueue: Function[];
-  constructor(initialValue: T) {
-    this.value = initialValue;
-    this.callBackQueue = [];
-  }
-  add(callback: (value: T) => void) {
-    this.callBackQueue.push(callback);
-  }
-  update(value: T) {
-    this.value = value;
-    this.callBackQueue.forEach((cb) => {
-      cb(value);
-    });
-  }
-  cancel(callback: (value: T) => void) {
-    this.callBackQueue = this.callBackQueue.filter((cb) => cb !== callback);
-  }
-}
 
 export const greetByTime = () => {
   const hour = new Date().getHours();
@@ -49,16 +27,18 @@ export const distributeArray = <T = any>(
 
 export const notice = {
   success({ text }: { text: string }) {
-    notification.success({
+    notification.open({
       message: text,
-      duration: 2,
+      duration: 2000,
+      type: "success",
     });
   },
   error({ text }: { text: string }) {
-    notification.error({
+    notification.open({
       message: "遇到了点问题～",
       description: text,
-      duration: 2,
+      duration: 2000,
+      type: "error",
     });
   },
 };

@@ -1,14 +1,9 @@
 import React from "react";
 import { Scaffold } from "@/components/index";
-import { Input, Button, Drawer, Space } from "antd";
-import { Form } from "base-component";
+import { Input, Form, Space, Button, Drawer } from "base-component";
 import styled from "styled-components";
-import {
-  RouterLink,
-  navigateTo,
-  useRouteMatch,
-  useSagaDuckState,
-} from "@/utils";
+import { useSagaDuckState } from "@/utils";
+import { RouterLink, navigateTo, useRouteMatch } from "router";
 import { useWindowSize } from "react-use";
 import { AuthPageDuck } from ".";
 import { Helmet } from "react-helmet";
@@ -76,7 +71,6 @@ export default function AuthPage() {
           </Form.Item>
           <Form.Item label="密码" name="password">
             <Input.Password
-              type="password"
               value={loginData?.password}
               onChange={(event) => {
                 dispatch(
@@ -134,6 +128,10 @@ export default function AuthPage() {
                 <Button
                   type="default"
                   htmlType="button"
+                  style={{
+                    display: "block",
+                    marginLeft: "8px",
+                  }}
                   onClick={() => {
                     dispatch(
                       duck.creators.fetchSecretCode(registryData?.email)

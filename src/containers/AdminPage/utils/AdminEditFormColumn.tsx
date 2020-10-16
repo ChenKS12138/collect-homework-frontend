@@ -3,20 +3,21 @@ import { EditableTagSet } from "@/components";
 import { IRenderEdit } from "@/duckComponents/EditableFormCard/EditableFormCard";
 import { formatDate } from "@/utils";
 import { IProjectItem } from "@/utils/interface";
-import { Input } from "antd";
-import { Tag, Switch } from "base-component";
+import { Tag, Switch, Input } from "base-component";
 import AdminPageEditFormDuck from "../ducks/AdminPageEditFormDuck";
 
 const editFormColumns = [
   {
     key: "adminName",
     label: "管理员",
-    renderShow: (instance: IProjectItem) => <div>{instance.adminName}</div>,
+    renderShow(instance: IProjectItem) {
+      return <div>{instance.adminName}</div>;
+    },
   },
   {
     key: "fileNameExtensions",
     label: "文件后缀名",
-    renderShow: (instance) => {
+    renderShow(instance) {
       return (
         <div>
           {instance.fileNameExtensions?.length ? (
@@ -29,11 +30,7 @@ const editFormColumns = [
         </div>
       );
     },
-    renderEdit: ({
-      store,
-      duck,
-      dispatch,
-    }: IRenderEdit<AdminPageEditFormDuck>) => {
+    renderEdit({ store, duck, dispatch }: IRenderEdit<AdminPageEditFormDuck>) {
       const fileNameExtensions =
         duck.selector(store)?.formData?.fileNameExtensions ?? [];
 
@@ -58,7 +55,7 @@ const editFormColumns = [
   {
     key: "fileNameExample",
     label: "文件名示例",
-    renderShow: (instance: IProjectItem) => {
+    renderShow(instance: IProjectItem) {
       return (
         <div>
           {instance?.fileNameExample?.length
@@ -67,11 +64,7 @@ const editFormColumns = [
         </div>
       );
     },
-    renderEdit: ({
-      store,
-      duck,
-      dispatch,
-    }: IRenderEdit<AdminPageEditFormDuck>) => {
+    renderEdit({ store, duck, dispatch }: IRenderEdit<AdminPageEditFormDuck>) {
       const fileNameExample =
         duck.selector(store)?.formData?.fileNameExample ?? "";
       return (
@@ -91,7 +84,7 @@ const editFormColumns = [
   {
     key: "fileNamePattern",
     label: "文件名正则表达式",
-    renderShow: (instance: IProjectItem) => {
+    renderShow(instance: IProjectItem) {
       return (
         <div>
           {instance?.fileNamePattern?.length
@@ -100,11 +93,7 @@ const editFormColumns = [
         </div>
       );
     },
-    renderEdit: ({
-      store,
-      duck,
-      dispatch,
-    }: IRenderEdit<AdminPageEditFormDuck>) => {
+    renderEdit({ store, duck, dispatch }: IRenderEdit<AdminPageEditFormDuck>) {
       const fileNamePattern =
         duck.selector(store)?.formData?.fileNamePattern ?? "";
       return (
@@ -124,14 +113,10 @@ const editFormColumns = [
   {
     key: "visible",
     label: "是否对外公布",
-    renderShow: (instance: IProjectItem) => (
-      <Switch disabled checked={instance.visible} />
-    ),
-    renderEdit: ({
-      store,
-      duck,
-      dispatch,
-    }: IRenderEdit<AdminPageEditFormDuck>) => {
+    renderShow(instance: IProjectItem) {
+      return <Switch disabled checked={instance.visible} />;
+    },
+    renderEdit({ store, duck, dispatch }: IRenderEdit<AdminPageEditFormDuck>) {
       const visible = duck.selector(store)?.formData?.visible;
       return (
         <Switch
@@ -146,14 +131,10 @@ const editFormColumns = [
   {
     key: "sendEmail",
     label: "是否发送邮件提醒",
-    renderShow: (instance: IProjectItem) => (
-      <Switch disabled checked={instance.sendEmail} />
-    ),
-    renderEdit: ({
-      store,
-      duck,
-      dispatch,
-    }: IRenderEdit<AdminPageEditFormDuck>) => {
+    renderShow(instance: IProjectItem) {
+      return <Switch disabled checked={instance.sendEmail} />;
+    },
+    renderEdit({ store, duck, dispatch }: IRenderEdit<AdminPageEditFormDuck>) {
       const sendEmail = duck.selector(store)?.formData?.sendEmail;
       return (
         <Switch
@@ -168,9 +149,9 @@ const editFormColumns = [
   {
     key: "createAt",
     label: "创建时间",
-    renderShow: (instance: IProjectItem) => (
-      <div>{formatDate(instance.createAt)}</div>
-    ),
+    renderShow(instance: IProjectItem) {
+      return <div>{formatDate(instance.createAt)}</div>;
+    },
   },
 ];
 

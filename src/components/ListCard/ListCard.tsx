@@ -1,10 +1,8 @@
-import React, { Props, AllHTMLAttributes, ReactNode } from "react";
-import { Space, Button } from "antd";
-import { Table } from "base-component";
-import { Empty, Tag } from "base-component";
+import React, { Props, AllHTMLAttributes } from "react";
+import { Button, Table, Empty, Tag, Space } from "base-component";
 import styled from "styled-components";
 import { IProjectItem } from "@/utils/interface";
-import { RouterLink } from "@/utils";
+import { RouterLink } from "router";
 
 const ListCardWrapper = styled(Table)`
   border-radius: 8px;
@@ -23,22 +21,24 @@ const columns = [
   {
     title: "支持的文件格式",
     dataIndex: "fileNameExtensions",
-    render: (tags) => (
-      <Space>
-        {tags?.length ? (
-          tags?.map?.((tag, tagIndex) => <Tag key={tagIndex}>{tag}</Tag>)
-        ) : (
-          <span>暂无要求</span>
-        )}
-      </Space>
-    ),
+    render(tags) {
+      return (
+        <Space>
+          {tags?.length ? (
+            tags?.map?.((tag, tagIndex) => <Tag key={tagIndex}>{tag}</Tag>)
+          ) : (
+            <span>暂无要求</span>
+          )}
+        </Space>
+      );
+    },
   },
   {
     title: "文件名示例",
     dataIndex: "fileNameExample",
-    render: (example: string) => (
-      <span>{example?.length ? example : "暂无要求"}</span>
-    ),
+    render(example: string) {
+      return <span>{example?.length ? example : "暂无要求"}</span>;
+    },
   },
   {
     title: "创建时间",
@@ -47,13 +47,19 @@ const columns = [
   {
     title: "操作",
     dataIndex: "id",
-    render: (id) => (
-      <Button type="primary" size="small">
-        <RouterLink className="app-text-size-1n" to={`/detail/${id}`}>
-          去提交
-        </RouterLink>
-      </Button>
-    ),
+    render(id) {
+      return (
+        <Button type="primary" size="small">
+          <RouterLink
+            style={{ color: "#ffffff" }}
+            className="app-text-size-1n"
+            to={`/detail/${id}`}
+          >
+            去提交
+          </RouterLink>
+        </Button>
+      );
+    },
   },
 ];
 

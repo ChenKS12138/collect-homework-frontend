@@ -1,14 +1,15 @@
 import React, { Props, ReactNode, useState } from "react";
-import { Layout, Row, Col, Space, Button } from "antd";
+import { Layout, Space, Button, Row, Col } from "base-component";
 import { BarsOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 const { Header, Content, Footer } = Layout;
 import { useWindowSize } from "react-use";
-import { RouterLink } from "@/utils";
+import { RouterLink } from "router";
 import { Helmet } from "react-helmet";
 
 const BottomText = styled.div`
   text-align: center;
+  word-break: break-all;
 `;
 
 const TitleText = styled.h2`
@@ -96,7 +97,7 @@ export default function Scaffold({ links, sider, children }: IScaffold) {
       <Footer>
         <BottomText>
           {process.env.VERSION
-            ? `Version: ${process.env.VERSION}`
+            ? `version: ${process.env.VERSION}`
             : "Developing Mode No Version"}
         </BottomText>
       </Footer>

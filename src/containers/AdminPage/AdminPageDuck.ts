@@ -16,7 +16,8 @@ import AdminPageCreateFormDuck, {
   ICreateProjectForm,
 } from "./ducks/AdminPageCreateFormDuck";
 import { DuckMap } from "saga-duck";
-import { navigateTo, notice } from "@/utils";
+import { notice } from "@/utils";
+import { navigateTo } from "router";
 import { cleanToken } from "@/utils/request";
 import AdminPageEditFormDuck, {
   IEditProjectForm,

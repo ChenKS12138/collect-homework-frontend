@@ -42,6 +42,7 @@ const config = merge({
       "@": path.resolve("./src"),
       mock: path.resolve("./mock"),
       "base-component": path.resolve("./src/components/base"),
+      router: path.resolve("./src/utils/customRouter"),
     },
   },
   plugins: [

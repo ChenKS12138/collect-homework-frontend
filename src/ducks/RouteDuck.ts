@@ -1,8 +1,8 @@
-import { navigateTo, singleton } from "@/utils";
-import { fork } from "redux-saga/effects";
-import { createToPayload, DuckMap } from "saga-duck";
-import { takeLatest } from "redux-saga-catch";
-import { format } from "prettier";
+// import { navigateTo, singleton } from "@/utils";
+// import { fork } from "redux-saga/effects";
+// import { createToPayload, DuckMap } from "saga-duck";
+// import { takeLatest } from "redux-saga-catch";
+// import { format } from "prettier";
 
 // @singleton({
 //   runOnceMethods: ["saga"],

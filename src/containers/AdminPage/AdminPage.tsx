@@ -1,30 +1,28 @@
-import React, { Dispatch, useEffect } from "react";
+import React from "react";
 import { Scaffold, CommonModal, EditableTagSet } from "@/components";
 import { EditableFormCard } from "@/duckComponents";
 import styled from "styled-components";
 import {
-  Card,
-  Button,
+  Drawer,
+  Statistic,
+  Empty,
   Row,
   Col,
-  Statistic,
-  Drawer,
-  Input,
-  Empty,
+  Button,
+  List,
+  Form,
+  Card,
   Progress,
-} from "antd";
-import { List } from "base-component";
-import { Form } from "base-component";
+  Input,
+} from "base-component";
 import { AdminPageDuck } from ".";
 import {
-  useRouteMatch,
   distributeArray,
-  navigateTo,
   useSagaDuckState,
   greetByTime,
-  RouterLink,
   useDiskSize,
 } from "@/utils";
+import { useRouteMatch, navigateTo, RouterLink } from "router";
 import { IProjectItem } from "@/utils/interface";
 import { DuckCmpProps } from "saga-duck";
 import { useWindowSize } from "react-use";
@@ -88,7 +86,7 @@ export default function AdminPage() {
           <WelcomeText className="app-text-size-10n app-mb-6n">
             {greetByTime()}，{basicInfo?.username}
           </WelcomeText>
-          <Row className="app-mt-5n" gutter={50}>
+          <Row className="app-mt-5n" gutter={[24, 24]}>
             <Col>
               <Statistic
                 title="创建的作业项目"
@@ -117,7 +115,9 @@ export default function AdminPage() {
           className="app-mt-2n"
           extra={[
             <Button type="primary" key="new">
-              <RouterLink to="/admin/create">新建</RouterLink>
+              <RouterLink style={{ color: "#ffffff" }} to="/admin/create">
+                新建
+              </RouterLink>
             </Button>,
           ]}
         >
@@ -172,12 +172,16 @@ function ProjectOwnWrapper({
   return (
     <>
       {distributedProjectOwn?.map((row, rowIndex) => (
-        <Row gutter={[16, 16]} key={rowIndex}>
+        <Row gutter={[24, 24]} key={rowIndex}>
           {row?.map((col, colIndex) => {
             const { fileList } = duck.selector(store);
             const currentFileInfo = { reason: "reason", data: "data" };
             return (
-              <Col span={width < 960 ? 24 : 12} key={colIndex}>
+              <Col
+                style={{ padding: "12px" }}
+                span={width < 960 ? 24 : 12}
+                key={colIndex}
+              >
                 <EditableFormCard
                   duck={duck.ducks.editProject}
                   store={store}
@@ -237,6 +241,7 @@ function ProjectOwnWrapper({
                   ]}
                   actions={({ isEdit, setIsEdit }) => [
                     <CommonModal
+                      key="files"
                       innerComponent={(visible, setVisible) => (
                         <Button
                           size="small"
@@ -264,10 +269,14 @@ function ProjectOwnWrapper({
                           size="small"
                         />
                       ) : (
-                        <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                        <Empty
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                          description="暂无提交的文件"
+                        />
                       )}
                     </CommonModal>,
                     <CommonModal
+                      key="download"
                       title="一键下载"
                       innerComponent={(visible, setVisible) => {
                         return (

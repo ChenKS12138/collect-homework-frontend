@@ -1,7 +1,7 @@
 import React from "react";
-import { Scaffold } from "@/components/index";
-import { Collapse } from "antd";
+import { Scaffold } from "@/components";
 import { Helmet } from "react-helmet";
+import { Collapse } from "base-component";
 
 const tips = [
   {

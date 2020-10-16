@@ -1,22 +1,22 @@
 import { ProgressDuck } from "@/ducks";
-import { Watcher } from "@/utils";
+import { Observer } from "@/utils";
 
 export default class AdminPageDownloadProgressDuck extends ProgressDuck {
-  progressWatcher: Watcher;
+  progressObserver: Observer;
   constructor(props) {
     super(props);
-    this.progressWatcher = new Watcher(0);
+    this.progressObserver = new Observer(0);
   }
   emitProgress = (emit) => {
     const cb = (value) => {
       emit(value);
     };
-    this.progressWatcher.add(cb);
+    this.progressObserver.listen(cb);
     return () => {
-      this.progressWatcher.cancel(cb);
+      this.progressObserver.cancel(cb);
     };
   };
   emit(progress) {
-    this.progressWatcher.update(progress);
+    this.progressObserver.update(progress);
   }
 }

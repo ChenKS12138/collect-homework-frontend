@@ -1,6 +1,5 @@
-import React, { Dispatch, ReactNode, useEffect, useState } from "react";
-import { Card, Button, Tag } from "antd";
-import { Form } from "base-component";
+import React, { Dispatch, ReactNode, useState } from "react";
+import { Card, Form } from "base-component";
 import { FormDuck } from "@/ducks";
 
 export interface IRenderShow<T extends FormDuck = any> {

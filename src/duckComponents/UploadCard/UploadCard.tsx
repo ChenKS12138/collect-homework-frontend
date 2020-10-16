@@ -1,10 +1,16 @@
 import React, { Dispatch, Props, ReactNode, useEffect } from "react";
-import { Input, Popover, Upload, Button, Space } from "antd";
-import { Form } from "base-component";
-import { Tag } from "base-component";
-import { Result } from "base-component";
-import { Divider } from "base-component";
-import { Alert } from "base-component";
+import {
+  Popover,
+  Space,
+  Input,
+  Form,
+  Tag,
+  Result,
+  Button,
+  Divider,
+  Alert,
+  Upload,
+} from "base-component";
 import { InboxOutlined } from "@ant-design/icons";
 import styled from "styled-components";
 import { IProjectItem } from "@/utils/interface";

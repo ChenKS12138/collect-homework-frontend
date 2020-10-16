@@ -32,7 +32,7 @@ export default function Form({ children, className, style }: IForm) {
   );
 }
 
-Form.Item = function ({ children, label, required }: IFormItem) {
+function Item({ children, label, required }: IFormItem) {
   return (
     <div className={styles.item}>
       {label?.length && (
@@ -49,4 +49,5 @@ Form.Item = function ({ children, label, required }: IFormItem) {
       {children}
     </div>
   );
-};
+}
+Form.Item = Item;

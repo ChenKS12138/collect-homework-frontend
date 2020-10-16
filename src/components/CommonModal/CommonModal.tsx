@@ -1,9 +1,13 @@
-import React, { useState, Props, ReactNode, Component } from "react";
-import { Modal } from "antd";
-import { ModalProps } from "antd/lib/modal";
+import React, { useState, ReactNode } from "react";
+import { Modal } from "base-component";
 
-interface IAdminPageDeleteModel extends Props<null>, ModalProps {
+interface IAdminPageDeleteModel {
   innerComponent?: (any, Function) => ReactNode;
+  children?: ReactNode;
+  onOk?: (e: React.MouseEvent<HTMLElement>) => void;
+  onCancel?: (e: React.MouseEvent<HTMLElement>) => void;
+  title?: React.ReactNode | string;
+  footer?: React.ReactNode;
 }
 
 export default function CommonModal({
