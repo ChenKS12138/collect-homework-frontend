@@ -336,7 +336,7 @@ function AdminPageCreate({
     <Form>
       <Form.Item label="项目名称" name="name">
         <Input
-          value={createProjectFormData?.name}
+          defaultValue={createProjectFormData?.name}
           onChange={(event) => {
             dispatch(
               ducks.createProject.creators.setFormDataPartly({
@@ -366,7 +366,7 @@ function AdminPageCreate({
       </Form.Item>
       <Form.Item label="文件名示例" name="fileNameExample">
         <Input
-          value={createProjectFormData?.fileNameExample}
+          defaultValue={createProjectFormData?.fileNameExample}
           onChange={(event) => {
             dispatch(
               ducks.createProject.creators.setFormDataPartly({
@@ -378,7 +378,7 @@ function AdminPageCreate({
       </Form.Item>
       <Form.Item label="文件名正则表达式" name="fileNamePattern">
         <Input
-          value={createProjectFormData?.fileNamePattern}
+          defaultValue={createProjectFormData?.fileNamePattern}
           onChange={(event) => {
             dispatch(
               ducks.createProject.creators.setFormDataPartly({

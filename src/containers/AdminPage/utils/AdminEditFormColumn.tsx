@@ -69,7 +69,7 @@ const editFormColumns = [
         duck.selector(store)?.formData?.fileNameExample ?? "";
       return (
         <Input
-          value={fileNameExample}
+          defaultValue={fileNameExample}
           onChange={(event) => {
             dispatch(
               duck.creators.setFormDataPartly({
@@ -98,7 +98,7 @@ const editFormColumns = [
         duck.selector(store)?.formData?.fileNamePattern ?? "";
       return (
         <Input
-          value={fileNamePattern}
+          defaultValue={fileNamePattern}
           onChange={(event) => {
             dispatch(
               duck.creators.setFormDataPartly({

@@ -8,6 +8,7 @@ interface IInput {
   style?: React.CSSProperties;
   className?: string;
   value?: string;
+  defaultValue?: string;
   disabled?: boolean;
   placeholder?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -44,7 +45,8 @@ export default function Input({
 }
 
 interface IPassword {
-  value: string;
+  value?: string;
+  defaultValue?: string;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onPressEnter?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
 }

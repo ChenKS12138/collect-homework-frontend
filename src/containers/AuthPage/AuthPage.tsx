@@ -59,7 +59,7 @@ export default function AuthPage() {
         >
           <Form.Item label="邮箱" name="email">
             <Input
-              value={loginData?.email}
+              defaultValue={loginData?.email}
               onChange={(event) => {
                 dispatch(
                   ducks.loginForm.creators.setFormDataPartly({
@@ -71,7 +71,7 @@ export default function AuthPage() {
           </Form.Item>
           <Form.Item label="密码" name="password">
             <Input.Password
-              value={loginData?.password}
+              defaultValue={loginData?.password}
               onChange={(event) => {
                 dispatch(
                   ducks.loginForm.creators.setFormDataPartly({
@@ -116,7 +116,7 @@ export default function AuthPage() {
             <Form.Item label="邮箱" name="email" required>
               <Space size="large">
                 <Input
-                  value={registryData?.email}
+                  defaultValue={registryData?.email}
                   onChange={(event) => {
                     dispatch(
                       ducks.registryForm.creators.setFormDataPartly({
@@ -146,7 +146,7 @@ export default function AuthPage() {
             </Form.Item>
             <Form.Item label="邀请码" name="invitationCode" required>
               <Input.Password
-                value={registryData?.invitationCode}
+                defaultValue={registryData?.invitationCode}
                 onChange={(event) => {
                   dispatch(
                     ducks.registryForm.creators.setFormDataPartly({
@@ -158,7 +158,7 @@ export default function AuthPage() {
             </Form.Item>
             <Form.Item label="用户名" name="username" required>
               <Input
-                value={registryData?.username}
+                defaultValue={registryData?.username}
                 onChange={(event) => {
                   dispatch(
                     ducks.registryForm.creators.setFormDataPartly({
@@ -170,7 +170,7 @@ export default function AuthPage() {
             </Form.Item>
             <Form.Item label="密码" name="userPassword" required>
               <Input.Password
-                value={registryData?.userPassword}
+                defaultValue={registryData?.userPassword}
                 onChange={(event) => {
                   dispatch(
                     ducks.registryForm.creators.setFormDataPartly({

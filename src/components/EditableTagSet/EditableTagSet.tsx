@@ -60,7 +60,7 @@ export default function EditTableSet({
         type="text"
         size="small"
         style={{ display: "inline-block", width: "60px" }}
-        value={inputValue}
+        defaultValue={inputValue}
         onChange={(event) => {
           setInputValue(event.target.value);
         }}
