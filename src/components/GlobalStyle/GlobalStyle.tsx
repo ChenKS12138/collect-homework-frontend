@@ -122,4 +122,15 @@ export default createGlobalStyle`
   * {
     transition: all .5s ease;
   }
+  body{
+    margin: 0;
+    color: rgba(0,0,0,.85);
+    font-size: 14px;
+    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
+    font-variant: tabular-nums;
+    line-height: 1.5715;
+    background-color: #fff;
+    -webkit-font-feature-settings: "tnum";
+    font-feature-settings: "tnum";
+  }
 `;

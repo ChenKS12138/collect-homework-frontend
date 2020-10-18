@@ -34,6 +34,10 @@ export default function Scaffold({ links, sider, children }: IScaffold) {
     <Layout style={{ minHeight: "100vh" }}>
       <Helmet>
         <meta name="description" content="作业提交平台" />
+        <meta
+          name="viewport"
+          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0,user-scalable=no"
+        />
       </Helmet>
       <Header
         className="app-box-shadow-default"
@@ -74,12 +78,12 @@ export default function Scaffold({ links, sider, children }: IScaffold) {
               height: "64px",
             }}
             justify="center"
-            align="middle"
+            align="bottom"
           >
-            <Col>
+            <Col span={21}>
               <TitleText>作业提交平台</TitleText>
             </Col>
-            <Col push={9}>
+            <Col span={3} style={{ outline: 0 }}>
               <BarsOutlined
                 style={{
                   color: "#ffffff",
