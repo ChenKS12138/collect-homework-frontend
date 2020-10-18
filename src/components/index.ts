@@ -6,3 +6,4 @@ export { default as ListCard } from "./ListCard/ListCard";
 export { default as CommonModal } from "./CommonModal/CommonModal";
 export { default as EditableTagSet } from "./EditableTagSet/EditableTagSet";
 export { default as Loading } from "./Loading/Loading";
+export { default as ExternalLink } from "./ExternalLink/ExternalLink";

@@ -28,6 +28,9 @@
           ["base-component", "./src/components/base"]
         ]
       }
+    },
+    "react": {
+      "version": "detect"
     }
   }
 }

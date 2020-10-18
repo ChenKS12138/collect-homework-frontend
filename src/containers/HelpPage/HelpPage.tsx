@@ -1,7 +1,14 @@
 import React from "react";
-import { Scaffold } from "@/components";
+import { Scaffold, ExternalLink } from "@/components";
 import { Helmet } from "react-helmet";
-import { Collapse } from "base-component";
+import { Collapse, Divider } from "base-component";
+import styled from "styled-components";
+import { GithubFilled } from "@ant-design/icons";
+
+const ProjectTitle = styled.div`
+  font-size: 14px;
+  font-weight: 600;
+`;
 
 const tips = [
   {
@@ -63,6 +70,36 @@ export default function HelpPage() {
             </Collapse.Panel>
           ))}
         </Collapse>
+        <Divider />
+        <div>
+          <section>
+            <GithubFilled />
+            <ProjectTitle>
+              <ExternalLink href="https://github.com/ChenKS12138/collect-homework-frontend">
+                github.com/ChenKS12138/collect-homework-frontend
+              </ExternalLink>
+            </ProjectTitle>
+            <img
+              src="https://github.com/ChenKS12138/collect-homework-frontend/workflows/Build/badge.svg"
+              alt="status"
+            />
+            <img
+              src="https://img.shields.io/badge/language-typescript-blue.svg?label=language"
+              alt="lang"
+            />
+          </section>
+          <section style={{ marginTop: "10px" }}>
+            <ProjectTitle>
+              <ExternalLink href="https://github.com/ChenKS12138/collect-homework-go">
+                github.com/ChenKS12138/collect-homework-go
+              </ExternalLink>
+            </ProjectTitle>
+            <img
+              src="https://github.com/ChenKS12138/collect-homework-go/workflows/testing/badge.svg"
+              alt="testing"
+            />
+          </section>
+        </div>
       </div>
     </Scaffold>
   );
