@@ -1,7 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import styles from "./Modal.module.less";
-import { Button, Space } from "base-component";
+import { Button } from "base-component";
+import DisableBodyScrollStyle from "../DisableBodyScrollStyle/DisableBodyScrollStyle";
 
 interface IModal {
   title?: React.ReactNode;
@@ -38,6 +39,7 @@ export default class Modal extends React.Component<
         className={styles.container}
         style={{ zIndex: visible || showModal ? 9 : -9 }}
       >
+        {visible && <DisableBodyScrollStyle />}
         <div
           className={styles.mask}
           style={{
@@ -45,7 +47,6 @@ export default class Modal extends React.Component<
           }}
           onClick={this.handleCancel}
           onTransitionEnd={this.handleTransionEnd}
-          onWheel={this.handleWheel}
         />
         <div
           className={styles.wrapper}
@@ -99,10 +100,6 @@ export default class Modal extends React.Component<
   }
   handleTransionEnd = () => {
     this.setState({ showModal: this.props.visible });
-  };
-  handleWheel = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
   };
   handleCancel = (e) => {
     e.preventDefault();

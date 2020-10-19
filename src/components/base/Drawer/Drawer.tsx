@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import styles from "./Drawer.module.less";
+import DisableBodyScrollStyle from "../DisableBodyScrollStyle/DisableBodyScrollStyle";
 
 interface IDrawer {
   visible?: boolean;
@@ -45,8 +46,8 @@ export default class Drawer extends React.Component<
       <div
         style={{ zIndex: visible || showDrawer ? 9 : -9 }}
         className={styles.container}
-        onWheel={this.handleDrawerWheel}
       >
+        {visible && <DisableBodyScrollStyle />}
         <div
           style={{
             backgroundColor: visible ? "rgba(0, 0, 0, 0.45)" : "rgba(0,0,0,0)",
@@ -104,10 +105,6 @@ export default class Drawer extends React.Component<
   };
   handleTransitionComplete = () => {
     this.setState({ showDrawer: this.props.visible });
-  };
-  handleDrawerWheel = (e) => {
-    e.stopPropagation();
-    e.preventDefault();
   };
   getContainer() {
     if (!this.hasRenderBefore) {
