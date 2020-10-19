@@ -49,9 +49,9 @@ export default function Scaffold({ links, sider, children }: IScaffold) {
           {links?.map?.((item, index) => (
             <Row key={index} align="middle">
               <Col push={3} style={{ maxHeight: "64px" }}>
-                <Button type="link">
-                  <RouterLink to={item.link}>{item.text}</RouterLink>
-                </Button>
+                <RouterLink to={item.link}>
+                  <Button type="link">{item.text}</Button>
+                </RouterLink>
               </Col>
             </Row>
           ))}
@@ -65,9 +65,9 @@ export default function Scaffold({ links, sider, children }: IScaffold) {
             <Col span={2}>
               <Space>
                 {links?.map?.((item) => (
-                  <Button type="link" key={item.text}>
-                    <RouterLink to={item.link}>{item.text}</RouterLink>
-                  </Button>
+                  <RouterLink key={item.text} to={item.link}>
+                    <Button type="link">{item.text}</Button>
+                  </RouterLink>
                 ))}
               </Space>
             </Col>

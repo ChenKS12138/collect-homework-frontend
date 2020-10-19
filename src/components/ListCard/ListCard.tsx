@@ -49,15 +49,15 @@ const columns = [
     dataIndex: "id",
     render(id) {
       return (
-        <Button type="primary" size="small">
-          <RouterLink
-            style={{ color: "#ffffff" }}
-            className="app-text-size-1n"
-            to={`/detail/${id}`}
-          >
+        <RouterLink
+          style={{ color: "#ffffff" }}
+          className="app-text-size-1n"
+          to={`/detail/${id}`}
+        >
+          <Button type="primary" size="small">
             去提交
-          </RouterLink>
-        </Button>
+          </Button>
+        </RouterLink>
       );
     },
   },

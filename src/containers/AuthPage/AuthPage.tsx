@@ -95,9 +95,12 @@ export default function AuthPage() {
           >
             登陆
           </Button>
-          <Button type="link" htmlType="button" block className="app-mt-1n">
-            <RouterLink to="/auth/registry">暂无账号？立即注册</RouterLink>
-          </Button>
+
+          <RouterLink to="/auth/registry" className="app-mt-1n">
+            <Button type="link" htmlType="button" block>
+              暂无账号？立即注册
+            </Button>
+          </RouterLink>
         </Form>
       </AuthWrapper>
       <Drawer

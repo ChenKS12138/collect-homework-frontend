@@ -114,11 +114,13 @@ export default function AdminPage() {
           title="作业项目"
           className="app-mt-2n"
           extra={[
-            <Button type="primary" key="new">
-              <RouterLink style={{ color: "#ffffff" }} to="/admin/create">
-                新建
-              </RouterLink>
-            </Button>,
+            <RouterLink
+              key="new"
+              style={{ color: "#ffffff" }}
+              to="/admin/create"
+            >
+              <Button type="primary">新建</Button>
+            </RouterLink>,
           ]}
         >
           {projectOwn?.length ? (
