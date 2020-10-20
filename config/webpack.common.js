@@ -53,7 +53,7 @@ const config = merge({
       loaders: ["babel-loader?cacheDirectory=true"],
     }),
     new HtmlWebpackPlugin({
-      template: path.resolve("./public/index.html"),
+      template: path.resolve("./public/index.ejs"),
       filename: "index.html",
       meta: {
         viewport: "width=device-width, initial-scale=1.0",
