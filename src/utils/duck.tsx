@@ -1,4 +1,4 @@
-import React, { useMemo, useEffect, useReducer } from "react";
+import React, { useMemo, useEffect, useReducer, useCallback } from "react";
 import { DuckMap, DuckOptions, INIT, END } from "saga-duck";
 import { parallel } from "redux-saga-catch";
 import { useReactSaga } from "use-react-saga";
@@ -32,9 +32,13 @@ export function useSagaDuckState<T extends DuckMap = any>(
     };
     return makeState(duck.ducks);
   }, []);
+  const init = useCallback((state) => {
+    return state;
+  }, []);
   const [state, dispatch]: [any, any] = useReducer(
     duck.reducer as any,
-    initState as any
+    initState as any,
+    init as any
   );
 
   const enhanceDispatch = useReactSaga({
