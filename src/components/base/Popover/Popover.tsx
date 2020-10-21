@@ -59,8 +59,8 @@ export default class Popover extends React.Component<
           left: x,
           opacity: visible ? 1 : 0,
           transform: visible
-            ? "translate(-50%, 50%) scale(1)"
-            : "translate(-50%, 50%) scale(0)",
+            ? "translate(-50%, -150%) scale(1)"
+            : "translate(-50%, -150%) scale(0)",
         }}
         onTransitionEnd={this.handleTransitionEnd}
       >
@@ -92,10 +92,17 @@ export default class Popover extends React.Component<
     this.setState({ showContent: this.state.visible });
   };
   handleMouseEnter = (e) => {
+    const clientRect = this.ref.current?.getBoundingClientRect?.();
+    const top =
+      clientRect?.top + clientRect?.height / 2 ??
+      this.ref.current.offsetLeft + this.ref.current.clientWidth / 2;
+    const left =
+      clientRect?.left + clientRect?.width / 2 ??
+      this.ref.current.offsetTop + this.ref.current.clientHeight / 2;
     this.setState({
       visible: true,
-      x: this.ref.current.offsetLeft + this.ref.current.clientWidth / 2,
-      y: this.ref.current.offsetTop + this.ref.current.clientHeight / 2,
+      x: left,
+      y: top,
     });
     e.preventDefault();
   };

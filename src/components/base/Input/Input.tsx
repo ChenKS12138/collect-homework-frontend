@@ -30,7 +30,9 @@ export default function Input({
         onPressEnter(event);
         event.preventDefault();
       }
-      onKeyDown(event);
+      if (onkeydown instanceof Function) {
+        onKeyDown(event);
+      }
     },
     [onPressEnter, onkeydown]
   );

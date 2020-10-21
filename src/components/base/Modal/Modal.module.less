@@ -18,7 +18,7 @@
   z-index: 1000;
   height: 100%;
   background-color: rgba(0, 0, 0, 0.45);
-  transition: all 0.5s ease;
+  transition: all 0.3s ease;
 }
 
 .wrapper {
@@ -28,7 +28,7 @@
   left: 50%;
   z-index: 1001;
   min-width: 300px;
-  transition: all 0.3s ease;
+  transition: all 0.5s ease;
 }
 
 .content {
@@ -42,8 +42,8 @@
   box-shadow: 0 3px 6px -4px rgba(0, 0, 0, 0.12),
     0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05);
   pointer-events: auto;
-  overflow: scroll;
-  max-height: 60vh;
+  overflow: hidden;
+  max-height: 70vh;
 }
 
 .close {
@@ -94,10 +94,15 @@
 }
 
 .body {
+  -webkit-box-flex: 1;
+  -ms-flex-positive: 1;
+  flex-grow: 1;
   padding: 24px;
   font-size: 14px;
   line-height: 1.5715;
   word-wrap: break-word;
+  max-height: calc(70vh - 100px);
+  overflow: scroll;
 }
 
 .footer {

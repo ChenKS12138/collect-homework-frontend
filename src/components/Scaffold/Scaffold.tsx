@@ -58,7 +58,7 @@ export default function Scaffold({ links, sider, children }: IScaffold) {
         </div>
         {width > MAX_WIDTH_TO_SHOW_FULL_OPERATION ? (
           <Row>
-            <Col span={2} />
+            <Col span={1} />
             <Col span={20}>
               <TitleText>作业提交平台</TitleText>
             </Col>

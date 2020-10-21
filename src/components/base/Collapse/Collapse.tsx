@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import { classnames } from "@/utils";
+import React, { useCallback, useState } from "react";
 import styles from "./Collspase.module.less";
 
 interface ICollapse {
@@ -17,12 +18,19 @@ interface IPanel {
 
 function Panel({ header, children }: IPanel) {
   const [show, setShow] = useState(false);
+  const [exist, setExist] = useState(show);
+
+  const handleTransitionEnd = useCallback(() => {
+    setExist(show);
+  }, []);
+
   return (
     <div className={styles.panel}>
       <div
         className={styles.header}
         onClick={() => {
           setShow(!show);
+          setExist(true);
         }}
       >
         <span className={styles.spin}>
@@ -41,7 +49,16 @@ function Panel({ header, children }: IPanel) {
         </span>
         {header}
       </div>
-      <div className={show ? styles.content : styles["content-hidden"]}>
+      <div
+        className={classnames({
+          [styles.content]: true,
+        })}
+        style={{
+          maxHeight: show ? "300px" : "0px",
+          display: exist || show ? "block" : "none",
+        }}
+        onTransitionEnd={handleTransitionEnd}
+      >
         {children}
       </div>
     </div>
