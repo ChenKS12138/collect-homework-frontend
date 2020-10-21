@@ -13,11 +13,15 @@ export function usePrefetchResult<T = any>(selector: (state: any) => T) {
 
 interface IPrefetchResultProvider {
   children: any;
+  prefetchResult: any;
 }
 
-export function PrefetchResultProvider({ children }: IPrefetchResultProvider) {
+export function PrefetchResultProvider({
+  children,
+  prefetchResult,
+}: IPrefetchResultProvider) {
   return (
-    <PrefetchContext.Provider value={PrefetchContext}>
+    <PrefetchContext.Provider value={prefetchResult}>
       {children}
     </PrefetchContext.Provider>
   );

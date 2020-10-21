@@ -20,6 +20,6 @@
     "skipLibCheck": true,
     "plugins": [{ "name": "typescript-plugin-css-modules" }]
   },
-  "include": ["src/**/*", "mock/*", "ambient/*"],
+  "include": ["src/**/*", "mock/*", "ambient/*", "server/**/*"],
   "exclude": ["node_modules"]
 }
