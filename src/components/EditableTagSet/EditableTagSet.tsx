@@ -1,7 +1,7 @@
-import React, { Props, useCallback, useState } from "react";
+import React, { useCallback, useState } from "react";
 import { Tag, Input } from "base-component";
 
-interface IEditTableSet extends Props<null> {
+interface IEditTableSet {
   // isEdit: boolean;
   tagSet: {
     text: string;
@@ -60,7 +60,7 @@ export default function EditTableSet({
         type="text"
         size="small"
         style={{ display: "inline-block", width: "60px" }}
-        defaultValue={inputValue}
+        value={inputValue}
         onChange={(event) => {
           setInputValue(event.target.value);
         }}

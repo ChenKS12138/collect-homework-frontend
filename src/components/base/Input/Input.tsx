@@ -21,15 +21,18 @@ export default function Input({
   className,
   size,
   onPressEnter,
+  onKeyDown,
   ...rest
 }: IInput) {
   const handlePressEnter = useCallback(
     (event) => {
       if (event.key === "Enter") {
         onPressEnter(event);
+        event.preventDefault();
       }
+      onKeyDown(event);
     },
-    [onPressEnter]
+    [onPressEnter, onkeydown]
   );
   return (
     <input
