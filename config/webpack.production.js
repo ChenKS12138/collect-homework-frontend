@@ -23,7 +23,6 @@ const config = merge(common, {
   optimization: {
     splitChunks: {
       chunks: "all",
-
       cacheGroups: {
         vendors: {
           test: /[\\/]node_modules[\\/]/,
@@ -59,6 +58,7 @@ const config = merge(common, {
               modules: true,
             },
           },
+          "postcss-loader",
           "less-loader",
         ],
       },
