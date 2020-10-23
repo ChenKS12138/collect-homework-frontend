@@ -53,7 +53,8 @@ export default class Modal extends React.Component<
           style={{
             transform: visible
               ? "translate(-50%,0) scale(1)"
-              : "translate(-50%,0) scale(0)",
+              : "translate(-50%,0) scale(1.1)",
+            opacity: visible ? 1 : 0,
           }}
         >
           <div className={styles.content}>
