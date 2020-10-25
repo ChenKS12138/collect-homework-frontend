@@ -83,6 +83,7 @@ export default function Table({
                 <tr
                   className={classnames({
                     [styles.tr]: true,
+                    [styles["tr-dark"]]: index % 2 === 0,
                     [rowClassName]: rowClassName?.length,
                   })}
                   key={index}
@@ -91,7 +92,7 @@ export default function Table({
                     <td
                       className={classnames({
                         [styles.cell]: true,
-                        [styles.td]: true,
+                        // [styles.td]: true,
                       })}
                       key={index + "_" + colIndex}
                     >
