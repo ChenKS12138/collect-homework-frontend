@@ -115,19 +115,19 @@ export default function UploadCard({
           </Space>
         </Form.Item>
         <Form.Item label="正确的文件名示例">
-          {currentProject?.fileNameExample?.length ? (
-            <Popover
-              content={
-                currentProject?.fileNamePattern?.length
-                  ? `对应的正则表达式为${currentProject?.fileNamePattern}`
-                  : "正则表达式无要求"
-              }
-            >
-              <span>{currentProject?.fileNameExample}</span>
-            </Popover>
-          ) : (
-            <span>暂无要求</span>
-          )}
+          <Popover
+            content={
+              currentProject?.fileNamePattern?.length
+                ? `文件名正则表达式要求为${currentProject?.fileNamePattern}`
+                : "正则表达式无要求"
+            }
+          >
+            <span>
+              {currentProject?.fileNameExample?.length
+                ? currentProject?.fileNameExample
+                : "暂无文件名示例"}
+            </span>
+          </Popover>
         </Form.Item>
         <Dragger
           multiple={false}
