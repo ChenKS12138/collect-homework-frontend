@@ -11,10 +11,6 @@ const ListCardWrapper = styled(Table)`
 
 const columns = [
   {
-    title: "作业名称",
-    dataIndex: "name",
-  },
-  {
     title: "管理员",
     dataIndex: "adminName",
   },
@@ -40,9 +36,13 @@ const columns = [
       return <span>{example?.length ? example : "暂无要求"}</span>;
     },
   },
+  // {
+  //   title: "创建时间",
+  //   dataIndex: "createAt",
+  // },
   {
-    title: "创建时间",
-    dataIndex: "createAt",
+    title: "作业名称",
+    dataIndex: "name",
   },
   {
     title: "操作",

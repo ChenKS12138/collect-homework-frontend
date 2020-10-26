@@ -13,6 +13,7 @@ interface IFormItem {
   name?: string;
   required?: boolean;
   children?: React.ReactNode;
+  className?: string;
 }
 
 export default function Form({ children, className, style }: IForm) {
@@ -32,9 +33,14 @@ export default function Form({ children, className, style }: IForm) {
   );
 }
 
-function Item({ children, label, required }: IFormItem) {
+function Item({ children, label, required, className }: IFormItem) {
   return (
-    <div className={styles.item}>
+    <div
+      className={classnames({
+        [styles.item]: true,
+        [className]: className?.length,
+      })}
+    >
       {label?.length && (
         <label
           title={label}

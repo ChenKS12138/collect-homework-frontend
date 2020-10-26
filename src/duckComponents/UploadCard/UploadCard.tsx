@@ -73,13 +73,13 @@ export default function UploadCard({
   return (
     <UploadCardWrapper className="app-mlr-auto">
       <Form>
-        <Form.Item label="作业名称">
+        <Form.Item className="app-text-weight-8n" label="作业名称">
           <div>{currentProject?.name}</div>
         </Form.Item>
         <Form.Item label="管理员">
           <div>{currentProject?.adminName}</div>
         </Form.Item>
-        <Form.Item label="提交份数">
+        <Form.Item label="已提交份数">
           <div>{uploadCount ?? "-"}</div>
         </Form.Item>
         <Divider />
