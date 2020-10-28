@@ -176,8 +176,8 @@ function ProjectOwnWrapper({
       {distributedProjectOwn?.map((row, rowIndex) => (
         <Row gutter={[24, 24]} key={rowIndex}>
           {row?.map((col, colIndex) => {
-            const { fileList } = duck.selector(store);
-            const currentFileInfo = { reason: "reason", data: "data" };
+            const { fileList, projectSize } = duck.selector(store);
+            const [size, unit] = useDiskSize(projectSize ?? 0);
             return (
               <Col
                 style={{ padding: "12px" }}
@@ -251,6 +251,7 @@ function ProjectOwnWrapper({
                           key="overview"
                           onClick={() => {
                             dispatch(duck.creators.fetchFileList(col.id));
+                            dispatch(duck.creators.fetchProjectSize(col.id));
                             setVisible(true);
                           }}
                           disabled={isEdit}
@@ -261,21 +262,29 @@ function ProjectOwnWrapper({
                       title="查看文件"
                       footer={null}
                     >
-                      {fileList?.length ? (
-                        <List
-                          dataSource={
-                            fileList?.map?.((one) => ({ title: one })) ?? []
-                          }
-                          bordered
-                          renderItem={(item) => <div>{item?.title}</div>}
-                          size="small"
-                        />
-                      ) : (
-                        <Empty
-                          image={Empty.PRESENTED_IMAGE_SIMPLE}
-                          description="暂无提交的文件"
-                        />
-                      )}
+                      <>
+                        {projectSize ? (
+                          <div>
+                            总大小: {size}
+                            {unit}
+                          </div>
+                        ) : null}
+                        {fileList?.length ? (
+                          <List
+                            dataSource={
+                              fileList?.map?.((one) => ({ title: one })) ?? []
+                            }
+                            bordered
+                            renderItem={(item) => <div>{item?.title}</div>}
+                            size="small"
+                          />
+                        ) : (
+                          <Empty
+                            image={Empty.PRESENTED_IMAGE_SIMPLE}
+                            description="暂无提交的文件"
+                          />
+                        )}
+                      </>
                     </CommonModal>,
                     <CommonModal
                       key="download"

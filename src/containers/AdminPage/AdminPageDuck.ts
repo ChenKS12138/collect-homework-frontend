@@ -10,6 +10,7 @@ import {
   requestProjectUpdate,
   requestStorageFileList,
   requestStorageDownload,
+  requestStorageProjectSize,
 } from "@/utils/model";
 import { IProjectItem, IAdminBasicInfo } from "@/utils/interface";
 import AdminPageCreateFormDuck, {
@@ -31,6 +32,7 @@ export default class AdminPageDuck extends DuckMap {
       SET_PROJECT_OWN,
       SET_ADMIN_BASIC_INFO,
       SET_FILE_LIST,
+      SET_PROJECT_SIZE,
 
       RELOAD,
 
@@ -41,6 +43,7 @@ export default class AdminPageDuck extends DuckMap {
       FETCH_RESTORE_PROJECT,
       FETCH_UPDATE_PROJECT,
       FETCH_FILE_LIST,
+      FETCH_PROEJCT_SIZE,
       FETCH_DOWNLAOD_FILE,
     }
     return {
@@ -69,6 +72,7 @@ export default class AdminPageDuck extends DuckMap {
         types.FETCH_UPDATE_PROJECT
       ),
       fetchFileList: createToPayload<string>(types.FETCH_FILE_LIST),
+      fetchProjectSize: createToPayload<string>(types.FETCH_PROEJCT_SIZE),
       downloadFile: createToPayload<{ id: string; name: string }>(
         types.FETCH_DOWNLAOD_FILE
       ),
@@ -84,6 +88,7 @@ export default class AdminPageDuck extends DuckMap {
         null
       ),
       fileList: reduceFromPayload<string[]>(types.SET_FILE_LIST, []),
+      projectSize: reduceFromPayload<number>(types.SET_PROJECT_SIZE, 0),
     };
   }
   *saga() {
@@ -96,6 +101,7 @@ export default class AdminPageDuck extends DuckMap {
     yield fork([this, this.watchToUpdateProject]);
     yield fork([this, this.watchToLoad]);
     yield fork([this, this.watchToFetchFileList]);
+    yield fork([this, this.watchToFetchProjectSize]);
     yield fork([this, this.watchToDownloadFile]);
   }
   *watchToLoad() {
@@ -259,6 +265,31 @@ export default class AdminPageDuck extends DuckMap {
           yield put({
             type: types.SET_FILE_LIST,
             payload: data?.files ?? [],
+          });
+        } else {
+          throw error;
+        }
+      } catch (err) {
+        notice.error({ text: String(err) });
+      }
+    });
+  }
+  *watchToFetchProjectSize() {
+    const { types } = this;
+    yield takeLatest([types.FETCH_PROEJCT_SIZE], function* (action) {
+      yield put({
+        type: types.SET_PROJECT_SIZE,
+        payload: 0,
+      });
+      const id = action.payload;
+      try {
+        const { success, error, data } = yield requestStorageProjectSize({
+          id,
+        });
+        if (success) {
+          yield put({
+            type: types.SET_PROJECT_SIZE,
+            payload: data?.size ?? 0,
           });
         } else {
           throw error;

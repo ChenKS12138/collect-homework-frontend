@@ -119,6 +119,13 @@ interface IRequestStorageFileCount {
 export const requestStorageFileCount = ({ id }: IRequestStorageFileCount) =>
   instance.get(`/storage/fileCount?id=${id}`);
 
+interface IRequestStorageProjectSize {
+  id: string;
+}
+
+export const requestStorageProjectSize = ({ id }: IRequestStorageProjectSize) =>
+  instance.get(`/storage/projectSize?id=${id}`);
+
 interface IRequestStorageDownload {
   id: string;
   onDownloadProgress: (progressEvent: any) => void;
