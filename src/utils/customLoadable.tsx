@@ -12,9 +12,9 @@ export function loadable({
   loader,
   loading = null,
   minDuration = 0,
-}: ILoadable): () => JSX.Element {
+}: ILoadable): (props?: any) => JSX.Element {
   let LastComponent: any = null;
-  return function LoadableComponent(props) {
+  return function LoadableComponent(props): JSX.Element {
     const [currentElement, setCurrentElement] = useState(
       LastComponent ? <LastComponent {...props} /> : loading
     );
@@ -30,5 +30,5 @@ export function loadable({
       }
     }, []);
     return currentElement;
-  } as any;
+  };
 }
