@@ -70,6 +70,7 @@ function Dragger({ fileList, disabled, onChange }: IDragger) {
                 </svg>
               </span>
             </p>
+            <p className={styles.hint}>单次上传限制大小 50M</p>
             <p className={styles.hint}>点击或者将文件拖拽到此处</p>
             <p className={styles.hint}>一次仅上传一个文件</p>
           </div>

@@ -1,6 +1,6 @@
 export class Observer<T = any> {
   value: T;
-  callBackQueue: Function[];
+  private callBackQueue: Function[];
   constructor(initialValue: T) {
     this.value = initialValue;
     this.callBackQueue = [];
