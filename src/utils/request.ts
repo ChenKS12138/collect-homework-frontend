@@ -4,11 +4,13 @@ if (process.env.NODE_ENV === "development" && process.env.MOCK_REQUEST) {
   require("../../mock");
 }
 
+export const baseURL =
+  process.env.NODE_ENV === "development" && process.env.MOCK_REQUEST
+    ? ""
+    : "/api";
+
 export const instance = axios.create({
-  baseURL:
-    process.env.NODE_ENV === "development" && process.env.MOCK_REQUEST
-      ? ""
-      : "/api",
+  baseURL,
 });
 
 const CONSTANT_TOKEN_KEY = "JWT_TOKEN";

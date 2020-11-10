@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import { Scaffold, CommonModal, EditableTagSet } from "@/components";
 import { EditableFormCard } from "@/duckComponents";
 import styled from "styled-components";
@@ -169,7 +169,6 @@ function ProjectOwnWrapper({
     width < 960 ? 1 : 2
   );
   const { ducks } = duck;
-  const { percentage } = ducks.downloadProgress.selector(store);
 
   return (
     <>
@@ -288,7 +287,7 @@ function ProjectOwnWrapper({
                     </CommonModal>,
                     <CommonModal
                       key="download"
-                      title="一键下载"
+                      title="下载"
                       innerComponent={(visible, setVisible) => {
                         return (
                           <Button
@@ -297,29 +296,28 @@ function ProjectOwnWrapper({
                             key="download"
                             disabled={isEdit}
                             onClick={() => {
-                              dispatch(
-                                duck.creators.downloadFile({
-                                  id: col.id,
-                                  name: col.name,
-                                })
-                              );
                               setVisible(true);
+                              dispatch({
+                                type: duck.ducks.downloadProgress.types.RELOAD,
+                              });
+                              dispatch({
+                                type: duck.types.SET_EXPORT_LINK,
+                                payload: "",
+                              });
                             }}
                           >
-                            一键下载
+                            下载
                           </Button>
                         );
                       }}
                       footer={null}
                     >
-                      <div>
-                        <Progress
-                          percent={parseFloat((percentage * 100).toFixed(2))}
-                        />
-                        <span style={{ color: "red" }}>
-                          文件压缩需要一定的时间，请耐心等待，下载中请勿关闭浏览器窗口
-                        </span>
-                      </div>
+                      <DownloadModal
+                        store={store}
+                        dispatch={dispatch}
+                        duck={duck}
+                        col={col}
+                      />
                     </CommonModal>,
                   ]}
                 />
@@ -413,5 +411,55 @@ function AdminPageCreate({
         创建
       </Button>
     </Form>
+  );
+}
+
+interface IDownloadModal extends DuckCmpProps<AdminPageDuck> {
+  col: any;
+}
+
+function DownloadModal({ dispatch, duck, store, col }: IDownloadModal) {
+  const { percentage } = duck.ducks.downloadProgress.selector(store);
+  const { exportLink } = duck.selector(store);
+  const handleDownload = useCallback(() => {
+    dispatch(
+      duck.creators.downloadFile({
+        id: col.id,
+        name: col.name,
+      })
+    );
+  }, [dispatch, duck]);
+  const handleExportLink = useCallback(() => {
+    dispatch({
+      type: duck.types.FETCH_EXPORT_LINK,
+      payload: { id: col.id },
+    });
+  }, [col, dispatch, duck]);
+
+  if (percentage) {
+    return (
+      <div>
+        <Progress percent={parseFloat((percentage * 100).toFixed(2))} />
+        <span style={{ color: "red" }}>
+          文件压缩需要一定的时间，请耐心等待，下载中请勿关闭浏览器窗口
+        </span>
+      </div>
+    );
+  }
+
+  if (exportLink) {
+    return (
+      <div>
+        <p style={{ color: "red" }}>下载链接有效时间5分钟，请及时访问</p>
+        <p>{exportLink}</p>
+      </div>
+    );
+  }
+
+  return (
+    <div className="app-mlr-auto">
+      <Button onClick={handleDownload}>立即下载</Button>
+      <Button onClick={handleExportLink}>生成下载链接</Button>
+    </div>
   );
 }

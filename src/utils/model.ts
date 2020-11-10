@@ -140,7 +140,17 @@ export const requestStorageDownload = ({
     onDownloadProgress,
   });
 
-export const requestStorageUpload = ({ file, secret, projectId }) => {
+interface IRequestStorageUpload {
+  file: any;
+  secret: string;
+  projectId: string;
+}
+
+export const requestStorageUpload = ({
+  file,
+  secret,
+  projectId,
+}: IRequestStorageUpload) => {
   const form = new FormData();
   form.append("secret", secret);
   form.append("projectId", projectId);
@@ -151,3 +161,11 @@ export const requestStorageUpload = ({ file, secret, projectId }) => {
     },
   });
 };
+
+interface IRequestSubToken {
+  expire: number;
+  authCode: number;
+}
+
+export const requestSubToken = ({ expire, authCode }: IRequestSubToken) =>
+  instance.post(`/admin/subToken`, { expire, authCode });

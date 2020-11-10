@@ -11,6 +11,7 @@ import {
   requestStorageFileList,
   requestStorageDownload,
   requestStorageProjectSize,
+  requestSubToken,
 } from "@/utils/model";
 import { IProjectItem, IAdminBasicInfo } from "@/utils/interface";
 import AdminPageCreateFormDuck, {
@@ -19,7 +20,7 @@ import AdminPageCreateFormDuck, {
 import { DuckMap } from "saga-duck";
 import { notice } from "@/utils";
 import { navigateTo } from "router";
-import { cleanToken } from "@/utils/request";
+import { baseURL, cleanToken } from "@/utils/request";
 import AdminPageEditFormDuck, {
   IEditProjectForm,
 } from "./ducks/AdminPageEditFormDuck";
@@ -33,6 +34,7 @@ export default class AdminPageDuck extends DuckMap {
       SET_ADMIN_BASIC_INFO,
       SET_FILE_LIST,
       SET_PROJECT_SIZE,
+      SET_EXPORT_LINK,
 
       RELOAD,
 
@@ -45,6 +47,7 @@ export default class AdminPageDuck extends DuckMap {
       FETCH_FILE_LIST,
       FETCH_PROEJCT_SIZE,
       FETCH_DOWNLAOD_FILE,
+      FETCH_EXPORT_LINK,
     }
     return {
       ...super.quickTypes,
@@ -89,6 +92,7 @@ export default class AdminPageDuck extends DuckMap {
       ),
       fileList: reduceFromPayload<string[]>(types.SET_FILE_LIST, []),
       projectSize: reduceFromPayload<number>(types.SET_PROJECT_SIZE, 0),
+      exportLink: reduceFromPayload<string>(types.SET_EXPORT_LINK, null),
     };
   }
   *saga() {
@@ -103,6 +107,7 @@ export default class AdminPageDuck extends DuckMap {
     yield fork([this, this.watchToFetchFileList]);
     yield fork([this, this.watchToFetchProjectSize]);
     yield fork([this, this.watchToDownloadFile]);
+    yield fork([this, this.watchToExportLink]);
   }
   *watchToLoad() {
     const { types } = this;
@@ -314,6 +319,29 @@ export default class AdminPageDuck extends DuckMap {
         if (result?.success) {
           const fileName = `${name}.zip`;
           saveAs(result?.blob, fileName);
+        } else {
+          throw result?.error;
+        }
+      } catch (err) {
+        notice.error({ text: String(err) });
+      }
+    });
+  }
+  *watchToExportLink() {
+    const { types } = this;
+    yield takeLatest([types.FETCH_EXPORT_LINK], function* (action) {
+      const { id } = action.payload;
+      try {
+        const result = yield requestSubToken({ expire: 5, authCode: 5 });
+        if (result?.success) {
+          const exportLink =
+            location.origin +
+            baseURL +
+            `/storage/download?id=${id}&jwt=${result?.data}`;
+          yield put({
+            type: types.SET_EXPORT_LINK,
+            payload: exportLink,
+          });
         } else {
           throw result?.error;
         }
