@@ -273,6 +273,7 @@ export default class AdminPageDuck extends DuckMap {
           id,
         });
         if (success) {
+          data?.files?.sort((a, b) => a?.name?.localeCompare?.(b?.name));
           yield put({
             type: types.SET_FILE_LIST,
             payload: data?.files ?? [],
