@@ -89,3 +89,35 @@ export function classnames(classes: { [key: string]: any }): string {
     return classString;
   }, "");
 }
+
+const codeMap = {
+  "0000": "0",
+  "0001": "1",
+  "0010": "2",
+  "0011": "3",
+  "0100": "4",
+  "0101": "5",
+  "0110": "6",
+  "0111": "7",
+  1000: "8",
+  1001: "9",
+  1010: "A",
+  1011: "B",
+  1100: "C",
+  1101: "D",
+  1110: "E",
+  1111: "F",
+};
+
+export function generateDownloadCode(seqList: number[]): string {
+  const bins = Array.from({ length: Math.max(...seqList) }).map(() => 0);
+  seqList.forEach((item) => {
+    bins[item] = 1;
+  });
+  let code = "";
+  while (bins.length) {
+    const tmp = bins.splice(0, 4);
+    code = codeMap[tmp.reverse().join("").padStart(4, "0")] + code;
+  }
+  return code;
+}

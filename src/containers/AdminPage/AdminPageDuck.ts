@@ -8,10 +8,11 @@ import {
   requestProjectDelete,
   requestProjectRestore,
   requestProjectUpdate,
-  requestStorageFileList,
+  requestProjectFileList,
   requestStorageDownload,
   requestStorageProjectSize,
   requestSubToken,
+  requestStorageDownloadSeletively,
 } from "@/utils/model";
 import { IProjectItem, IAdminBasicInfo } from "@/utils/interface";
 import AdminPageCreateFormDuck, {
@@ -76,7 +77,7 @@ export default class AdminPageDuck extends DuckMap {
       ),
       fetchFileList: createToPayload<string>(types.FETCH_FILE_LIST),
       fetchProjectSize: createToPayload<string>(types.FETCH_PROEJCT_SIZE),
-      downloadFile: createToPayload<{ id: string; name: string }>(
+      downloadFile: createToPayload<{ id: string; name: string; code: string }>(
         types.FETCH_DOWNLAOD_FILE
       ),
     };
@@ -90,7 +91,10 @@ export default class AdminPageDuck extends DuckMap {
         types.SET_ADMIN_BASIC_INFO,
         null
       ),
-      fileList: reduceFromPayload<string[]>(types.SET_FILE_LIST, []),
+      fileList: reduceFromPayload<{ name: string; seq: number }[]>(
+        types.SET_FILE_LIST,
+        []
+      ),
       projectSize: reduceFromPayload<number>(types.SET_PROJECT_SIZE, 0),
       exportLink: reduceFromPayload<string>(types.SET_EXPORT_LINK, null),
     };
@@ -265,7 +269,9 @@ export default class AdminPageDuck extends DuckMap {
       });
       const id = action.payload;
       try {
-        const { success, error, data } = yield requestStorageFileList({ id });
+        const { success, error, data } = yield requestProjectFileList({
+          id,
+        });
         if (success) {
           yield put({
             type: types.SET_FILE_LIST,
@@ -307,12 +313,13 @@ export default class AdminPageDuck extends DuckMap {
   *watchToDownloadFile() {
     const { types, handleDownloadProgress, ducks } = this;
     yield takeLatest([types.FETCH_DOWNLAOD_FILE], function* (action) {
-      const { id, name } = action.payload;
+      const { id, name, code } = action.payload;
       try {
         yield put({
           type: ducks.downloadProgress.types.RELOAD,
         });
-        const result = yield requestStorageDownload({
+        const result = yield requestStorageDownloadSeletively({
+          code,
           id,
           onDownloadProgress: handleDownloadProgress,
         });
@@ -330,14 +337,14 @@ export default class AdminPageDuck extends DuckMap {
   *watchToExportLink() {
     const { types } = this;
     yield takeLatest([types.FETCH_EXPORT_LINK], function* (action) {
-      const { id } = action.payload;
+      const { id, code } = action.payload;
       try {
         const result = yield requestSubToken({ expire: 5, authCode: 5 });
         if (result?.success) {
           const exportLink =
             location.origin +
             baseURL +
-            `/storage/download?id=${id}&jwt=${result?.data}`;
+            `/storage/downloadSelectively?id=${id}&code=${code}&jwt=${result?.data}`;
           yield put({
             type: types.SET_EXPORT_LINK,
             payload: exportLink,

@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Scaffold, CommonModal, EditableTagSet } from "@/components";
 import { EditableFormCard } from "@/duckComponents";
 import styled from "styled-components";
@@ -21,6 +21,7 @@ import {
   useSagaDuckState,
   greetByTime,
   useDiskSize,
+  generateDownloadCode,
 } from "@/utils";
 import { useRouteMatch, navigateTo, RouterLink } from "router";
 import { IProjectItem } from "@/utils/interface";
@@ -84,7 +85,7 @@ export default function AdminPage() {
           ]}
         >
           <WelcomeText className="app-text-size-10n app-mb-6n">
-            {greetByTime()}，{basicInfo?.username}
+            {greetByTime()}，{basicInfo?.username ?? "-"}
           </WelcomeText>
           <Row className="app-mt-5n" gutter={[24, 24]}>
             <Col>
@@ -168,15 +169,12 @@ function ProjectOwnWrapper({
     projectOwn,
     width < 960 ? 1 : 2
   );
-  const { ducks } = duck;
 
   return (
     <>
       {distributedProjectOwn?.map((row, rowIndex) => (
         <Row gutter={[24, 24]} key={rowIndex}>
           {row?.map((col, colIndex) => {
-            const { fileList, projectSize } = duck.selector(store);
-            const [size, unit] = useDiskSize(projectSize ?? 0);
             return (
               <Col
                 style={{ padding: "12px" }}
@@ -251,72 +249,28 @@ function ProjectOwnWrapper({
                           onClick={() => {
                             dispatch(duck.creators.fetchFileList(col.id));
                             dispatch(duck.creators.fetchProjectSize(col.id));
+                            dispatch({
+                              type: duck.ducks.downloadProgress.types.RELOAD,
+                            });
+                            dispatch({
+                              type: duck.types.SET_EXPORT_LINK,
+                              payload: "",
+                            });
                             setVisible(true);
                           }}
                           disabled={isEdit}
                         >
-                          查看文件
+                          文件管理
                         </Button>
                       )}
-                      title="查看文件"
-                      footer={null}
-                    >
-                      <>
-                        {projectSize ? (
-                          <div>
-                            总大小: {size}
-                            {unit}
-                          </div>
-                        ) : null}
-                        {fileList?.length ? (
-                          <List
-                            dataSource={
-                              fileList?.map?.((one) => ({ title: one })) ?? []
-                            }
-                            bordered
-                            renderItem={(item) => <div>{item?.title}</div>}
-                            size="small"
-                          />
-                        ) : (
-                          <Empty
-                            image={Empty.PRESENTED_IMAGE_SIMPLE}
-                            description="暂无提交的文件"
-                          />
-                        )}
-                      </>
-                    </CommonModal>,
-                    <CommonModal
-                      key="download"
-                      title="下载"
-                      innerComponent={(visible, setVisible) => {
-                        return (
-                          <Button
-                            size="small"
-                            type="link"
-                            key="download"
-                            disabled={isEdit}
-                            onClick={() => {
-                              setVisible(true);
-                              dispatch({
-                                type: duck.ducks.downloadProgress.types.RELOAD,
-                              });
-                              dispatch({
-                                type: duck.types.SET_EXPORT_LINK,
-                                payload: "",
-                              });
-                            }}
-                          >
-                            下载
-                          </Button>
-                        );
-                      }}
+                      title="文件管理"
                       footer={null}
                     >
                       <DownloadModal
+                        col={col}
+                        duck={duck}
                         store={store}
                         dispatch={dispatch}
-                        duck={duck}
-                        col={col}
                       />
                     </CommonModal>,
                   ]}
@@ -420,21 +374,32 @@ interface IDownloadModal extends DuckCmpProps<AdminPageDuck> {
 
 function DownloadModal({ dispatch, duck, store, col }: IDownloadModal) {
   const { percentage } = duck.ducks.downloadProgress.selector(store);
-  const { exportLink } = duck.selector(store);
+  const { exportLink, projectSize, fileList } = duck.selector(store);
+  const [size, unit] = useDiskSize(projectSize ?? 0);
+  const [selectedList, setSelectedList] = useState([]);
+  const code = useMemo(
+    () => (selectedList?.length ? generateDownloadCode(selectedList) : "0"),
+    [selectedList]
+  );
   const handleDownload = useCallback(() => {
     dispatch(
       duck.creators.downloadFile({
         id: col.id,
+        code,
         name: col.name,
       })
     );
-  }, [dispatch, duck]);
+  }, [dispatch, duck, code]);
   const handleExportLink = useCallback(() => {
     dispatch({
       type: duck.types.FETCH_EXPORT_LINK,
-      payload: { id: col.id },
+      payload: { id: col.id, code },
     });
-  }, [col, dispatch, duck]);
+  }, [col, dispatch, duck, code]);
+
+  useEffect(() => {
+    setSelectedList(fileList.map((one) => one.seq));
+  }, [fileList, fileList.length]);
 
   if (percentage) {
     return (
@@ -458,8 +423,83 @@ function DownloadModal({ dispatch, duck, store, col }: IDownloadModal) {
 
   return (
     <div className="app-mlr-auto">
-      <Button onClick={handleDownload}>立即下载</Button>
-      <Button onClick={handleExportLink}>生成下载链接</Button>
+      {projectSize ? (
+        <div>
+          总大小: {size}
+          {unit}
+        </div>
+      ) : null}
+      {fileList?.length ? (
+        <>
+          <List
+            dataSource={
+              fileList?.map?.((one) => ({ title: one.name, seq: one.seq })) ??
+              []
+            }
+            bordered
+            renderItem={(item, index) => (
+              <SelectedItem
+                selected={selectedList.includes(item.seq)}
+                onClick={() => {
+                  if (selectedList.includes(item.seq)) {
+                    setSelectedList(selectedList.filter((x) => x !== item.seq));
+                  } else {
+                    setSelectedList([...selectedList, item.seq]);
+                  }
+                }}
+              >
+                {index + 1}. {item?.title}
+              </SelectedItem>
+            )}
+            size="small"
+          />
+          <p className="app-ml-1n app-mb-2n app-mt-1n">
+            <span>选中: {selectedList.length}项</span>
+            <Button
+              size="small"
+              className="app-ml-2n"
+              onClick={() => {
+                if (selectedList.length === fileList.length) {
+                  setSelectedList([]);
+                } else {
+                  setSelectedList(fileList.map((one) => one.seq));
+                }
+              }}
+            >
+              {selectedList.length === fileList.length ? "全不选" : "全选"}
+            </Button>
+          </p>
+          <Button disabled={!selectedList.length} onClick={handleDownload}>
+            立即下载
+          </Button>
+          <Button disabled={!selectedList.length} onClick={handleExportLink}>
+            生成下载链接
+          </Button>
+        </>
+      ) : (
+        <Empty
+          image={Empty.PRESENTED_IMAGE_SIMPLE}
+          description="暂无提交的文件"
+        />
+      )}
     </div>
   );
 }
+
+interface ISelectedItem {
+  selected: boolean;
+}
+
+const SelectedItem = styled.div`
+  padding: 2px;
+  cursor: pointer;
+  user-select: none;
+  ${(props: ISelectedItem) =>
+    props.selected
+      ? `
+    background-color: #678898;
+    border-radius: 3px;
+    color: #ffffff;
+  `
+      : ""}
+`;

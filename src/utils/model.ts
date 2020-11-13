@@ -169,3 +169,26 @@ interface IRequestSubToken {
 
 export const requestSubToken = ({ expire, authCode }: IRequestSubToken) =>
   instance.post(`/admin/subToken`, { expire, authCode });
+
+interface IRequestProjectFileList {
+  id: string;
+}
+
+export const requestProjectFileList = ({ id }: IRequestProjectFileList) =>
+  instance.get(`/project/fileList?id=${id}`);
+
+interface IRequestStorageDownloadSelectively {
+  id: string;
+  code: string;
+  onDownloadProgress: (progressEvent: any) => void;
+}
+
+export const requestStorageDownloadSeletively = ({
+  id,
+  code,
+  onDownloadProgress,
+}: IRequestStorageDownloadSelectively) =>
+  instance.get(`/storage/downloadSelectively?id=${id}&code=${code}`, {
+    responseType: "blob",
+    onDownloadProgress,
+  });
