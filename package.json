@@ -5,9 +5,9 @@
   "author": "ChenKS12138 <749923710@qq.com>",
   "license": "MIT",
   "dependencies": {
+    "@ant-design/colors": "^5.0.0",
     "@ant-design/icons": "^4.0.3",
     "@babel/runtime": "^7.10.4",
-    "antd": "^4.0.3",
     "axios": "^0.19.2",
     "file-saver": "^2.0.2",
     "path-to-regexp": "^6.1.0",
@@ -16,7 +16,6 @@
     "react-redux": "^7.2.0",
     "react-use": "^14.1.1",
     "redux": "^4.0.5",
-    "redux-logger": "^3.0.6",
     "redux-saga": "^1.1.3",
     "redux-saga-catch": "^0.0.10",
     "saga-duck": "^3.3.0",

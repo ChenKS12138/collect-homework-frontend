@@ -15,31 +15,24 @@ const columns = [
     dataIndex: "adminName",
   },
   {
-    title: "支持的文件格式",
-    dataIndex: "fileNameExtensions",
-    render(tags) {
+    title: "标签",
+    dataIndex: "labels",
+    render(labels) {
       return (
         <Space>
-          {tags?.length ? (
-            tags?.map?.((tag, tagIndex) => <Tag key={tagIndex}>{tag}</Tag>)
+          {labels?.length ? (
+            labels?.map?.((label, labelIndex) => (
+              <Tag color={Tag.getColor(label)} key={labelIndex}>
+                {label}
+              </Tag>
+            ))
           ) : (
-            <span>暂无要求</span>
+            <span>暂无标签</span>
           )}
         </Space>
       );
     },
   },
-  {
-    title: "文件名示例",
-    dataIndex: "fileNameExample",
-    render(example: string) {
-      return <span>{example?.length ? example : "暂无要求"}</span>;
-    },
-  },
-  // {
-  //   title: "创建时间",
-  //   dataIndex: "createAt",
-  // },
   {
     title: "作业名称",
     dataIndex: "name",

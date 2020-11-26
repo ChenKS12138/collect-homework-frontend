@@ -18,6 +18,11 @@ Random.extend({
   projectName() {
     return `第${this.natural(1, 10)}次${this.project()}`;
   },
+  labels() {
+    const labels = ["截止21号晚", "记得修改文件名", "急!!!!!", "记得打印!!!"];
+    labels.sort(() => Math.random() - 0.5);
+    return labels.slice(0, (Math.random() * 100) % labels.length);
+  },
 });
 
 export const projectListData = [
@@ -30,6 +35,9 @@ export const projectListData = [
     fileNameExtensions: [".doc", ".docx"],
     fileNameExample: Random.fileName(),
     usable: true,
+    visible: true,
+    sendEmail: true,
+    labels: Random.labels(),
     createAt: Random.date(),
     updateAt: Random.datetime(),
   })),

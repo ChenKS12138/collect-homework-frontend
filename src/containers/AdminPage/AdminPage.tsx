@@ -351,6 +351,24 @@ function AdminPageCreate({
           }}
         />
       </Form.Item>
+      <Form.Item label="标签" name="labels">
+        <EditableTagSet
+          tagSet={
+            [] ||
+            createProjectFormData?.labels?.map?.((x: string) => ({
+              key: x,
+              text: x,
+            }))
+          }
+          onTagSetChange={(value: { text: string; key: string }[]) => {
+            dispatch(
+              ducks.createProject.creators.setFormDataPartly({
+                labels: value?.map?.((x) => x.text) ?? [],
+              })
+            );
+          }}
+        />
+      </Form.Item>
       <Button
         block
         type="primary"

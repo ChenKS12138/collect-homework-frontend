@@ -175,12 +175,14 @@ export default class AdminPageDuck extends DuckMap {
             fileNameExtensions,
             fileNamePattern,
             name,
+            labels,
           } = fromData;
           const { success, error } = yield requestProjectInsert({
             fileNameExample,
             fileNameExtensions,
             fileNamePattern,
             name,
+            labels,
           });
           if (success) {
             notice.success({ text: "新建成功" });
@@ -248,6 +250,7 @@ export default class AdminPageDuck extends DuckMap {
           usable: true,
           sendEmail: updateForm?.sendEmail,
           visible: updateForm?.visible,
+          labels: updateForm?.labels ?? [],
         });
         if (success) {
           notice.success({ text: "更新成功" });

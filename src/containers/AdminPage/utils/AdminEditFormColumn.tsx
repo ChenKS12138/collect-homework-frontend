@@ -53,6 +53,42 @@ const editFormColumns = [
     },
   },
   {
+    key: "labels",
+    label: "标签",
+    renderShow(instance) {
+      return (
+        <div>
+          {instance.labels?.length ? (
+            instance.labels?.map((label, labelIndex) => (
+              <Tag key={labelIndex}>{label}</Tag>
+            ))
+          ) : (
+            <span>暂无标签</span>
+          )}
+        </div>
+      );
+    },
+    renderEdit({ store, duck, dispatch }: IRenderEdit<AdminPageEditFormDuck>) {
+      const labels = duck.selector(store)?.formData?.labels ?? [];
+      const formatedList = Array.from(labels)?.map((x: string) => ({
+        key: x,
+        text: x,
+      }));
+      return (
+        <EditableTagSet
+          tagSet={formatedList}
+          onTagSetChange={(value) => {
+            dispatch(
+              duck.creators.setFormDataPartly({
+                labels: value?.map?.((x) => x.text) ?? [],
+              })
+            );
+          }}
+        />
+      );
+    },
+  },
+  {
     key: "fileNameExample",
     label: "文件名示例",
     renderShow(instance: IProjectItem) {

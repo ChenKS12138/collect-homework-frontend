@@ -5,6 +5,7 @@ export interface ICreateProjectForm {
   fileNameExtensions: string[];
   fileNameExample: string;
   fileNamePattern: string;
+  labels: string[];
 }
 
 export default class AdminPageCreateFormDuck extends FormDuck {
@@ -14,6 +15,7 @@ export default class AdminPageCreateFormDuck extends FormDuck {
       ...data,
       name: data?.name ?? "",
       fileNameExtensions: data?.fileNameExtensions ?? [],
+      labels: data?.labels ?? [],
     };
   }
 }

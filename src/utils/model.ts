@@ -47,6 +47,7 @@ interface IRequestProjectInsert {
   fileNamePattern: string;
   fileNameExtensions: string[];
   fileNameExample: string;
+  labels: string[];
 }
 
 export const requestProjectInsert = ({
@@ -54,12 +55,14 @@ export const requestProjectInsert = ({
   fileNameExtensions,
   fileNamePattern,
   name,
+  labels,
 }: IRequestProjectInsert) =>
   instance.post("/project/insert", {
     name,
     fileNamePattern,
     fileNameExtensions,
     fileNameExample,
+    labels,
   });
 
 interface IRequestProjectUpdate {
@@ -68,6 +71,7 @@ interface IRequestProjectUpdate {
   fileNamePattern: string;
   fileNameExtensions: string[];
   fileNameExample: string;
+  labels: string[];
   sendEmail: boolean;
   visible: boolean;
 }
@@ -80,6 +84,7 @@ export const requestProjectUpdate = ({
   usable,
   sendEmail,
   visible,
+  labels,
 }: IRequestProjectUpdate) =>
   instance.post("/project/update", {
     id,
@@ -89,6 +94,7 @@ export const requestProjectUpdate = ({
     fileNameExample,
     sendEmail,
     visible,
+    labels,
   });
 
 interface IRequestProjectDelete {

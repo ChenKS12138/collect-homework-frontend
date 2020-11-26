@@ -1,15 +1,79 @@
 import React from "react";
+import {
+  blue,
+  green,
+  cyan,
+  gold,
+  orange,
+  lime,
+  volcano,
+} from "@ant-design/colors";
 import styles from "./Tag.module.less";
+
+export interface TagColor {
+  font: string;
+  border: string;
+  background: string;
+}
 
 interface ITag {
   onClose?: () => void;
   closable?: boolean;
+  color?: TagColor;
   children: React.ReactNode;
 }
 
-export default function Tag({ children, closable, onClose }: ITag) {
+const defaultTagColor = {
+  font: "black",
+  border: "rgb(217,217,217)",
+  background: "rgb(250,250,250)",
+};
+
+const colors: TagColor[] = [
+  {
+    font: "white",
+    border: "transparent",
+    background: blue[6],
+  },
+  {
+    font: "white",
+    border: "transparent",
+    background: green[7],
+  },
+  {
+    font: "white",
+    border: "transparent",
+    background: cyan[6],
+  },
+  {
+    font: "white",
+    border: "transparent",
+    background: gold[6],
+  },
+  {
+    font: "white",
+    border: "transparent",
+    background: orange[6],
+  },
+  {
+    font: "white",
+    border: "transparent",
+    background: lime[6],
+  },
+  {
+    font: "white",
+    border: "transparent",
+    background: volcano[6],
+  },
+];
+
+export default function Tag({ children, closable, onClose, color }: ITag) {
+  const { font, background, border } = color ?? defaultTagColor;
   return (
-    <span className={styles.tag}>
+    <span
+      className={styles.tag}
+      style={{ color: font, backgroundColor: background, borderColor: border }}
+    >
       {children}
       {closable && (
         <span
@@ -36,3 +100,10 @@ export default function Tag({ children, closable, onClose }: ITag) {
     </span>
   );
 }
+
+Tag.colors = colors;
+
+Tag.getColor = function (str: String) {
+  const key = str.split("").reduce((a, b) => a + b.codePointAt(0), 0);
+  return colors[Number(key) % colors.length];
+};

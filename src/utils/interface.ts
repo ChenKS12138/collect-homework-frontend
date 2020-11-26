@@ -9,6 +9,7 @@ export interface IProjectItem {
   usable: boolean;
   visible: boolean;
   sendEmail: boolean;
+  labels: string[];
   createAt: string;
   updateAt: string;
 }
