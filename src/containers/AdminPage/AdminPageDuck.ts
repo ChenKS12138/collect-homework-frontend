@@ -19,9 +19,9 @@ import AdminPageCreateFormDuck, {
   ICreateProjectForm,
 } from "./ducks/AdminPageCreateFormDuck";
 import { DuckMap } from "saga-duck";
-import { notice } from "@/utils";
+import { generateDownloadCode, notice } from "@/utils";
 import { navigateTo } from "router";
-import { baseURL, cleanToken } from "@/utils/request";
+import { baseURL, cleanToken, HOST } from "@/utils/request";
 import AdminPageEditFormDuck, {
   IEditProjectForm,
 } from "./ducks/AdminPageEditFormDuck";
@@ -49,6 +49,7 @@ export default class AdminPageDuck extends DuckMap {
       FETCH_PROEJCT_SIZE,
       FETCH_DOWNLAOD_FILE,
       FETCH_EXPORT_LINK,
+      FETCH_REVIEW,
     }
     return {
       ...super.quickTypes,
@@ -77,9 +78,11 @@ export default class AdminPageDuck extends DuckMap {
       ),
       fetchFileList: createToPayload<string>(types.FETCH_FILE_LIST),
       fetchProjectSize: createToPayload<string>(types.FETCH_PROEJCT_SIZE),
-      downloadFile: createToPayload<{ id: string; name: string; code: string }>(
-        types.FETCH_DOWNLAOD_FILE
-      ),
+      downloadFile: createToPayload<{
+        id: string;
+        name: string;
+        list: number[];
+      }>(types.FETCH_DOWNLAOD_FILE),
     };
   }
   get reducers() {
@@ -112,6 +115,7 @@ export default class AdminPageDuck extends DuckMap {
     yield fork([this, this.watchToFetchProjectSize]);
     yield fork([this, this.watchToDownloadFile]);
     yield fork([this, this.watchToExportLink]);
+    yield fork([this, this.watchToPreview]);
   }
   *watchToLoad() {
     const { types } = this;
@@ -317,7 +321,8 @@ export default class AdminPageDuck extends DuckMap {
   *watchToDownloadFile() {
     const { types, handleDownloadProgress, ducks } = this;
     yield takeLatest([types.FETCH_DOWNLAOD_FILE], function* (action) {
-      const { id, name, code } = action.payload;
+      const { id, name, list } = action.payload;
+      const code = generateDownloadCode(list ?? []);
       try {
         yield put({
           type: ducks.downloadProgress.types.RELOAD,
@@ -341,7 +346,8 @@ export default class AdminPageDuck extends DuckMap {
   *watchToExportLink() {
     const { types } = this;
     yield takeLatest([types.FETCH_EXPORT_LINK], function* (action) {
-      const { id, code } = action.payload;
+      const { id, list } = action.payload;
+      const code = generateDownloadCode(list ?? []);
       try {
         const result = yield requestSubToken({ expire: 5, authCode: 5 });
         if (result?.success) {
@@ -352,6 +358,39 @@ export default class AdminPageDuck extends DuckMap {
           yield put({
             type: types.SET_EXPORT_LINK,
             payload: exportLink,
+          });
+        } else {
+          throw result?.error;
+        }
+      } catch (err) {
+        notice.error({ text: String(err) });
+      }
+    });
+  }
+  *watchToPreview() {
+    const { types } = this;
+    yield takeLatest([types.FETCH_REVIEW], function* (action) {
+      const { id, list } = action.payload;
+      try {
+        const result = yield requestSubToken({ expire: 5, authCode: 5 });
+        if (result?.success) {
+          const jwtToken = result?.data;
+          const previewUrls = list.map(
+            (item) =>
+              `https://view.officeapps.live.com/op/view.aspx?src=${encodeURI(
+                `https://${
+                  HOST + baseURL
+                }/storage/rawFile/${id}/${item}?jwt=${jwtToken}`
+              )}`
+          );
+          if (
+            list?.length > 3 &&
+            !confirm("预览链接数大于3，是否立即全部打开")
+          ) {
+            return;
+          }
+          previewUrls.forEach((url) => {
+            window.open(url, "_blank");
           });
         } else {
           throw result?.error;

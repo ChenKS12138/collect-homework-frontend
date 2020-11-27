@@ -395,25 +395,29 @@ function DownloadModal({ dispatch, duck, store, col }: IDownloadModal) {
   const { exportLink, projectSize, fileList } = duck.selector(store);
   const [size, unit] = useDiskSize(projectSize ?? 0);
   const [selectedList, setSelectedList] = useState([]);
-  const code = useMemo(
-    () => (selectedList?.length ? generateDownloadCode(selectedList) : "0"),
-    [selectedList]
-  );
   const handleDownload = useCallback(() => {
     dispatch(
       duck.creators.downloadFile({
         id: col.id,
-        code,
+        list: selectedList,
         name: col.name,
       })
     );
-  }, [dispatch, duck, code]);
+  }, [dispatch, duck, selectedList]);
   const handleExportLink = useCallback(() => {
     dispatch({
       type: duck.types.FETCH_EXPORT_LINK,
-      payload: { id: col.id, code },
+      payload: { id: col.id, list: selectedList },
     });
-  }, [col, dispatch, duck, code]);
+  }, [col, dispatch, duck, selectedList]);
+
+  const handlePreview = useCallback(() => {
+    const map = new Map(fileList.map((one) => [one.seq, one.name]));
+    dispatch({
+      type: duck.types.FETCH_REVIEW,
+      payload: { id: col.id, list: selectedList?.map((item) => map.get(item)) },
+    });
+  }, [col, dispatch, duck, selectedList]);
 
   useEffect(() => {
     setSelectedList(fileList.map((one) => one.seq));
@@ -434,7 +438,9 @@ function DownloadModal({ dispatch, duck, store, col }: IDownloadModal) {
     return (
       <div>
         <p style={{ color: "red" }}>下载链接有效时间5分钟，请及时访问</p>
-        <p>{exportLink}</p>
+        <p>
+          <a href={exportLink}>{exportLink}</a>
+        </p>
       </div>
     );
   }
@@ -492,6 +498,9 @@ function DownloadModal({ dispatch, duck, store, col }: IDownloadModal) {
           </Button>
           <Button disabled={!selectedList.length} onClick={handleExportLink}>
             生成下载链接
+          </Button>
+          <Button disabled={!selectedList.length} onClick={handlePreview}>
+            Office文件在线预览
           </Button>
         </>
       ) : (

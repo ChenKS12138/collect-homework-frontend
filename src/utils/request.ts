@@ -9,6 +9,8 @@ export const baseURL =
     ? ""
     : "/api";
 
+export const HOST = "homework.cattchen.top" || location.host;
+
 export const instance = axios.create({
   baseURL,
 });
