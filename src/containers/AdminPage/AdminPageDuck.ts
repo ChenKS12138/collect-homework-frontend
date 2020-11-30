@@ -94,10 +94,9 @@ export default class AdminPageDuck extends DuckMap {
         types.SET_ADMIN_BASIC_INFO,
         null
       ),
-      fileList: reduceFromPayload<{ name: string; seq: number }[]>(
-        types.SET_FILE_LIST,
-        []
-      ),
+      fileList: reduceFromPayload<
+        { name: string; seq: number; lastModifyTime: string }[]
+      >(types.SET_FILE_LIST, []),
       projectSize: reduceFromPayload<number>(types.SET_PROJECT_SIZE, 0),
       exportLink: reduceFromPayload<string>(types.SET_EXPORT_LINK, null),
     };

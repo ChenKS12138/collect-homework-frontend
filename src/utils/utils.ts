@@ -73,12 +73,31 @@ export function useDiskSize(sizeB: number) {
   return [size, unit];
 }
 
-export function formatDate(dataString: string): string {
+// export function formatDate(dataString: string): string;
+// export function formatDate(
+//   dataString: string,
+//   format: FormatDateFormat
+// ): string;
+
+type FormatDateFormat = "YYYY-MM-DD HH:mm" | "YYYY-MM-DD";
+
+export function formatDate(
+  dataString?: string,
+  format?: FormatDateFormat
+): string {
   const d = new Date(dataString);
   const year = d.getFullYear();
   const month = d.getMonth() + 1;
   const day = d.getDate();
-  return `${year}-${month}-${day}`;
+  if (format === "YYYY-MM-DD") {
+    return `${year}-${month}-${day}`;
+  } else {
+    const hour = d.getHours();
+    const minute = d.getMinutes();
+    return `${year}-${month}-${day} ${String(hour).padStart(2, "0")}:${String(
+      minute
+    ).padStart(2, "0")}`;
+  }
 }
 
 export function classnames(classes: { [key: string]: any }): string {

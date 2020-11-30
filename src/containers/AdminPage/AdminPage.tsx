@@ -14,6 +14,7 @@ import {
   Card,
   Progress,
   Input,
+  Space,
 } from "base-component";
 import { AdminPageDuck } from ".";
 import {
@@ -22,6 +23,7 @@ import {
   greetByTime,
   useDiskSize,
   generateDownloadCode,
+  formatDate,
 } from "@/utils";
 import { useRouteMatch, navigateTo, RouterLink } from "router";
 import { IProjectItem } from "@/utils/interface";
@@ -457,8 +459,11 @@ function DownloadModal({ dispatch, duck, store, col }: IDownloadModal) {
         <>
           <List
             dataSource={
-              fileList?.map?.((one) => ({ title: one.name, seq: one.seq })) ??
-              []
+              fileList?.map?.((one) => ({
+                title: one.name,
+                seq: one.seq,
+                lastModifyTime: one.lastModifyTime,
+              })) ?? []
             }
             bordered
             renderItem={(item, index) => (
@@ -472,7 +477,14 @@ function DownloadModal({ dispatch, duck, store, col }: IDownloadModal) {
                   }
                 }}
               >
-                {index + 1}. {item?.title}
+                <span>
+                  {index + 1}. {item?.title}
+                </span>
+                <span>{"   -----------   "}</span>
+                <span>
+                  {item?.lastModifyTime &&
+                    formatDate(item.lastModifyTime, "YYYY-MM-DD HH:mm")}
+                </span>
               </SelectedItem>
             )}
             size="small"
