@@ -1,8 +1,8 @@
 import { takeLatest } from "redux-saga-catch";
 import { fork, put, select } from "redux-saga/effects";
-import { createToPayload, DuckMap, reduceFromPayload } from "saga-duck";
+import { createToPayload, Duck, reduceFromPayload } from "use-duck-state";
 
-export default class LoadingDuck extends DuckMap {
+export default class LoadingDuck extends Duck {
   get quickTypes() {
     enum Types {
       SET_LOADING_COUNT,
@@ -37,15 +37,14 @@ export default class LoadingDuck extends DuckMap {
     };
   }
   *saga() {
-    yield* super.saga();
     yield fork([this, this.watchLoadingAdd]);
     yield fork([this, this.watchLoadingDone]);
   }
   *watchLoadingAdd() {
-    const { types, selector } = this;
+    const { types, selectors } = this;
     // loading add
     yield takeLatest([types.LOADING_ADD], function* () {
-      const { count } = selector(yield select());
+      const { count } = selectors(yield select());
       yield put({
         type: types.SET_LOADING_COUNT,
         payload: (count ?? 0) + 1,
@@ -53,10 +52,10 @@ export default class LoadingDuck extends DuckMap {
     });
   }
   *watchLoadingDone() {
-    const { types, selector } = this;
+    const { types, selectors } = this;
     // loading done
     yield takeLatest([types.LOADING_DONE], function* () {
-      const { count } = selector(yield select());
+      const { count } = selectors(yield select());
       yield put({
         type: types.SET_LOADING_COUNT,
         payload: (count ?? 0) - 1,

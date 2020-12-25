@@ -1,9 +1,9 @@
-import { createToPayload, DuckMap, reduceFromPayload } from "saga-duck";
+import { createToPayload, Duck, reduceFromPayload } from "use-duck-state";
 import { runAndTakeLatest } from "redux-saga-catch";
 import { fork, put, take } from "redux-saga/effects";
 import { eventChannel, Subscribe } from "redux-saga";
 
-export default abstract class ProgressDuck extends DuckMap {
+export default abstract class ProgressDuck extends Duck {
   get quickTypes() {
     enum Types {
       SET_PERCENTAGE,
@@ -42,7 +42,6 @@ export default abstract class ProgressDuck extends DuckMap {
     };
   }
   *saga() {
-    yield* super.saga();
     yield fork([this, this.watchToReload]);
   }
   *watchToReload() {

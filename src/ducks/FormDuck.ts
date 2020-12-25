@@ -1,8 +1,8 @@
 import { select, put, fork } from "redux-saga/effects";
-import { DuckMap, reduceFromPayload, createToPayload } from "saga-duck";
+import { Duck, reduceFromPayload, createToPayload } from "use-duck-state";
 import { takeLatest } from "redux-saga-catch";
 
-export default abstract class FormDuck extends DuckMap {
+export default abstract class FormDuck extends Duck {
   abstract IForm;
   get quickTypes() {
     enum Types {
@@ -44,7 +44,6 @@ export default abstract class FormDuck extends DuckMap {
     };
   }
   *saga() {
-    yield* super.saga();
     yield fork([this, this.watchToPartlySetFormData]);
     yield fork([this, this.watchToCleanForm]);
   }
@@ -53,10 +52,10 @@ export default abstract class FormDuck extends DuckMap {
   }
   abstract formatData(data: this["IForm"]): this["IForm"];
   *watchToPartlySetFormData() {
-    const { types, selector, creators } = this;
+    const { types, selectors, creators } = this;
     yield takeLatest([types.SET_FORM_DATA_PARTLY], function* (action) {
       const data = action.payload;
-      const { formData } = selector(yield select());
+      const { formData } = selectors(yield select());
       yield put({
         type: types.SET_FORM_DATA,
         payload: {

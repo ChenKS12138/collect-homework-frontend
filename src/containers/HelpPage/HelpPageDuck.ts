@@ -1,3 +1,5 @@
-import { DuckMap } from "saga-duck";
+import { Duck } from "use-duck-state";
 
-export default class HelpPageDuck extends DuckMap {}
+export default class HelpPageDuck extends Duck {
+  *saga() {}
+}

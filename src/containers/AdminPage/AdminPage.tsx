@@ -19,7 +19,7 @@ import {
 import { AdminPageDuck } from ".";
 import {
   distributeArray,
-  useSagaDuckState,
+  useDuckState,
   greetByTime,
   useDiskSize,
   generateDownloadCode,
@@ -27,7 +27,7 @@ import {
 } from "@/utils";
 import { useRouteMatch, navigateTo, RouterLink } from "router";
 import { IProjectItem } from "@/utils/interface";
-import { DuckCmpProps } from "saga-duck";
+import { DuckProps } from "use-duck-state";
 import { useWindowSize } from "react-use";
 import { cleanToken } from "@/utils/request";
 import { Helmet } from "react-helmet";
@@ -42,11 +42,9 @@ const WelcomeText = styled.span`
 `;
 
 export default function AdminPage() {
-  const { dispatch, duck, store } = useSagaDuckState<AdminPageDuck>(
-    AdminPageDuck
-  );
-  const { selector, ducks } = duck;
-  const { projectOwn, basicInfo } = selector(store);
+  const { dispatch, duck, store } = useDuckState<AdminPageDuck>(AdminPageDuck);
+  const { selectors, ducks } = duck;
+  const { projectOwn, basicInfo } = selectors(store);
   const { width, height } = useWindowSize();
 
   const showCreate = useRouteMatch("/admin/create") !== false;
@@ -156,7 +154,7 @@ export default function AdminPage() {
   );
 }
 
-interface IProjectOwnWrapper extends DuckCmpProps<AdminPageDuck> {
+interface IProjectOwnWrapper extends DuckProps<AdminPageDuck> {
   projectOwn: IProjectItem[];
 }
 
@@ -197,7 +195,7 @@ function ProjectOwnWrapper({
                       key="edit"
                       onClick={() => {
                         if (isEdit) {
-                          const { formData } = duck.ducks.editProject.selector(
+                          const { formData } = duck.ducks.editProject.selectors(
                             store
                           );
                           dispatch(duck.creators.updateProject(formData));
@@ -286,16 +284,12 @@ function ProjectOwnWrapper({
   );
 }
 
-function AdminPageCreate({
-  dispatch,
-  duck,
-  store,
-}: DuckCmpProps<AdminPageDuck>) {
+function AdminPageCreate({ dispatch, duck, store }: DuckProps<AdminPageDuck>) {
   const {
     formData: createProjectFormData,
     formError: createProjectFormError,
     formLoading: createProjectFormLoading,
-  } = duck.ducks.createProject.selector(store);
+  } = duck.ducks.createProject.selectors(store);
   const { ducks } = duck;
   return (
     <Form>
@@ -377,7 +371,7 @@ function AdminPageCreate({
         onClick={() => {
           dispatch(
             duck.creators.insertProject(
-              duck.ducks.createProject.selectors.formatedData(store)
+              duck.ducks.createProject.selectors(store).formatedData
             )
           );
         }}
@@ -388,13 +382,13 @@ function AdminPageCreate({
   );
 }
 
-interface IDownloadModal extends DuckCmpProps<AdminPageDuck> {
+interface IDownloadModal extends DuckProps<AdminPageDuck> {
   col: any;
 }
 
 function DownloadModal({ dispatch, duck, store, col }: IDownloadModal) {
-  const { percentage } = duck.ducks.downloadProgress.selector(store);
-  const { exportLink, projectSize, fileList } = duck.selector(store);
+  const { percentage } = duck.ducks.downloadProgress.selectors(store);
+  const { exportLink, projectSize, fileList } = duck.selectors(store);
   const [size, unit] = useDiskSize(projectSize ?? 0);
   const [selectedList, setSelectedList] = useState([]);
   const handleDownload = useCallback(() => {

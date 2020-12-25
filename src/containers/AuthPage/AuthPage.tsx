@@ -2,7 +2,7 @@ import React from "react";
 import { Scaffold } from "@/components/index";
 import { Input, Form, Space, Button, Drawer } from "base-component";
 import styled from "styled-components";
-import { useSagaDuckState } from "@/utils";
+import { useDuckState } from "@/utils";
 import { RouterLink, navigateTo, useRouteMatch } from "router";
 import { useWindowSize } from "react-use";
 import { AuthPageDuck } from ".";
@@ -13,9 +13,7 @@ const AuthWrapper = styled.div`
 `;
 
 export default function AuthPage() {
-  const { dispatch, duck, store } = useSagaDuckState<AuthPageDuck>(
-    AuthPageDuck
-  );
+  const { dispatch, duck, store } = useDuckState<AuthPageDuck>(AuthPageDuck);
   const { ducks } = duck;
   const showRegistry = useRouteMatch("/auth/registry") !== false;
   const { height, width } = useWindowSize();
@@ -24,14 +22,14 @@ export default function AuthPage() {
     formLoading: loginLoading,
     formError: loginError,
     formData: loginData,
-  } = ducks.loginForm.selector(store);
+  } = ducks.loginForm.selectors(store);
   const {
     formLoading: registryLoading,
     formError: registryError,
     formData: registryData,
-  } = ducks.registryForm.selector(store);
+  } = ducks.registryForm.selectors(store);
 
-  const { active, seconds } = ducks.cutdown.selector(store);
+  const { active, seconds } = ducks.cutdown.selectors(store);
 
   return (
     <Scaffold

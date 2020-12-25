@@ -3,11 +3,11 @@ import { useMemo } from "react";
 
 const PrefetchContext = React.createContext<any>("ssrPrefetch");
 
-export function usePrefetchResult<T = any>(selector: (state: any) => T) {
+export function usePrefetchResult<T = any>(selectors: (state: any) => T) {
   const state = useContext(PrefetchContext);
   const value = useMemo(() => {
-    return selector(state);
-  }, [selector]);
+    return selectors(state);
+  }, [selectors]);
   return value;
 }
 

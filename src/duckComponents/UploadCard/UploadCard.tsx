@@ -68,7 +68,7 @@ export default function UploadCard({
       duck.creators.setFormDataPartly({ projectId: currentProject?.id })
     );
   }, [currentProject, currentProject?.id]);
-  const { formData } = duck.selector(store);
+  const { formData } = duck.selectors(store);
 
   return (
     <UploadCardWrapper className="app-mlr-auto">
@@ -172,7 +172,7 @@ export default function UploadCard({
           className="app-mt-3n"
           loading={showLoading}
           onClick={() => {
-            const uploadForm = duck.selector(store)?.formData ?? {};
+            const uploadForm = duck.selectors(store)?.formData ?? {};
             onUpload(uploadForm);
           }}
         >

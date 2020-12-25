@@ -1,4 +1,4 @@
-import { reduceFromPayload, createToPayload } from "saga-duck";
+import { reduceFromPayload, createToPayload, Duck } from "use-duck-state";
 import { fork, put, select } from "redux-saga/effects";
 import { takeLatest } from "redux-saga-catch";
 import AuthPageLoginFormDuck from "./ducks/AuthPageLoginFormDuck";
@@ -8,7 +8,6 @@ import {
   requestAdminInvitationCode,
   requestAdminRegister,
 } from "@/utils/model";
-import { DuckMap } from "saga-duck";
 import { CutdownDuck } from "@/ducks";
 import { notice } from "@/utils";
 import { navigateTo } from "router";
@@ -19,7 +18,7 @@ export interface ILoginForm {
   password: string;
 }
 
-export default class AuthPageDuck extends DuckMap {
+export default class AuthPageDuck extends Duck {
   get quickTypes() {
     enum Types {
       FETCH_SECRET_CODE,
@@ -47,7 +46,6 @@ export default class AuthPageDuck extends DuckMap {
     };
   }
   *saga() {
-    yield* super.saga();
     yield fork([this, this.watchToLogin]);
     yield fork([this, this.watchToFetchSecretCode]);
     yield fork([this, this.watchToRegistry]);
@@ -59,7 +57,7 @@ export default class AuthPageDuck extends DuckMap {
       navigateTo("/admin");
     }
     yield takeLatest([types.INVOKE_LOGIN], function* () {
-      const { formData } = ducks.loginForm.selector(yield select());
+      const { formData } = ducks.loginForm.selectors(yield select());
       if (!formData?.email?.length || !formData?.password?.length) {
         notice.error({ text: "邮箱密码不能为空" });
       } else {
@@ -88,7 +86,7 @@ export default class AuthPageDuck extends DuckMap {
   *watchToRegistry() {
     const { types, ducks } = this;
     yield takeLatest([types.INVOKE_REGISTER], function* () {
-      const { formData } = ducks.registryForm.selector(yield select());
+      const { formData } = ducks.registryForm.selectors(yield select());
       if (
         !formData?.email?.length ||
         !formData?.userPassword?.length ||

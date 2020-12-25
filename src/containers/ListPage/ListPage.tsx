@@ -5,7 +5,7 @@ import { Button, Drawer } from "base-component";
 import styled from "styled-components";
 import { avatarImage } from "@/assets";
 import { ListPageDuck } from "@/containers/ListPage";
-import { useSagaDuckState, useLazyState } from "@/utils";
+import { useDuckState, useLazyState } from "@/utils";
 import { RouterLink, navigateTo, useRouteMatch } from "router";
 import { useWindowSize } from "react-use";
 import { Helmet } from "react-helmet";
@@ -19,12 +19,10 @@ const TitleLineThroughText = styled.span`
 `;
 
 export default function ListPage() {
-  const { dispatch, duck, store } = useSagaDuckState<ListPageDuck>(
-    ListPageDuck
-  );
+  const { dispatch, duck, store } = useDuckState<ListPageDuck>(ListPageDuck);
 
-  const { selector, ducks } = duck;
-  const { projects, currentProject, currentPorjectCount } = selector(store);
+  const { selectors, ducks } = duck;
+  const { projects, currentProject, currentPorjectCount } = selectors(store);
   const { height, width } = useWindowSize();
   const matched = useRouteMatch<{ id: string }>("/detail/:id");
   const [showDrawer, setShowDrawer] = useLazyState(false, 400);
@@ -45,9 +43,9 @@ export default function ListPage() {
     }
   }, [showDetail]);
 
-  const { uploadSuccess } = duck.selector(store);
-  const tableLoading = ducks.listLoading.selectors.isLoading(store);
-  const uploadLoading = ducks.uploadLoading.selectors.isLoading(store);
+  const { uploadSuccess } = duck.selectors(store);
+  const tableLoading = ducks.listLoading.selectors(store).isLoading;
+  const uploadLoading = ducks.uploadLoading.selectors(store).isLoading;
 
   return (
     <Scaffold

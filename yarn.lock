@@ -1001,7 +1001,7 @@
     core-js-pure "^3.0.0"
     regenerator-runtime "^0.13.4"
 
-"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.4", "@babel/runtime@^7.5.5", "@babel/runtime@^7.6.3", "@babel/runtime@^7.8.4":
+"@babel/runtime@^7.0.0", "@babel/runtime@^7.1.2", "@babel/runtime@^7.10.2", "@babel/runtime@^7.10.4", "@babel/runtime@^7.6.3", "@babel/runtime@^7.8.4":
   version "7.11.2"
   resolved "https://registry.npm.taobao.org/@babel/runtime/download/@babel/runtime-7.11.2.tgz?cache=0&sync_timestamp=1597562495795&other_urls=https%3A%2F%2Fregistry.npm.taobao.org%2F%40babel%2Fruntime%2Fdownload%2F%40babel%2Fruntime-7.11.2.tgz#f549c13c754cc40b87644b9fa9f09a6a95fe0736"
   integrity sha1-9UnBPHVMxAuHZEufqfCaapX+BzY=
@@ -1476,6 +1476,11 @@
   resolved "https://registry.npm.taobao.org/@types/node/download/@types/node-14.11.2.tgz#2de1ed6670439387da1c9f549a2ade2b0a799256"
   integrity sha1-LeHtZnBDk4faHJ9UmireKwp5klY=
 
+"@types/node@^14.14.16":
+  version "14.14.16"
+  resolved "https://registry.npmjs.org/@types/node/-/node-14.14.16.tgz#3cc351f8d48101deadfed4c9e4f116048d437b4b"
+  integrity sha512-naXYePhweTi+BMv11TgioE2/FXU4fSl29HAH1ffxVciNsH3rYXjNP2yM8wqmSm7jS20gM8TIklKiTen+1iVncw==
+
 "@types/normalize-package-data@^2.4.0":
   version "2.4.0"
   resolved "https://registry.npm.taobao.org/@types/normalize-package-data/download/@types/normalize-package-data-2.4.0.tgz#e486d0d97396d79beedd0a6e33f4534ff6b4973e"
@@ -1560,8 +1565,8 @@
 
 "@types/redux-logger@^3.0.8":
   version "3.0.8"
-  resolved "https://registry.npm.taobao.org/@types/redux-logger/download/@types/redux-logger-3.0.8.tgz#1fb6d26917bb198792bb1cf57feb31cae1532c5d"
-  integrity sha1-H7bSaRe7GYeSuxz1f+sxyuFTLF0=
+  resolved "https://registry.npmjs.org/@types/redux-logger/-/redux-logger-3.0.8.tgz#1fb6d26917bb198792bb1cf57feb31cae1532c5d"
+  integrity sha512-zM+cxiSw6nZtRbxpVp9SE3x/X77Z7e7YAfHD1NkxJyJbAGSXJGF0E9aqajZfPOa/sTYnuwutmlCldveExuCeLw==
   dependencies:
     redux "^4.0.0"
 
@@ -3744,6 +3749,11 @@ decode-uri-component@^0.2.0:
   version "0.2.0"
   resolved "https://registry.npm.taobao.org/decode-uri-component/download/decode-uri-component-0.2.0.tgz#eb3913333458775cb84cd1a1fae062106bb87545"
   integrity sha1-6zkTMzRYd1y4TNGh+uBiEGu4dUU=
+
+deep-diff@^0.3.5:
+  version "0.3.8"
+  resolved "https://registry.npmjs.org/deep-diff/-/deep-diff-0.3.8.tgz#c01de63efb0eec9798801d40c7e0dae25b582c84"
+  integrity sha1-wB3mPvsO7JeYgB1Ax+Da4ltYLIQ=
 
 deep-equal@^1.0.1:
   version "1.1.1"
@@ -9189,21 +9199,10 @@ react-helmet@^6.1.0:
     react-fast-compare "^3.1.1"
     react-side-effect "^2.1.0"
 
-react-is@^16.12.0, react-is@^16.13.1, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.6, react-is@^16.9.0:
+react-is@^16.12.0, react-is@^16.13.1, react-is@^16.7.0, react-is@^16.8.1, react-is@^16.8.6:
   version "16.13.1"
   resolved "https://registry.npm.taobao.org/react-is/download/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha1-eJcppNw23imZ3BVt1sHZwYzqVqQ=
-
-react-redux@^7.2.0:
-  version "7.2.1"
-  resolved "https://registry.npm.taobao.org/react-redux/download/react-redux-7.2.1.tgz#8dedf784901014db2feca1ab633864dee68ad985"
-  integrity sha1-je33hJAQFNsv7KGrYzhk3uaK2YU=
-  dependencies:
-    "@babel/runtime" "^7.5.5"
-    hoist-non-react-statics "^3.3.0"
-    loose-envify "^1.4.0"
-    prop-types "^15.7.2"
-    react-is "^16.9.0"
 
 react-side-effect@^2.1.0:
   version "2.1.0"
@@ -9356,10 +9355,12 @@ reduce-function-call@^1.0.1, reduce-function-call@^1.0.2:
   dependencies:
     balanced-match "^1.0.0"
 
-redux-saga-catch@0.0.9:
-  version "0.0.9"
-  resolved "https://registry.npm.taobao.org/redux-saga-catch/download/redux-saga-catch-0.0.9.tgz#cc7a3c304b2a6ba8a913f2c641f60e22f1238d0f"
-  integrity sha1-zHo8MEsqa6ipE/LGQfYOIvEjjQ8=
+redux-logger@^3.0.6:
+  version "3.0.6"
+  resolved "https://registry.npmjs.org/redux-logger/-/redux-logger-3.0.6.tgz#f7555966f3098f3c88604c449cf0baf5778274bf"
+  integrity sha1-91VZZvMJjzyIYExEnPC69XeCdL8=
+  dependencies:
+    deep-diff "^0.3.5"
 
 redux-saga-catch@^0.0.10:
   version "0.0.10"
@@ -9373,7 +9374,7 @@ redux-saga@^1.1.3:
   dependencies:
     "@redux-saga/core" "^1.1.3"
 
-redux@^4.0.0, redux@^4.0.4, redux@^4.0.5:
+redux@^4.0.0, redux@^4.0.4:
   version "4.0.5"
   resolved "https://registry.npm.taobao.org/redux/download/redux-4.0.5.tgz#4db5de5816e17891de8a80c424232d06f051d93f"
   integrity sha1-TbXeWBbheJHeioDEJCMtBvBR2T8=
@@ -9752,13 +9753,6 @@ safe-regex@^1.1.0:
   version "2.1.2"
   resolved "https://registry.npm.taobao.org/safer-buffer/download/safer-buffer-2.1.2.tgz#44fa161b0187b9549dd84bb91802f9bd8385cd6a"
   integrity sha1-RPoWGwGHuVSd2Eu5GAL5vYOFzWo=
-
-saga-duck@^3.3.0:
-  version "3.3.2"
-  resolved "https://registry.npm.taobao.org/saga-duck/download/saga-duck-3.3.2.tgz#b2ced49d0a8c7d6f9143f0b7f081ec023a742723"
-  integrity sha1-ss7UnQqMfW+RQ/C38IHsAjp0JyM=
-  dependencies:
-    redux-saga-catch "0.0.9"
 
 sane@^4.0.3:
   version "4.1.0"
@@ -11079,10 +11073,10 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
-use-react-saga@^0.0.8:
-  version "0.0.8"
-  resolved "https://registry.npm.taobao.org/use-react-saga/download/use-react-saga-0.0.8.tgz#10706746c664dc4a8791274de3b170ee4af52010"
-  integrity sha1-EHBnRsZk3EqHkSdN47Fw7kr1IBA=
+use-duck-state@^0.2.3:
+  version "0.2.3"
+  resolved "https://registry.npmjs.org/use-duck-state/-/use-duck-state-0.2.3.tgz#fc1576cc01d7fbe3cb811adeb1c095b15d4087cd"
+  integrity sha512-3Aw3u5yZ40WvkyOY9Zxi8bCc+WpMKvs2Z+fwLuhzx18klGEq9jUmUstZB/FQ6WDo99C93Jdt56X6Uv2sLeAByw==
 
 use@^3.1.0:
   version "3.1.1"

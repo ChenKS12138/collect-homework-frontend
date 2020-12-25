@@ -32,7 +32,7 @@ const editFormColumns = [
     },
     renderEdit({ store, duck, dispatch }: IRenderEdit<AdminPageEditFormDuck>) {
       const fileNameExtensions =
-        duck.selector(store)?.formData?.fileNameExtensions ?? [];
+        duck.selectors(store)?.formData?.fileNameExtensions ?? [];
 
       const formatedList = Array.from(fileNameExtensions)?.map((x: string) => ({
         key: x,
@@ -69,7 +69,7 @@ const editFormColumns = [
       );
     },
     renderEdit({ store, duck, dispatch }: IRenderEdit<AdminPageEditFormDuck>) {
-      const labels = duck.selector(store)?.formData?.labels ?? [];
+      const labels = duck.selectors(store)?.formData?.labels ?? [];
       const formatedList = Array.from(labels)?.map((x: string) => ({
         key: x,
         text: x,
@@ -102,7 +102,7 @@ const editFormColumns = [
     },
     renderEdit({ store, duck, dispatch }: IRenderEdit<AdminPageEditFormDuck>) {
       const fileNameExample =
-        duck.selector(store)?.formData?.fileNameExample ?? "";
+        duck.selectors(store)?.formData?.fileNameExample ?? "";
       return (
         <Input
           defaultValue={fileNameExample}
@@ -131,7 +131,7 @@ const editFormColumns = [
     },
     renderEdit({ store, duck, dispatch }: IRenderEdit<AdminPageEditFormDuck>) {
       const fileNamePattern =
-        duck.selector(store)?.formData?.fileNamePattern ?? "";
+        duck.selectors(store)?.formData?.fileNamePattern ?? "";
       return (
         <Input
           defaultValue={fileNamePattern}
@@ -153,7 +153,7 @@ const editFormColumns = [
       return <Switch disabled checked={instance.visible} />;
     },
     renderEdit({ store, duck, dispatch }: IRenderEdit<AdminPageEditFormDuck>) {
-      const visible = duck.selector(store)?.formData?.visible;
+      const visible = duck.selectors(store)?.formData?.visible;
       return (
         <Switch
           checked={visible}
@@ -171,7 +171,7 @@ const editFormColumns = [
       return <Switch disabled checked={instance.sendEmail} />;
     },
     renderEdit({ store, duck, dispatch }: IRenderEdit<AdminPageEditFormDuck>) {
-      const sendEmail = duck.selector(store)?.formData?.sendEmail;
+      const sendEmail = duck.selectors(store)?.formData?.sendEmail;
       return (
         <Switch
           checked={sendEmail}

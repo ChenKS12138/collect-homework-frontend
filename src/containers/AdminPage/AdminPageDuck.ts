@@ -1,4 +1,4 @@
-import { reduceFromPayload, createToPayload } from "saga-duck";
+import { reduceFromPayload, createToPayload, Duck } from "use-duck-state";
 import { fork, put, select } from "redux-saga/effects";
 import { takeLatest, runAndTakeLatest } from "redux-saga-catch";
 import {
@@ -18,7 +18,6 @@ import { IProjectItem, IAdminBasicInfo } from "@/utils/interface";
 import AdminPageCreateFormDuck, {
   ICreateProjectForm,
 } from "./ducks/AdminPageCreateFormDuck";
-import { DuckMap } from "saga-duck";
 import { generateDownloadCode, notice } from "@/utils";
 import { navigateTo } from "router";
 import { baseURL, cleanToken, HOST } from "@/utils/request";
@@ -28,7 +27,7 @@ import AdminPageEditFormDuck, {
 import AdminPageDownloadProgressDuck from "./ducks/AdminPageDownloadProgressDuck";
 import { saveAs } from "file-saver";
 
-export default class AdminPageDuck extends DuckMap {
+export default class AdminPageDuck extends Duck {
   get quickTypes() {
     enum Types {
       SET_PROJECT_OWN,
@@ -102,7 +101,6 @@ export default class AdminPageDuck extends DuckMap {
     };
   }
   *saga() {
-    yield* super.saga();
     yield fork([this, this.watchToFetchProjectOwn]);
     yield fork([this, this.watchToFetchAdminBasicInfo]);
     yield fork([this, this.watchToInsertProject]);

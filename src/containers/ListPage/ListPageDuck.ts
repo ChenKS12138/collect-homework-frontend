@@ -1,4 +1,4 @@
-import { DuckMap, reduceFromPayload, createToPayload } from "saga-duck";
+import { Duck, reduceFromPayload, createToPayload } from "use-duck-state";
 import { IProjectItem } from "@/utils/interface";
 import {
   requestProjectList,
@@ -13,7 +13,7 @@ import ListPageUploadFormDuck, {
 } from "./ducks/ListPageUploadFormDuck";
 import { LoadingDuck } from "@/ducks";
 
-export default class ListPageDuck extends DuckMap {
+export default class ListPageDuck extends Duck {
   get quickTypes() {
     enum Types {
       SET_PROJECTS,
@@ -67,7 +67,6 @@ export default class ListPageDuck extends DuckMap {
     };
   }
   *saga() {
-    yield* super.saga();
     yield fork([this, this.watchToFetchProjectList]);
     yield fork([this, this.watchToFetchCurrentProject]);
     yield fork([this, this.watchToFetchCurrentProjectCount]);
@@ -92,7 +91,7 @@ export default class ListPageDuck extends DuckMap {
     yield put(ducks.listLoading.creators.done());
   }
   *watchToFetchCurrentProject() {
-    const { types, formatList, selector, ducks } = this;
+    const { types, formatList, ducks } = this;
     yield takeLatest([types.FETCH_CURRENT_PROJECT], function* (action) {
       const id = action.payload;
       try {

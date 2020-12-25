@@ -1,6 +1,7 @@
 import axios from "axios";
 
 if (process.env.NODE_ENV === "development" && process.env.MOCK_REQUEST) {
+  // tslint:disable-next-line: no-var-requires
   require("../../mock");
 }
 

@@ -1,9 +1,9 @@
-import { DuckMap, reduceFromPayload, createToPayload } from "saga-duck";
+import { Duck, reduceFromPayload, createToPayload } from "use-duck-state";
 import { eventChannel, EventChannel } from "redux-saga";
 import { takeLatest } from "redux-saga-catch";
 import { put, take, fork } from "redux-saga/effects";
 
-export default class CutdownDuck extends DuckMap {
+export default class CutdownDuck extends Duck {
   get quickTypes() {
     enum Types {
       INVOKE_CUTDOWN,
@@ -31,7 +31,6 @@ export default class CutdownDuck extends DuckMap {
     };
   }
   *saga() {
-    yield* super.saga();
     yield fork([this, this.watchToInvoke]);
   }
   *watchToInvoke() {
