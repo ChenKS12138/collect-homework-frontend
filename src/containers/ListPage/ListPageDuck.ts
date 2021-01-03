@@ -116,8 +116,7 @@ export default class ListPageDuck extends Duck {
     });
   }
   *watchToFetchCurrentProjectCount() {
-    const { types, ducks } = this;
-    // yield put(ducks.uploadLoading.creators.add());
+    const { types } = this;
     yield takeLatest([types.FETCH_CURRENT_PROJECT], function* (action) {
       const id = action.payload;
       const { success, data } = yield requestStorageFileCount({ id });
@@ -138,22 +137,22 @@ export default class ListPageDuck extends Duck {
         notice.error({
           text: "信息不完整",
         });
-        return;
-      }
-      try {
-        const { success, error } = yield requestStorageUpload({
-          file: payload.file,
-          projectId: payload.projectId,
-          secret: payload.secret,
-        });
-        if (success) {
-          notice.success({ text: "上传成功" });
-          yield put(creators.setUploadSuccess(true));
-        } else {
-          throw error;
+      } else {
+        try {
+          const { success, error } = yield requestStorageUpload({
+            file: payload.file,
+            projectId: payload.projectId,
+            secret: payload.secret,
+          });
+          if (success) {
+            notice.success({ text: "上传成功" });
+            yield put(creators.setUploadSuccess(true));
+          } else {
+            throw error;
+          }
+        } catch (err) {
+          notice.error({ text: String(err) });
         }
-      } catch (err) {
-        notice.error({ text: String(err) });
       }
       yield put(ducks.uploadLoading.creators.done());
     });
