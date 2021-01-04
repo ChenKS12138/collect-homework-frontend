@@ -5,7 +5,8 @@ interface IAdminPageDeleteModel {
   innerComponent?: (any, Function) => ReactNode;
   children?: ReactNode;
   onOk?: (e: React.MouseEvent<HTMLElement>) => void;
-  onCancel?: (e: React.MouseEvent<HTMLElement>) => void;
+  closeable?: boolean;
+  onClose?: (e: React.MouseEvent<HTMLElement>) => void;
   title?: React.ReactNode | string;
   footer?: React.ReactNode;
 }
@@ -13,9 +14,10 @@ interface IAdminPageDeleteModel {
 export default function CommonModal({
   children,
   onOk,
-  onCancel,
+  onClose,
   innerComponent,
   title,
+  closeable,
   footer,
 }: IAdminPageDeleteModel) {
   const [visible, setVisible] = useState(false);
@@ -25,10 +27,11 @@ export default function CommonModal({
       <Modal
         title={title}
         visible={visible}
-        onCancel={(event) => {
-          onCancel?.(event);
+        onClose={(event) => {
+          onClose?.(event);
           setVisible(false);
         }}
+        closeable={closeable}
         onOk={(event) => {
           onOk?.(event);
           setVisible(false);

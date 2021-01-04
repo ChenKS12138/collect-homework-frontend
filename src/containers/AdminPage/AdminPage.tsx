@@ -264,6 +264,10 @@ function ProjectOwnWrapper({
                         </Button>
                       )}
                       title="文件管理"
+                      closeable={
+                        !duck.ducks.downloadProgress.selectors(store)
+                          .progressing
+                      }
                       footer={null}
                     >
                       <DownloadModal

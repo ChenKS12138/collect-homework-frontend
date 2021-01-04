@@ -7,7 +7,8 @@ import DisableBodyScrollStyle from "../DisableBodyScrollStyle/DisableBodyScrollS
 interface IModal {
   title?: React.ReactNode;
   visible?: boolean;
-  onCancel?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
+  closeable?: boolean;
+  onClose?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   onOk?: (e: React.MouseEvent<HTMLElement, MouseEvent>) => void;
   footer?: React.ReactNode;
   children?: React.ReactNode;
@@ -104,7 +105,9 @@ export default class Modal extends React.Component<
   };
   handleCancel = (e) => {
     e.preventDefault();
-    this.props.onCancel(e);
+    if (this.props.closeable !== false) {
+      this.props.onClose(e);
+    }
   };
   getContainer() {
     if (!this.hasRenderBefore) {
