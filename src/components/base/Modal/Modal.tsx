@@ -15,7 +15,7 @@ interface IModal {
 }
 export default class Modal extends React.Component<
   IModal,
-  { showModal: boolean }
+  { showModal: boolean; hasRenderBefore: boolean }
 > {
   ele: HTMLElement;
   hasRenderBefore: boolean;
@@ -23,8 +23,8 @@ export default class Modal extends React.Component<
   constructor(props) {
     super(props);
     this.ele = document.createElement("div");
-    this.hasRenderBefore = false;
     this.state = {
+      hasRenderBefore: false,
       showModal: false,
     };
     this.ref = React.createRef();
@@ -34,17 +34,20 @@ export default class Modal extends React.Component<
   }
   renderContent() {
     const { children, footer, onOk, title, visible, closeable } = this.props;
-    const { showModal } = this.state;
+    const { showModal, hasRenderBefore } = this.state;
+    const shoudleVisible = hasRenderBefore && visible;
     return (
       <div
         className={styles.container}
-        style={{ zIndex: visible || showModal ? 9 : -9 }}
+        style={{ zIndex: shoudleVisible || showModal ? 9 : -9 }}
       >
-        {visible && <DisableBodyScrollStyle />}
+        {shoudleVisible && <DisableBodyScrollStyle />}
         <div
           className={styles.mask}
           style={{
-            backgroundColor: visible ? "rgba(0,0,0,0.45)" : "rgba(0,0,0,0)",
+            backgroundColor: shoudleVisible
+              ? "rgba(0,0,0,0.45)"
+              : "rgba(0,0,0,0)",
           }}
           onClick={this.handleCancel}
           onTransitionEnd={this.handleTransionEnd}
@@ -52,10 +55,10 @@ export default class Modal extends React.Component<
         <div
           className={styles.wrapper}
           style={{
-            transform: visible
+            transform: shoudleVisible
               ? "translate(-50%,0) scale(1)"
               : "translate(-50%,0) scale(1.1)",
-            opacity: visible ? 1 : 0,
+            opacity: shoudleVisible ? 1 : 0,
           }}
         >
           <div className={styles.content}>
@@ -112,16 +115,21 @@ export default class Modal extends React.Component<
     }
   };
   getContainer() {
-    if (!this.hasRenderBefore) {
+    if (!this.state.hasRenderBefore) {
       (document.getElementById("portal-root") ?? document.body).appendChild(
         this.ele
       );
-      this.hasRenderBefore = true;
+      // 首次渲染Modal会有副作用，进行第二次渲染
+      setTimeout(() => {
+        this.setState({
+          hasRenderBefore: true,
+        });
+      });
     }
     return this.ele;
   }
   render() {
-    if (!this.hasRenderBefore && !this.props.visible) {
+    if (!this.state.hasRenderBefore && !this.props.visible) {
       return null;
     }
     return ReactDOM.createPortal(this.renderContent(), this.getContainer());

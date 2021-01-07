@@ -56,7 +56,7 @@ export default function HelpPage() {
       ]}
     >
       <Helmet>
-        <title>帮助 ｜ 作业提交平台</title>
+        <title>帮助 | 作业提交平台</title>
         <meta name="title" content="帮助 ｜ 作业提交平台" />
       </Helmet>
       <div
