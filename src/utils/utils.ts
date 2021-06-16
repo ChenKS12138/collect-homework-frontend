@@ -64,11 +64,13 @@ export function useDiskSize(sizeB: number) {
   const [size, unit] = useMemo(() => {
     const units = ["B", "KB", "MB", "GB", "TB"];
     let index = 0;
+    let sizeBStr = "";
     while (sizeB >= 1000 && index < units.length - 1) {
+      sizeBStr = (sizeB / 1000).toPrecision(4);
       sizeB = Math.round(sizeB / 1000);
       index++;
     }
-    return [sizeB, units[index]];
+    return [sizeBStr, units[index]];
   }, [sizeB]);
   return [size, unit];
 }
