@@ -30,6 +30,7 @@ export default function AuthPage() {
   } = ducks.registryForm.selectors(store);
 
   const { active, seconds } = ducks.cutdown.selectors(store);
+  const { imgUrl, token } = ducks.captcha.selectors(store);
 
   return (
     <Scaffold
@@ -77,10 +78,36 @@ export default function AuthPage() {
                   })
                 );
               }}
-              onPressEnter={() => {
-                dispatch({ type: duck.types.INVOKE_LOGIN });
-              }}
             />
+          </Form.Item>
+          <Form.Item label="验证码" name="captcha">
+            <div style={{ display: "flex", alignItems: "center" }}>
+              <Input
+                defaultValue={loginData?.captcha}
+                onChange={(event) => {
+                  dispatch(
+                    ducks.loginForm.creators.setFormDataPartly({
+                      captcha: event.target.value,
+                    })
+                  );
+                }}
+                onPressEnter={() => {
+                  dispatch({ type: duck.types.INVOKE_LOGIN });
+                }}
+              />
+              <img
+                style={{ marginLeft: "2rem", cursor: "pointer" }}
+                width="128"
+                height="64"
+                src={imgUrl}
+                data-token={token}
+                onClick={() => {
+                  dispatch({
+                    type: ducks.captcha.types.FETCH_CAPTCHA,
+                  });
+                }}
+              />
+            </div>
           </Form.Item>
           <Button
             type="primary"
@@ -93,7 +120,6 @@ export default function AuthPage() {
           >
             登陆
           </Button>
-
           <RouterLink to="/auth/registry" className="app-mt-1n">
             <Button type="link" htmlType="button" block>
               暂无账号？立即注册
@@ -114,6 +140,32 @@ export default function AuthPage() {
       >
         <AuthWrapper className="app-mlr-auto app-mt-4n">
           <Form>
+            <Form.Item label="验证码" name="captcha" required>
+              <div style={{ display: "flex", alignItems: "center" }}>
+                <Input
+                  defaultValue={registryData?.captcha}
+                  onChange={(event) => {
+                    dispatch(
+                      ducks.registryForm.creators.setFormDataPartly({
+                        captcha: event.target.value,
+                      })
+                    );
+                  }}
+                />
+                <img
+                  style={{ marginLeft: "2rem", cursor: "pointer" }}
+                  width="128"
+                  height="64"
+                  src={imgUrl}
+                  data-token={token}
+                  onClick={() => {
+                    dispatch({
+                      type: ducks.captcha.types.FETCH_CAPTCHA,
+                    });
+                  }}
+                />
+              </div>
+            </Form.Item>
             <Form.Item label="邮箱" name="email" required>
               <Space size="large">
                 <Input

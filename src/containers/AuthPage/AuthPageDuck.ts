@@ -12,11 +12,7 @@ import { CutdownDuck } from "@/ducks";
 import { notice } from "@/utils";
 import { navigateTo } from "router";
 import { getToken, setToken } from "@/utils/request";
-
-export interface ILoginForm {
-  email: string;
-  password: string;
-}
+import CaptchaDuck from "@/ducks/CaptchaDuck";
 
 export default class AuthPageDuck extends Duck {
   get quickTypes() {
@@ -36,6 +32,7 @@ export default class AuthPageDuck extends Duck {
       loginForm: AuthPageLoginFormDuck,
       registryForm: AuthPageRegistryFormDuck,
       cutdown: CutdownDuck,
+      captcha: CaptchaDuck,
     };
   }
   get creators() {
@@ -62,9 +59,12 @@ export default class AuthPageDuck extends Duck {
         notice.error({ text: "邮箱密码不能为空" });
       } else {
         try {
+          const { token } = ducks.captcha.selectors(yield select());
           const { success, data, error } = yield requestAdminLogin({
             email: formData?.email,
             password: formData?.password,
+            captcha: formData?.captcha,
+            captchaToken: token,
           });
           if (success) {
             notice.success({
@@ -79,6 +79,8 @@ export default class AuthPageDuck extends Duck {
           }
         } catch (err) {
           notice.error({ text: String(err) });
+        } finally {
+          yield put({ type: ducks.captcha.types.FETCH_CAPTCHA });
         }
       }
     });
@@ -95,13 +97,22 @@ export default class AuthPageDuck extends Duck {
       ) {
         notice.error({ text: "输入信息不完整" });
       } else {
-        const { email, invitationCode, userPassword, username } = formData;
+        const {
+          email,
+          invitationCode,
+          userPassword,
+          username,
+          captcha,
+        } = formData;
+        const { token } = ducks.captcha.selectors(yield select());
         try {
           const { success, error, data } = yield requestAdminRegister({
             email,
             invitationCode,
             name: username,
             password: userPassword,
+            captcha,
+            captchaToken: token,
           });
           if (success) {
             notice.success({ text: "注册成功" });
@@ -111,6 +122,8 @@ export default class AuthPageDuck extends Duck {
           }
         } catch (err) {
           notice.error({ text: String(err) });
+        } finally {
+          yield put({ type: ducks.captcha.types.FETCH_CAPTCHA });
         }
       }
     });
@@ -121,9 +134,13 @@ export default class AuthPageDuck extends Duck {
       if (!action?.payload?.length) {
         notice.error({ text: "请输入邮箱" });
       } else {
+        const { formData } = ducks.registryForm.selectors(yield select());
+        const { token } = ducks.captcha.selectors(yield select());
         try {
           const result = yield requestAdminInvitationCode({
             email: action.payload,
+            captcha: formData.captcha,
+            captchaToken: token,
           });
           if (result.success) {
             notice.success({ text: "请求邀请码成功" });
@@ -133,6 +150,8 @@ export default class AuthPageDuck extends Duck {
           }
         } catch (err) {
           notice.error({ text: String(err) });
+        } finally {
+          yield put({ type: ducks.captcha.types.FETCH_CAPTCHA });
         }
       }
     });

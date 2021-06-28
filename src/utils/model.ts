@@ -5,17 +5,26 @@ import { instance, memorize } from "./request";
 interface IRequestAdminLogin {
   email: string;
   password: string;
+  captcha: string;
+  captchaToken: string;
 }
 
 // admin
-export const requestAdminLogin = ({ email, password }: IRequestAdminLogin) =>
-  instance.post("/admin/login", { email, password });
+export const requestAdminLogin = ({
+  email,
+  password,
+  captcha,
+  captchaToken,
+}: IRequestAdminLogin) =>
+  instance.post("/admin/login", { email, password, captcha, captchaToken });
 
 interface IRequestAdminRegister {
   email: string;
   password: string;
   name: string;
   invitationCode: string;
+  captcha: string;
+  captchaToken: string;
 }
 
 export const requestAdminRegister = ({
@@ -23,19 +32,32 @@ export const requestAdminRegister = ({
   password,
   invitationCode,
   name,
+  captcha,
+  captchaToken,
 }: IRequestAdminRegister) =>
-  instance.post("/admin/register", { email, password, invitationCode, name });
+  instance.post("/admin/register", {
+    email,
+    password,
+    invitationCode,
+    name,
+    captcha,
+    captchaToken,
+  });
 
 export const requestAdminStatus = () => instance.get("/admin/status");
 
 interface IRequestAdminInvitationCode {
   email: string;
+  captcha: string;
+  captchaToken: string;
 }
 
 export const requestAdminInvitationCode = ({
   email,
+  captcha,
+  captchaToken,
 }: IRequestAdminInvitationCode) =>
-  instance.post("/admin/invitationCode", { email });
+  instance.post("/admin/invitationCode", { email, captcha, captchaToken });
 
 // project
 export const requestProjectList = () => instance.get("/project/");
@@ -182,6 +204,11 @@ interface IRequestProjectFileList {
 
 export const requestProjectFileList = ({ id }: IRequestProjectFileList) =>
   instance.get(`/project/fileList?id=${id}`);
+
+export const requestCommonGenerateCaptcha = () =>
+  instance.get(`/common/generateCaptcha`, {
+    responseType: "blob",
+  });
 
 interface IRequestStorageDownloadSelectively {
   id: string;

@@ -39,8 +39,10 @@ instance.interceptors.response.use((response) => {
       blob: new Blob([response?.data]),
       headers: response.headers,
     };
-  } else {
+  } else if (response.headers["content-type"]?.includes?.("application/json")) {
     return response?.data;
+  } else {
+    return response;
   }
 });
 instance.interceptors.request.use((config) => {
