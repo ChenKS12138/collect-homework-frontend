@@ -9,9 +9,14 @@ const ManifestPlugin = require("webpack-manifest-plugin");
 const RobotstxtPlugin = require("robotstxt-webpack-plugin");
 const BundleAnalyzerPlugin = require("webpack-bundle-analyzer")
   .BundleAnalyzerPlugin;
-const GitRevisionPlugin = require("git-revision-webpack-plugin");
+const process = require("process");
 
-const gitRevisionPlugin = new GitRevisionPlugin();
+const gitRevisionPlugin = process.env["GIT_COMMIT_HASH"]
+  ? undefined
+  : new (require("git-revision-webpack-plugin"))();
+
+const plugins = [];
+gitRevisionPlugin && plugins.push(gitRevisionPlugin);
 
 const config = merge(common, {
   mode: "production",
@@ -66,9 +71,12 @@ const config = merge(common, {
   },
 
   plugins: [
-    gitRevisionPlugin,
+    ...plugins,
     new webpack.DefinePlugin({
-      "process.env.VERSION": JSON.stringify(gitRevisionPlugin.commithash()),
+      "process.env.VERSION": JSON.stringify(
+        process.env["GIT_COMMIT_HASH"] ||
+          (gitRevisionPlugin && gitRevisionPlugin.commithash())
+      ),
     }),
     new CleanWebpackPlugin(),
     new MiniCssExtractPlugin({
